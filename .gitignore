@@ -18,8 +18,18 @@ obj/
 *.db
 *.db-shm
 *.db-wal
+# NuGet
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
 
 
+# Ignore temporary files
+*.log
+*.tmp
+*.cache
 =======
 /.vs
 >>>>>>> 82bd780bd5ca4dc055a4604657e349d9c05d0753
