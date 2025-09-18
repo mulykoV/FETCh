@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35825.156 d17.13
+VisualStudioVersion = 17.13.35825.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FETCh", "FETCh.csproj", "{6BC3023C-4A39-4802-B3FE-DE23E1E56633}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FetchData", "..\FetchData\FetchData.csproj", "{1D51F9BA-A059-4BAD-97D2-758DFF5891AA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6BC3023C-4A39-4802-B3FE-DE23E1E56633}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BC3023C-4A39-4802-B3FE-DE23E1E56633}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BC3023C-4A39-4802-B3FE-DE23E1E56633}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D51F9BA-A059-4BAD-97D2-758DFF5891AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D51F9BA-A059-4BAD-97D2-758DFF5891AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D51F9BA-A059-4BAD-97D2-758DFF5891AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D51F9BA-A059-4BAD-97D2-758DFF5891AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
