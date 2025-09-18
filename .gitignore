@@ -8,6 +8,7 @@
 /.vs/FETCh/FileContentIndex
 /.vs/FETCh/CopilotIndices/17.13.433.20974/CodeChunks.db-wal
 /.vs/FETCh/CopilotIndices/17.13.433.20974
+<<<<<<< HEAD
 .vs/
 bin/
 obj/
@@ -19,3 +20,6 @@ obj/
 *.db-wal
 
 
+=======
+/.vs
+>>>>>>> 82bd780bd5ca4dc055a4604657e349d9c05d0753

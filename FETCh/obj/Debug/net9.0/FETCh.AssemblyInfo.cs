@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FETCh")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b003482fb430f2009b7c5df4934f55487e60c090")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ef17d49aa25e28a7177fe82b8f6c44374fb61406")]
 [assembly: System.Reflection.AssemblyProductAttribute("FETCh")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FETCh")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

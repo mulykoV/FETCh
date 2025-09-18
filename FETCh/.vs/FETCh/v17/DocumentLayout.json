@@ -29,7 +29,7 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "FETCh",
+              "Title": "FETCh.csproj",
               "DocumentMoniker": "D:\\Learning\\FETCh\\FETCh\\FETCh.csproj",
               "RelativeDocumentMoniker": "FETCh.csproj",
               "ToolTip": "D:\\Learning\\FETCh\\FETCh\\FETCh.csproj",
@@ -49,8 +49,7 @@
               "RelativeToolTip": "..\\FetchData\\Data\\FETChDbContext.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-18T12:43:39.788Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-18T12:43:39.788Z"
             },
             {
               "$type": "Document",
@@ -62,8 +61,7 @@
               "RelativeToolTip": "..\\FetchData\\Class1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-18T12:37:24.06Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-18T12:37:24.06Z"
             },
             {
               "$type": "Document",
@@ -75,8 +73,7 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-18T11:51:44.718Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-18T11:51:44.718Z"
             }
           ]
         }
