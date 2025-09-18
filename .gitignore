@@ -1,0 +1,10 @@
+﻿################################################################################
+# Данный GITIGNORE-файл был автоматически создан Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/VSWorkspaceState.json
+/.vs/FETCh/CopilotIndices/17.13.433.20974/SemanticSymbols.db-wal
+/.vs/FETCh/FileContentIndex
+/.vs/FETCh/CopilotIndices/17.13.433.20974/CodeChunks.db-wal
+/.vs/FETCh/CopilotIndices/17.13.433.20974
+/.vs
