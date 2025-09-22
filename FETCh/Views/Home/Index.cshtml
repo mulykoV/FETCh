@@ -1,8 +1,66 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-split">
+    <div class="hero-half dark-side chess-layout scroll-animate">
+        <h1 class="pixel-title">Світ змінюється.</h1>
+        <p class="subtext">Майбутнє творять ті, хто вже сьогодні натискає "commit".</p>
+        <img class="hero-img" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="Tech future">
+    </div>
+    <div class="hero-half light-side scroll-animate right">
+        <h1 class="pixel-title">Гра: <span id="score">0</span> коммітів</h1>
+        <p>Натискай кнопку якомога швидше за <b>10 секунд</b>!</p>
+        <div class="console-btn" id="commitBtn">git commit </div>
+        <p id="timer">Час: 10</p>
+    </div>
+</section>
+
+<!-- Перша секція -->
+<section class="marquee-info scroll-animate" id="about-tablo">
+    <div class="marquee">
+        <h2 class="pixel-title">Хто ми?</h2>
+        <h2 class="pixel-title">Хто ми?</h2>
+    </div>
+    <div class="marquee-content split split-30-70">
+        <div class="info-img">
+            <img src="/lib/FETCh.png" alt="Моє фото">
+        </div>
+        <div class="info-text">
+            <h2>Ми — освітня платформа нового покоління</h2>
+            <p>
+                Тут навчання перетворюється на пригоду: динамічні курси, актуальні новини
+                та інноваційні проєкти, що формують майбутнє університету.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Друга секція — повноекранне зображення -->
+<section class="fullwidth-image scroll-animate" id="about">
+    <img src="/lib/F1.png" alt="Презентація" class="full-img">
+</section>
+
+<!-- Третя секція -->
+<section class="marquee-info scroll-animate" id="where-tablo">
+    <div class="marquee">
+        <h2 class="marquee-text">Де ми?</h2>
+        <h2 class="marquee-text">Де ми?</h2>
+    </div>
+    <div class="marquee-content split split-70-30">
+        <div class="info-text">
+            <h2>У серці університетського життя</h2>
+            <p>
+                Наша платформа — це міст між традиційною освітою та новими технологіями.
+                Ми завжди поряд, щоб зробити твоє навчання доступним, зручним і надихаючим.
+            </p>
+        </div>
+        <div class="info-img">
+            <img src="https://images.unsplash.com/photo-1484417894907-623942c8ee29" alt="Campus">
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+}

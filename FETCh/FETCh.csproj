@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FetchData\FetchData.csproj" />
+    <ProjectReference Include="..\FETChModels\FETChModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,31 +1,309 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
+﻿/* ===== Базові ===== */
 body {
-  margin-bottom: 60px;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: #111;
+    overflow-x: hidden;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.pixel-brand {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 1.5rem;
+    color: #0f0 !important;
+    text-shadow: 0 0 5px #0f0;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* ===== Navbar ===== */
+.custom-navbar {
+    background: #000 !important;
+    padding: 15px 30px;
+    font-size: 1rem;
 }
+
+.nav-link-custom {
+    color: #fff !important;
+    font-weight: 600;
+    position: relative;
+    transition: color 0.3s;
+}
+
+    .nav-link-custom::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -5px;
+        width: 0%;
+        height: 2px;
+        background: #0f0;
+        transition: width 0.3s;
+    }
+
+    .nav-link-custom:hover {
+        color: #0f0 !important;
+    }
+
+        .nav-link-custom:hover::after {
+            width: 100%;
+        }
+
+/* ===== Main ===== */
+.main-wrapper {
+    padding-top: 90px; /* відступ щоб не залазило під navbar */
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== Footer ===== */
+.custom-footer {
+    background: #000;
+    color: #aaa;
+    font-size: 0.9rem;
+    padding: 20px 0;
+    border-top: 1px solid #333;
+}
+
+    .custom-footer .pixel-brand {
+        font-size: 1rem;
+        color: #0f0;
+    }
+
+
+/* Hero Split */
+.hero-split {
+    display: flex;
+    height: 100vh;
+}
+
+.hero-half {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.dark-side {
+    background: #000;
+    color: #fff;
+}
+
+.light-side {
+    background: #fff;
+    color: #000;
+    text-align: center;
+}
+
+    .light-side h1,
+    .light-side p,
+    .light-side #timer {
+        color: #000;
+    }
+
+.hero-half h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero-half p {
+    font-size: 1.2rem;
+}
+
+.chess-layout .subtext {
+    margin-left: 40px;
+    font-size: 1.1rem;
+}
+
+.chess-layout .hero-img {
+    align-self: flex-end;
+    margin-top: 20px;
+    max-width: 250px;
+    border-radius: 10px;
+}
+
+/* Кнопка гри як консоль */
+.console-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #000;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    border: 2px solid #0f0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+    .console-btn:hover {
+        background: #111;
+        box-shadow: 0 0 10px #0f0;
+    }
+
+/* Піксельний текст */
+.pixel-title {
+    font-family: 'Press Start 2P', cursive !important;
+    font-size: 2.5rem;
+    line-height: 1.2;
+}
+
+/* Анімація скролу */
+.scroll-animate {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 1s ease;
+}
+
+    .scroll-animate.right {
+        transform: translateX(-50px);
+    }
+
+    .scroll-animate.visible {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+/* ===== СЕКЦІЇ З ТАБЛО ===== */
+.marquee {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    padding: 30px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+}
+
+    .marquee h2 {
+        flex-shrink: 0;
+        min-width: 100%;
+        font-family: 'Press Start 2P', cursive;
+        font-size: 2rem;
+        margin: 0;
+        animation: marquee-loop 15s linear infinite;
+    }
+
+@keyframes marquee-loop {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* ===== КОНТЕНТ СЕКЦІЙ ===== */
+.marquee-content {
+    display: flex;
+    width: 100%;
+    min-height: 100vh; /* щоб блок займав екран, але не ломився */
+    overflow: hidden;
+}
+
+/* ===== ВАРІАНТ 30/70 ===== */
+.split-30-70 .info-img {
+    flex: 0 0 30%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.split-30-70 .info-text {
+    flex: 0 0 70%;
+    padding: 60px; /* трохи менше щоб текст влазив */
+    background: #fff;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ===== ВАРІАНТ 70/30 ===== */
+.split-70-30 .info-text {
+    flex: 0 0 70%;
+    padding: 60px;
+    background: #fff;
+    color: #111;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.split-70-30 .info-img {
+    flex: 0 0 30%;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ===== КАРТИНКИ ===== */
+.info-img img {
+    width: 100%;
+    height: auto; /* 🔑 залишаємо натуральну пропорцію */
+    max-height: 100%; /* не перевищує висоту секції */
+    object-fit: contain; /* щоб фото не обрізалось */
+}
+
+/* ===== ТЕКСТ ===== */
+.info-text h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.info-text p {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    max-width: 600px;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 992px) {
+    .marquee-content {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .info-img, .info-text {
+        flex: 0 0 100%;
+        height: 50vh;
+    }
+
+    .info-text {
+        padding: 40px 20px;
+        height: auto;
+    }
+}
+
+/* ===== ДРУГА СЕКЦІЯ — ПОВНОЕКРАННЕ ЗОБРАЖЕННЯ ===== */
+.fullwidth-image {
+    width: 100%;
+    height: 100vh; /* секція рівно на весь екран */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000; /* щоб не було білих полос */
+    overflow: hidden;
+}
+
+    .fullwidth-image .full-img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; /* вся картинка влізе, нічого не обріжеться */
+    }
