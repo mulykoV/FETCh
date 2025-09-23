@@ -17,5 +17,7 @@ namespace FETCh.Models
         public string VideoUrl { get; set; }               // Посилання на відео (якщо є)
         public TimeSpan? Duration { get; set; }            // Тривалість лекції
         public int Order { get; set; }                     // Порядок відображення лекції у модулі
+
+        public ICollection<UserLectureProgress> UserLectureProgresses { get; set; } = new List<UserLectureProgress>();
     }
 }

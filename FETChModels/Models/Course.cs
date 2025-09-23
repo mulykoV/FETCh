@@ -28,5 +28,7 @@ namespace FETCh.Models
         public ICollection<Lecture> Lectures { get; set; }// Лекції, якщо вони не в модулях
         public ICollection<CourseTag> CourseTags { get; set; } // Теги курсу (для фільтрів/пошуку)
         public ICollection<UserCourse> Enrollments { get; set; } // Користувачі, записані на курс
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public ICollection<UserCourse> UserCourses { get; set; } = new List<UserCourse>();
     }
 }
