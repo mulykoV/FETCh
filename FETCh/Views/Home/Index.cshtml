@@ -6,17 +6,36 @@
     <div class="hero-half dark-side chess-layout scroll-animate">
         <h1 class="pixel-title">Світ змінюється.</h1>
         <p class="subtext">Майбутнє творять ті, хто вже сьогодні натискає "commit".</p>
-        <img class="hero-img" src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="Tech future">
+        <img class="hero-img" src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB" alt="Tech future">
     </div>
+
     <div class="hero-half light-side scroll-animate right">
         <h1 class="pixel-title">Гра: <span id="score">0</span> коммітів</h1>
         <p>Натискай кнопку якомога швидше за <b>10 секунд</b>!</p>
-        <div class="console-btn" id="commitBtn">git commit </div>
+
+        <!-- Консольна лінія -->
+        <div class="console-line" id="consoleLine">
+            <span id="typedText"></span><span class="cursor">|</span>
+
+            <!-- тільки одна кнопка -->
+            <button class="console-btn" id="commitBtn" type="button" aria-label="Commit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1a.5.5 0 0 1 .5.5V7h5.5a.5.5 0 0 1 0 1H8.5v5.5a.5.5 0 0 1-1 0V8H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- таймер -->
         <p id="timer">Час: 10</p>
+
+        <!-- результат -->
+        <div id="resultBox" class="result-box hidden" aria-live="polite"></div>
+        <!-- Додаємо прихований контейнер із URL -->
+        <div id="registerUrl" data-url="@Url.Page("/Account/Register", new { area = "Identity" })" style="display:none;"></div>
+
     </div>
 </section>
 
-<!-- Перша секція -->
 <section class="marquee-info scroll-animate" id="about-tablo">
     <div class="marquee">
         <h2 class="pixel-title">Хто ми?</h2>
@@ -36,12 +55,10 @@
     </div>
 </section>
 
-<!-- Друга секція — повноекранне зображення -->
 <section class="fullwidth-image scroll-animate" id="about">
     <img src="/lib/F1.png" alt="Презентація" class="full-img">
 </section>
 
-<!-- Третя секція -->
 <section class="marquee-info scroll-animate" id="where-tablo">
     <div class="marquee">
         <h2 class="marquee-text">Де ми?</h2>
@@ -49,14 +66,11 @@
     </div>
     <div class="marquee-content split split-70-30">
         <div class="info-text">
-            <h2>У серці університетського життя</h2>
-            <p>
-                Наша платформа — це міст між традиційною освітою та новими технологіями.
-                Ми завжди поряд, щоб зробити твоє навчання доступним, зручним і надихаючим.
-            </p>
+            <h2>Наша локація</h2>
+            <p>Ми працюємо в серці університету, де інновації народжуються щодня.</p>
         </div>
         <div class="info-img">
-            <img src="https://images.unsplash.com/photo-1484417894907-623942c8ee29" alt="Campus">
+            <img src="https://i.pinimg.com/736x/6a/19/f0/6a19f0212838e86d33058ca33b18f3b0.jpg" alt="Локація">
         </div>
     </div>
 </section>
