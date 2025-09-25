@@ -9,8 +9,8 @@ namespace FETChModels.Models
 {
     public class UserLectureProgress
     {
-        public int UserId { get; set; }                 // Ідентифікатор користувача (FK)
-        public User User { get; set; }                     // Навігаційна властивість на користувача
+        public string UserId { get; set; }                 // Ідентифікатор користувача (FK)
+        public ApplicationUser User { get; set; }                     // Навігаційна властивість на користувача
 
         public int LectureId { get; set; }                 // Ідентифікатор лекції (FK)
         public Lecture Lecture { get; set; }               // Навігаційна властивість на лекцію
