@@ -4,7 +4,7 @@ using FETChModels.Models;
 
 namespace FetchData.Data
 {
-    public class FETChDbContext : IdentityDbContext
+    public class FETChDbContext : IdentityDbContext<ApplicationUser>
     {
         public FETChDbContext(DbContextOptions<FETChDbContext> options)
             : base(options)

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FetchData.Data;
+using FETChModels.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,14 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Реєструємо DbContext і явно вказуємо де будуть зберігатися міграції
+// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ DbContext пїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
+//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FETChDbContext>();
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<FETChDbContext>();
+
+//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<FETChDbContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 
@@ -34,6 +41,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -45,5 +54,10 @@ app.MapControllerRoute(
 
 app.MapRazorPages()
    .WithStaticAssets();
+
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
+}
 
 app.Run();
