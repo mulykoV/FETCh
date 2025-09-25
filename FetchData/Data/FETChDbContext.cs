@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using FETCh.Models;
+using FETChModels.Models;
 
 namespace FetchData.Data
 {
