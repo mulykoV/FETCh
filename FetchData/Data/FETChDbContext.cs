@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using FETCh.Models;
+using FETChModels.Models;
 
 namespace FetchData.Data
 {
@@ -87,6 +87,33 @@ namespace FetchData.Data
             modelBuilder.Entity<Lecture>()
                 .HasMany(l => l.UserLectureProgresses)
                 .WithOne(ulp => ulp.Lecture)
+                .HasForeignKey(ulp => ulp.LectureId);
+            //
+            modelBuilder.Entity<UserCourse>()
+        .HasKey(uc => new { uc.UserId, uc.CourseId });
+
+            modelBuilder.Entity<UserCourse>()
+                .HasOne(uc => uc.User)
+                .WithMany()
+                .HasForeignKey(uc => uc.UserId);
+
+            modelBuilder.Entity<UserCourse>()
+                .HasOne(uc => uc.Course)
+                .WithMany(c => c.UserCourses)
+                .HasForeignKey(uc => uc.CourseId);
+            //
+            // UserLectureProgress: складений ключ
+            modelBuilder.Entity<UserLectureProgress>()
+                .HasKey(ulp => new { ulp.UserId, ulp.LectureId });
+
+            modelBuilder.Entity<UserLectureProgress>()
+                .HasOne(ulp => ulp.User)
+                .WithMany()
+                .HasForeignKey(ulp => ulp.UserId);
+
+            modelBuilder.Entity<UserLectureProgress>()
+                .HasOne(ulp => ulp.Lecture)
+                .WithMany(l => l.UserLectureProgresses)
                 .HasForeignKey(ulp => ulp.LectureId);
         }
     }
