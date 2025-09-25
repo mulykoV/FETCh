@@ -1,6 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using FETCh.Models;
+using FETChModels.Models;
 
 namespace FETCh.Controllers;
 

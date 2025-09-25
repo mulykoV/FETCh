@@ -5,11 +5,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FETCh.Models
+namespace FETChModels.Models
 {
     public class UserLectureProgress
     {
-        public string UserId { get; set; }                 // Ідентифікатор користувача (FK)
+        public int UserId { get; set; }                 // Ідентифікатор користувача (FK)
         public User User { get; set; }                     // Навігаційна властивість на користувача
 
         public int LectureId { get; set; }                 // Ідентифікатор лекції (FK)
