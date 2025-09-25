@@ -42,6 +42,9 @@ namespace FetchData.Data
             // Course ↔ Tag (many-to-many)
             modelBuilder.Entity<CourseTag>()
                 .HasKey(ct => new { ct.CourseId, ct.TagId });
+                
+            modelBuilder.Entity<UserCourse>()
+                .HasKey(uc => new { uc.UserId, uc.CourseId });
 
             modelBuilder.Entity<CourseTag>()
                 .HasOne(ct => ct.Course)
@@ -52,6 +55,11 @@ namespace FetchData.Data
                 .HasOne(ct => ct.Tag)
                 .WithMany(t => t.CourseTags)
                 .HasForeignKey(ct => ct.TagId);
+
+            modelBuilder.Entity<UserCourse>()
+                .HasOne(uc => uc.Course)
+                .WithMany(u => u.UserCourses)
+                .HasForeignKey(uc => uc.CourseId);
 
             // CourseCategory ↔ Course (one-to-many)
             modelBuilder.Entity<CourseCategory>()

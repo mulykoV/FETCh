@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FETChModels.Models
+namespace FETCh.ViewModels
 {
     public class ErrorViewModel
     {
