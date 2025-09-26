@@ -13,9 +13,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FETChDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
 
 //������� ���

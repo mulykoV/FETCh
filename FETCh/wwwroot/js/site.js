@@ -102,3 +102,43 @@ const observer = new IntersectionObserver(
 );
 
 animatedBlocks.forEach(block => observer.observe(block));
+
+//Дизайн на сторінці Реєстрація
+const canvas = document.getElementById('matrixRain');
+const ctx = canvas.getContext('2d');
+
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,.<>?'.split('');
+const logo = 'FETCh';
+const fontSize = 40;
+ctx.font = fontSize + 'px monospace';
+const logoX = canvas.width / 2 - (fontSize * logo.length) / 2;
+const logoY = canvas.height / 2;
+
+function draw() {
+    // затемнення фону для слідів
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // глітч-логотип
+    ctx.fillStyle = '#0f0';
+    for (let i = 0; i < logo.length; i++) {
+        // додаємо випадковий зміщений шум
+        const glitchOffsetX = Math.random() * 6 - 3;
+        const glitchOffsetY = Math.random() * 6 - 3;
+        ctx.fillText(logo[i], logoX + i * fontSize + glitchOffsetX, logoY + glitchOffsetY);
+    }
+
+    // додаткові випадкові символи навколо
+    for (let i = 0; i < 10; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const char = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(char, x, y);
+    }
+}
+
+// оновлення кожні 50мс для плавного глітчу
+setInterval(draw, 50);
