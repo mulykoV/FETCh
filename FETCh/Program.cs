@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// �������� DbContext � ���� ������� �� ������ ���������� �������
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
@@ -17,8 +16,6 @@ builder.Services.AddDbContext<FETChDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
-//������� ���
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
