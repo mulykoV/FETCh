@@ -31,13 +31,15 @@ namespace FETCh.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _config;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration config)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +47,7 @@ namespace FETCh.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _config = config;
         }
 
         /// <summary>
@@ -73,6 +76,11 @@ namespace FETCh.Areas.Identity.Pages.Account
         public class InputModel
         {
             public string?  Name { get; set; }
+
+
+            [DataType(DataType.Password)]
+            [Display(Name = "Secret key")]
+            public string? Secret { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -123,9 +131,27 @@ namespace FETCh.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+                if (!string.IsNullOrEmpty(Input.Secret))
+                {
+                    var adminSecret = _config["AdminSettings:SecretKey"];
+                    if (Input.Secret != adminSecret)
+                    {
+                        ModelState.AddModelError(string.Empty, "Невірна секретна фраза для адміністратора.");
+                        return Page(); // зупиняємо реєстрацію і повертаємо помилку
+                    }
+                }
+
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+                    if (!string.IsNullOrEmpty(Input.Secret))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

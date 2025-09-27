@@ -53,9 +53,11 @@
                     <label for="isAdmin">Я адміністратор</label>
                 </div>
 
+
                 <div id="adminField" class="form-group" style="display:none;">
-                    <label for="Secret">Секретна фраза</label>
-                    <input type="text" id="Secret" name="Secret" class="form-input" />
+                    <label for="Secret">Підтвердження пароля</label>
+                    <input asp-for="Input.Secret" type="password" class="form-input" aria-required="true" placeholder="Секретна фраза..." />
+                    <span asp-validation-for="Input.Secret" class="text-danger"></span>
                 </div>
 
                 <button id="registerSubmit" type="submit" class="btn-primary w-100">Зареєструватися</button>
