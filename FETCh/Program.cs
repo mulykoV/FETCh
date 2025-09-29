@@ -19,7 +19,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
 //������� ���
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
