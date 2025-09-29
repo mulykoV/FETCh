@@ -166,8 +166,9 @@ namespace FETCh.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await SendEmailAsync(Input.Email, "Підтвердження Електроної пошти",
+                        $"Це посилання створено автоматично й буде дійсне 5 хвилин!!!" +
+                        $"Будь ласка, щоб підтвердити вашу електрону пошту <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>натисність сюди</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -193,10 +194,10 @@ namespace FETCh.Areas.Identity.Pages.Account
         {
             try
             {
-                var smtpHost = "smtp.gmail.com";
-                var smtpPort = int.Parse("587");
-                var smtpUser = "vovamulyka@gmail.com";
-                var smtpPass = "egam wfba qlzy bvsr";
+                var smtpHost = _config["EmailSettings:SmtpHost"]; 
+                var smtpPort = int.Parse(_config["EmailSettings:SmtpPort"]); 
+                var smtpUser = _config["EmailSettings:SmtpUser"]; 
+                var smtpPass = _config["EmailSettings:SmtpPass"];
 
                 using (var client = new SmtpClient(smtpHost, smtpPort))
                 {
