@@ -2,14 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using FETCh.Constants;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -20,6 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FETCh.Areas.Identity.Pages.Account
 {
@@ -163,7 +166,7 @@ namespace FETCh.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    await SendEmailAsync(Input.Email, "Confirm your email",
                         $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
@@ -184,6 +187,40 @@ namespace FETCh.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            try
+            {
+                var smtpHost = "smtp.gmail.com";
+                var smtpPort = int.Parse("587");
+                var smtpUser = "vovamulyka@gmail.com";
+                var smtpPass = "egam wfba qlzy bvsr";
+
+                using (var client = new SmtpClient(smtpHost, smtpPort))
+                {
+                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                    client.EnableSsl = true;
+
+                    using (var mailMessage = new MailMessage())
+                    {
+                        mailMessage.From = new MailAddress(smtpUser, "FETCh System");
+                        mailMessage.To.Add(email);
+                        mailMessage.Subject = subject;
+                        mailMessage.Body = htmlMessage;
+                        mailMessage.IsBodyHtml = true;
+
+                        await client.SendMailAsync(mailMessage);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private ApplicationUser CreateUser()
