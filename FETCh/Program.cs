@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FetchData.Data;
 using FETChModels.Models;
+using FetchData.Interfaces;
+using FetchData.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// �������� DbContext � ���� ������� �� ������ ���������� �������
+ //�������� DbContext � ���� ������� �� ������ ���������� �������
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
+builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
