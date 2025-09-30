@@ -1,83 +1,175 @@
 ﻿@page
 @model LoginModel
-
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Вхід";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                    <label asp-for="Input.Email" class="form-label">Email</label>
+<section class="hero-split">
+    <!-- Ліва частина (форма входу) -->
+    <div class="hero-half light-side scroll-animate">
+        <div class="login-card">
+            <h1 class="pixel-title" style="font-size: 24px;">@ViewData["Title"]</h1>
+            <p class="subtext">Твоя пригода продовжується...</p>
+
+            <form id="loginForm" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+                <div class="form-block">
+                    <input asp-for="Input.Email" class="form-input unified-input" autocomplete="username" aria-required="true" placeholder="Твоя пошта@gmail.com" />
                     <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                    <label asp-for="Input.Password" class="form-label">Password</label>
+
+                <div class="form-block">
+                    <input asp-for="Input.Password" type="password" class="form-input unified-input" autocomplete="current-password" aria-required="true" placeholder="Твій пароль..." />
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
-                </div>
-                <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                    </p>
-                </div>
+
+                <button id="loginSubmit" type="submit" class="btn-primary w-100">Увійти</button>
             </form>
-        </section>
+        </div>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+
+    <div class="hero-half dark-side scroll-animate right">
+        <div class="creative-side">
+            <h1 class="pixel-title" style="font-size: 20;">FETCh loging...</h1>
+            <div class="console-container">
+                <div id="console" class="console-window" aria-live="polite"></div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const consoleEl = document.getElementById("console");
+
+                    const lines = [
+                        "> Initializing system...",
+                        "> Connecting to FETCh core...",
+                        "> Loading modules [███████......]",
+                        "> Authenticating...",
+                        "> Tunneling packets... [OK]",
+                        "> Ready.",
+                        ""
+                    ];
+
+                    const logoLines = [
+        `                          ,----,
+                                ,/   .\`|
+                ,---,.    ,---,.    ,\`   .'  : ,----..    ,---,
+              ,'  .' |  ,'  .' |  ;    ;     //   /   \\ ,--.' |
+            ,---.'   |,---.'   |.'___,/    ,'|   :     :|  |  :
+            |   |   .'|   |   .'|    :     | .   |  ;. /:  :  :
+            :   :  :  :   :  |-,;    |.';  ; .   ; /--\` :  |  |,--.
+            :   |  |-,:   |  ;/|\`----'  |  | ;   | ;    |  :  '   |
+            |   :  ;/||   :   .'    '   :  ; |   : |    |  |   /' :
+            |   |   .'|   |  |-,    |   |  ' .   | '___ '  :  | | |
+            '   :  '  '   :  ;/|    '   :  | '   ; : .'||  |  ' | :
+            |   |  |  |   |    \\    ;   |.'  '   | '/  :|  :  :_:,'
+            |   :  \\  |   :   .'    '---'    |   :    / |  | ,'
+            |   | ,'  |   | ,'                \\   \\ .'  \`--''
+            \`----'    \`----'                   \`---\`
+
+                                  F E T C h`
+                    ];
+
+                    const sleep = ms => new Promise(res => setTimeout(res, ms));
+
+                    async function typeLine(line, speed = 30) {
+                        for (let i = 0; i < line.length; i++) {
+                            consoleEl.textContent += line[i];
+                            consoleEl.scrollTop = consoleEl.scrollHeight;
+                            await sleep(speed);
+                        }
+                        consoleEl.textContent += '\n';
+                        consoleEl.scrollTop = consoleEl.scrollHeight;
+                    }
+
+                    async function runSequence() {
+                        consoleEl.textContent = '';
+                        await sleep(120);
+
+                        // Типування основних рядків
+                        for (let i = 0; i < lines.length; i++) {
+                            const speed = 18 + Math.floor(Math.random() * 30);
+                            await typeLine(lines[i], speed);
+                            await sleep(80);
+                        }
+
+                        // Типування логотипу прямо в консолі
+                        for (let i = 0; i < logoLines.length; i++) {
+                            await typeLine(logoLines[i], 2); // повільніше для "ASCII-ефекту"
+                        }
+
+                        // Пауза перед очищенням
+                        await sleep(2000);
+
+                        // Очищення консолі символ за символом
+                        while (consoleEl.textContent.length > 0) {
+                            consoleEl.textContent = consoleEl.textContent.slice(0, -2);
+                            consoleEl.scrollTop = consoleEl.scrollHeight;
+                            await sleep(10);
+                        }
+
+                        await sleep(700 + Math.floor(Math.random() * 800));
+                        runSequence();
+                    }
+
+                    runSequence();
+                });
+    </script>
 }
+<style>
+    .console-container {
+        max-width: 540px;
+        margin-top: 10px;
+    }
+
+    .console-window {
+        background: #000;
+        color: #0f0;
+        padding: 12px;
+        height: 220px;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        white-space: pre;
+        font-family: "Courier New", monospace;
+        font-size: 13px;
+        border-radius: 6px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.6), inset 0 -6px 20px rgba(0,0,0,0.4);
+        text-align: left; 
+    }
+
+    .ascii-logo {
+        display: none;
+        margin-top: 14px;
+        color: #0f0;
+        font-size: 12px;
+        white-space: pre;
+        text-shadow: 0 0 6px rgba(0,255,0,0.2);
+        line-height: 0.95;
+    }
+
+        .ascii-logo.show {
+            display: block;
+            animation: fadeInScale 700ms ease-out forwards;
+        }
+
+    @@keyframes fadeInScale {
+        from
+
+    {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    }
+</style>
