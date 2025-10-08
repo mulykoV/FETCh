@@ -1,0 +1,28 @@
+﻿@model FETChModels.Models.Lecture
+
+<h2>🎬 Лекція: @Model.Title</h2>
+
+<p><strong>Модуль:</strong> @Model.Module.Title</p>
+<p><strong>Курс:</strong> @Model.Module.Course.Title</p>
+
+@if (!string.IsNullOrEmpty(Model.VideoUrl))
+{
+    <div class="mt-3 mb-3">
+        <video width="100%" controls>
+            <source src="@Model.VideoUrl" type="video/mp4">
+            Ваш браузер не підтримує відтворення відео.
+        </video>
+    </div>
+}
+
+<div class="mt-3">
+    <h4>Контент лекції:</h4>
+    <div class="border p-3 bg-light">@Html.Raw(Model.Content)</div>
+</div>
+
+<div class="mt-3">
+    <p><strong>Тривалість:</strong> @(Model.Duration?.ToString(@"hh\:mm\:ss") ?? "не вказано")</p>
+    <a asp-action="Edit" class="btn btn-warning">✏️ Редагувати</a>
+    <a asp-action="Delete" class="btn btn-danger">🗑 Видалити</a>
+    <a asp-action="Details" asp-controller="AdminModules" asp-route-id="@Model.ModuleId" class="btn btn-secondary">↩️ Назад до модуля</a>
+</div>

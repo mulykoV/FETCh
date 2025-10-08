@@ -1,0 +1,31 @@
+﻿@model FETChModels.Models.CourseCategory
+
+@{
+    ViewData["Title"] = "Перегляд категорії";
+}
+
+<h2 class="mt-3">📄 Категорія: @Model.Name</h2>
+
+<h4 class="mt-4">Курси в цій категорії:</h4>
+
+@if (Model.Courses.Any())
+{
+    <ul class="list-group">
+        @foreach (var course in Model.Courses)
+        {
+            <li class="list-group-item">
+                @course.Title
+                <a class="btn btn-link btn-sm" asp-controller="AdminCourses" asp-action="Details" asp-route-id="@course.Id">Переглянути</a>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Курси відсутні.</p>
+}
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏️ Редагувати</a>
+    <a asp-action="Index" class="btn btn-secondary">↩️ Назад</a>
+</div>

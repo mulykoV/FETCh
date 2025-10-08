@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
-    public class Tag
+    public class Tag //???
     {
         public int Id { get; set; }                        // Унікальний ідентифікатор тегу
         public string? Name { get; set; }                   // Назва тегу

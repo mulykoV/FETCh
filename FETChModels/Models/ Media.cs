@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
-    public class Media
+    public class Media //???
     {
         public int Id { get; set; }                        // Унікальний ідентифікатор медіафайлу
         public string? FileName { get; set; }               // Ім'я файлу

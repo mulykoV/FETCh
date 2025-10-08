@@ -1,0 +1,10 @@
+﻿@model FETChModels.Models.Lecture
+
+<h2>Видалити лекцію: @Model.Title</h2>
+<p>Ви впевнені, що хочете видалити цю лекцію?</p>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Details" asp-controller="AdminModules" asp-route-id="@Model.ModuleId" class="btn btn-secondary">Відміна</a>
+</form>

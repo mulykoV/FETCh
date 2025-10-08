@@ -9,15 +9,15 @@ namespace FETChModels.Models
 {
     public class Lecture
     {
-        public int Id { get; set; }                        // Унікальний ідентифікатор лекції
-        public int ModuleId { get; set; }                  // Посилання на модуль (FK)
-        public Module? Module { get; set; }                 // Навігаційна властивість на модуль
-        public string? Title { get; set; }                  // Назва лекції
-        public string? Content { get; set; }                // Основний текст або HTML контент лекції
-        public string? VideoUrl { get; set; }               // Посилання на відео (якщо є)
-        public TimeSpan? Duration { get; set; }            // Тривалість лекції
-        public int Order { get; set; }                     // Порядок відображення лекції у модулі
+        public int Id { get; set; }                        // Г“Г­ВіГЄГ Г«ГјГ­ГЁГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° Г«ГҐГЄГ¶ВіВї
+        public int ModuleId { get; set; }                  // ГЏГ®Г±ГЁГ«Г Г­Г­Гї Г­Г  Г¬Г®Г¤ГіГ«Гј (FK)
+        public Module? Module { get; set; }                 // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  Г¬Г®Г¤ГіГ«Гј
+        public string? Title { get; set; }                  // ГЌГ Г§ГўГ  Г«ГҐГЄГ¶ВіВї
+        public string? Content { get; set; }                // ГЋГ±Г­Г®ГўГ­ГЁГ© ГІГҐГЄГ±ГІ Г ГЎГ® HTML ГЄГ®Г­ГІГҐГ­ГІ Г«ГҐГЄГ¶ВіВї
+        public string? VideoUrl { get; set; }               // ГЏГ®Г±ГЁГ«Г Г­Г­Гї Г­Г  ГўВіГ¤ГҐГ® (ГїГЄГ№Г® Вє)
+        public TimeSpan? Duration { get; set; }            // Г’Г°ГЁГўГ Г«ВіГ±ГІГј Г«ГҐГЄГ¶ВіВї
+        //public int? Order { get; set; }                     // ??? ГЏГ®Г°ГїГ¤Г®ГЄ ГўВіГ¤Г®ГЎГ°Г Г¦ГҐГ­Г­Гї Г«ГҐГЄГ¶ВіВї Гі Г¬Г®Г¤ГіГ«Ві
 
-        public ICollection<UserLectureProgress> UserLectureProgresses { get; set; } = new List<UserLectureProgress>();
+        public ICollection<UserLectureProgress>? UserLectureProgresses { get; set; } = new List<UserLectureProgress>();
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
-    public class CourseTag
+    public class CourseTag //???
     {
         public int CourseId { get; set; }                  // Посилання на курс (FK)
         public Course? Course { get; set; }                 // Навігаційна властивість на курс

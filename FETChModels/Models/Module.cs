@@ -10,12 +10,12 @@ namespace FETChModels.Models
     
         public class Module
         {
-            public int Id { get; set; }                        // Унікальний ідентифікатор модуля
-            public int CourseId { get; set; }                  // Посилання на курс (FK)
-            public Course? Course { get; set; }                 // Навігаційна властивість на курс
-            public string? Title { get; set; }                  // Назва модуля
-            public string? Description { get; set; }           // Опис модуля
-            public int Order { get; set; }                     // Порядок відображення модуля у курсі
-            public ICollection<Lecture>? Lectures { get; set; } // Лекції модуля
+            public int Id { get; set; }                        // Г“Г­ВіГЄГ Г«ГјГ­ГЁГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° Г¬Г®Г¤ГіГ«Гї
+            public int CourseId { get; set; }                  // ГЏГ®Г±ГЁГ«Г Г­Г­Гї Г­Г  ГЄГіГ°Г± (FK)
+            public Course? Course { get; set; }                 // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГіГ°Г±
+            public string? Title { get; set; }                  // ГЌГ Г§ГўГ  Г¬Г®Г¤ГіГ«Гї
+            public string? Description { get; set; }           // ГЋГЇГЁГ± Г¬Г®Г¤ГіГ«Гї
+            public int Order { get; set; }                     // ГЏГ®Г°ГїГ¤Г®ГЄ ГўВіГ¤Г®ГЎГ°Г Г¦ГҐГ­Г­Гї Г¬Г®Г¤ГіГ«Гї Гі ГЄГіГ°Г±Ві
+            public ICollection<Lecture>? Lectures { get; set; } // Г‹ГҐГЄГ¶ВіВї Г¬Г®Г¤ГіГ«Гї
         }
 }

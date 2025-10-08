@@ -1,0 +1,23 @@
+﻿@model FETChModels.Models.CourseCategory
+
+@{
+    ViewData["Title"] = "Видалити категорію";
+}
+
+<h2 class="mt-3 text-danger">🗑️ Видалити категорію</h2>
+
+<div class="alert alert-warning">
+    Ви впевнені, що хочете видалити категорію: <strong>@Model.Name</strong>?
+    @if (Model.Courses.Any())
+    {
+        <p class="text-danger">Увага: ця категорія містить курси і не може бути видалена!</p>
+    }
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-danger">🗑️ Видалити</button>
+        <a asp-action="Index" class="btn btn-secondary">↩️ Назад</a>
+    </div>
+</form>

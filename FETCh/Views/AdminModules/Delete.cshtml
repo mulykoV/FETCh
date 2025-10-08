@@ -1,0 +1,10 @@
+﻿@model FETChModels.Models.Module
+
+<h2> Видалити модуль: @Model.Title</h2>
+<p>Ви впевнені, що хочете видалити цей модуль?</p>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Так, видалити</button>
+    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn btn-secondary">Відміна</a>
+</form>

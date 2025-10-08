@@ -9,15 +9,15 @@ namespace FETChModels.Models
 {
     public class Review
     {
-        public int Id { get; set; }                        // Унікальний ідентифікатор відгуку
-        public int CourseId { get; set; }                  // Ідентифікатор курсу (FK)
-        public Course? Course { get; set; }                 // Навігаційна властивість на курс
+        public int Id { get; set; }                        // Г“Г­ВіГЄГ Г«ГјГ­ГЁГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГўВіГ¤ГЈГіГЄГі
+        public int CourseId { get; set; }                  // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГіГ°Г±Гі (FK)
+        public Course? Course { get; set; }                 // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГіГ°Г±
 
-        public string? UserId { get; set; }                 // Ідентифікатор користувача (FK, string для Identity)
-        public ApplicationUser? User { get; set; }                     // Навігаційна властивість на користувача
+        public string? UserId { get; set; }                 // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г  (FK, string Г¤Г«Гї Identity)
+        public ApplicationUser? User { get; set; }                     // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г 
 
-        public string? Text { get; set; }                   // Текст відгуку
-        public int Rating { get; set; }                    // Оцінка (1–5)
+        public string? Text { get; set; }                   // Г’ГҐГЄГ±ГІ ГўВіГ¤ГЈГіГЄГі
+        public int Rating { get; set; }                    // ГЋГ¶ВіГ­ГЄГ  (1вЂ“5)
         public DateTime PostedDate { get; set; }
     }
 }

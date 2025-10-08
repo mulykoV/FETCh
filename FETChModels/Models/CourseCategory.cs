@@ -9,9 +9,9 @@ namespace FETChModels.Models
 {
 	public class CourseCategory
 	{
-		public int Id { get; set; }                        // Унікальний ідентифікатор категорії
-		public string? Name { get; set; }                   // Назва категорії
-		public string? Slug { get; set; }                   // URL-дружній ідентифікатор (для роутів)
+		public int Id { get; set; }                        // Г“Г­ВіГЄГ Г«ГјГ­ГЁГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГ ГІГҐГЈГ®Г°ВіВї
+		public string? Name { get; set; }                   // ГЌГ Г§ГўГ  ГЄГ ГІГҐГЈГ®Г°ВіВї
+		public string? Slug { get; set; }                   // URL-Г¤Г°ГіГ¦Г­ВіГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° (Г¤Г«Гї Г°Г®ГіГІВіГў)
 
         public ICollection<Course> Courses { get; set; } = new List<Course>(); 
     }

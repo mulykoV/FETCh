@@ -1,0 +1,78 @@
+﻿@model FETChModels.Models.Module
+
+@{
+    ViewData["Title"] = "Модуль: " + Model.Title;
+    var userId = ViewBag.UserId as string;
+    int totalLectures = Model.Lectures.Count();
+    int watchedLectures = Model.Lectures.Count(l =>
+        l.UserLectureProgresses != null &&
+        l.UserLectureProgresses.Any(p => p.UserId == userId && p.Watched)
+    );
+
+    double progressPercent = totalLectures > 0
+        ? Math.Round((double)watchedLectures / totalLectures * 100, 1)
+        : 0;
+}
+
+<h2 class="mt-3">Модуль: @Model.Title</h2>
+<p>@Model.Description</p>
+
+@if (totalLectures > 0)
+{
+    <div class="progress my-3" style="height: 25px;">
+        <div class="progress-bar bg-success"
+             role="progressbar"
+             style="width: @progressPercent%;"
+             aria-valuenow="@progressPercent"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            @progressPercent%
+        </div>
+    </div>
+
+    <h4 class="mt-4">Лекції:</h4>
+    <ul class="list-group">
+        @foreach (var lecture in Model.Lectures)
+        {
+            var progress = lecture.UserLectureProgresses?
+            .FirstOrDefault(p => p.UserId == userId);
+
+            bool watched = progress?.Watched ?? false;
+
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@lecture.Title</strong>
+                    <br />
+                    <small class="text-muted">
+                        @if (lecture.Duration != null)
+                        {
+                            <text>Тривалість: @lecture.Duration.Value.ToString(@"hh\:mm\:ss")</text>
+                        }
+                    </small>
+                </div>
+
+                <div>
+                    @if (watched)
+                    {
+                        <span class="badge bg-success me-2">✅ Переглянуто</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-secondary me-2">⏳ Не переглянуто</span>
+                    }
+
+                    <a class="btn btn-outline-primary btn-sm"
+                       asp-controller="UserLectures"
+                       asp-action="Details"
+                       asp-route-id="@lecture.Id">
+                        Переглянути
+                    </a>
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>Лекції відсутні.</p>
+}
