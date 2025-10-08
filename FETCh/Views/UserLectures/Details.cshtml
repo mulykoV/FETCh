@@ -4,28 +4,25 @@
     ViewData["Title"] = "Лекція: " + Model.Title;
 }
 
-<h2 class="mt-3"> Лекція: @Model.Title</h2>
-<p><strong>Модуль:</strong> @Model.Module.Title</p>
-<p><strong>Курс:</strong> @Model.Module.Course.Title</p>
+<h2 class="mt-3">@Model.Title</h2>
 
 @if (!string.IsNullOrEmpty(Model.VideoUrl))
 {
-    <div class="mt-3 mb-3">
-        <video width="100%" controls>
-            <source src="@Model.VideoUrl" type="video/mp4">
-            Ваш браузер не підтримує відтворення відео.
-        </video>
+    <div class="ratio ratio-16x9 mb-3">
+        <iframe src="@Model.VideoUrl" allowfullscreen></iframe>
     </div>
 }
 
-<div class="mt-3">
-    <h4>Контент лекції:</h4>
-    <div class="border p-3 bg-light">
-        @Html.Raw(Model.Content)
-    </div>
-</div>
+<p>@Html.Raw(Model.Content)</p>
 
-<div class="mt-3">
-    <p><strong>Тривалість:</strong> @(Model.Duration?.ToString(@"hh\:mm\:ss") ?? "не вказано")</p>
-    <a asp-controller="UserModules" asp-action="Details" asp-route-id="@Model.ModuleId" class="btn btn-secondary">↩️ Назад до модуля</a>
-</div>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["Message"]</div>
+}
+
+<form asp-action="MarkAsWatched" method="post" class="mt-3">
+    <input type="hidden" name="lectureId" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">✅ Позначити як переглянуту</button>
+</form>
+
+<a asp-action="Details" asp-controller="UserModules" asp-route-id="@Model.ModuleId" class="btn btn-secondary mt-3">⬅ Назад до модуля</a>

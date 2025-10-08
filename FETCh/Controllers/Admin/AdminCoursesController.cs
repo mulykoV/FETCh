@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETCh.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminCoursesController : Controller
     {
         private readonly FETChDbContext _context;

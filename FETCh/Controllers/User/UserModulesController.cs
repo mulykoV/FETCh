@@ -1,6 +1,7 @@
-﻿using FETChModels.Models;
-using FetchData.Data;
+﻿using FetchData.Data;
+using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,13 +11,14 @@ namespace FETCh.Controllers.User
     public class UserModulesController : Controller
     {
         private readonly FETChDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserModulesController(FETChDbContext context)
+        public UserModulesController(FETChDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: /UserModules?courseId=5
         public async Task<IActionResult> Index(int courseId)
         {
             var modules = await _context.Modules
@@ -29,15 +31,20 @@ namespace FETCh.Controllers.User
             return View(modules);
         }
 
-        // GET: /UserModules/Details/5
         public async Task<IActionResult> Details(int id)
         {
+            var userId = _userManager.GetUserId(User);
+
             var module = await _context.Modules
                 .Include(m => m.Lectures)
+                    .ThenInclude(l => l.UserLectureProgresses)
                 .Include(m => m.Course)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (module == null) return NotFound();
+
+
+            ViewBag.UserId = userId;
 
             return View(module);
         }
