@@ -1,0 +1,30 @@
+﻿@model FETChModels.Models.Module
+
+@{
+    ViewData["Title"] = "Додати модуль";
+}
+
+<h2 class="mt-3">➕ Додати новий модуль</h2>
+
+<form asp-action="Create" method="post">
+    <input type="hidden" asp-for="CourseId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Назва модуля</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Опис модуля</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">✅ Зберегти</button>
+    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn btn-secondary">↩️ Назад до курсу</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
-    public class Instructor
+    public class Instructor //???
     {
         public int Id { get; set; }                        // Унікальний ідентифікатор викладача
         public string FullName { get; set; }               // Повне ім'я викладача

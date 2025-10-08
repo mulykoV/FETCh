@@ -1,0 +1,33 @@
+﻿@model IEnumerable<FETChModels.Models.CourseCategory>
+
+@{
+    ViewData["Title"] = "Категорії курсів";
+}
+
+<h2 class="mt-3">📂 Категорії курсів</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">➕ Додати категорію</a>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Кількість курсів</th>
+            <th>Дії</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.Courses.Count</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@category.Id">Перегляд</a>
+                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@category.Id">Редагувати</a>
+                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@category.Id">Видалити</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

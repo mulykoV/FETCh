@@ -7,11 +7,9 @@ using FetchData.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
- //�������� DbContext � ���� ������� �� ������ ���������� �������
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();

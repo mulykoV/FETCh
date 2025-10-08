@@ -1,0 +1,46 @@
+﻿@model FETChModels.Models.Course
+
+@{
+    ViewData["Title"] = "Видалення курсу";
+}
+
+<h2 class="mt-3 text-danger">🗑️ Видалення курсу</h2>
+
+<h4>Ви впевнені, що хочете видалити цей курс?</h4>
+<hr />
+
+<div class="card shadow-sm p-3">
+    <dl class="row">
+        <dt class="col-sm-3">Назва:</dt>
+        <dd class="col-sm-9">@Model.Title</dd>
+
+        <dt class="col-sm-3">Мова:</dt>
+        <dd class="col-sm-9">@Model.Language</dd>
+
+        <dt class="col-sm-3">Ціна:</dt>
+        <dd class="col-sm-9">
+            @if (Model.IsFree)
+            {
+                <span class="badge bg-success">Безкоштовно</span>
+            }
+            else
+            {
+                @Model.Price.ToString() @Model.PriceCurrency
+            }
+        </dd>
+
+        <dt class="col-sm-3">Категорія:</dt>
+        <dd class="col-sm-9">@Model.Category?.Name</dd>
+
+        <dt class="col-sm-3">Опис:</dt>
+        <dd class="col-sm-9 text-muted">@Model.Description</dd>
+    </dl>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post" class="mt-4">
+    <input type="hidden" asp-for="Id" />
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">🗑️ Видалити</button>
+        <a asp-action="Index" class="btn btn-secondary">↩️ Скасувати</a>
+    </div>
+</form>

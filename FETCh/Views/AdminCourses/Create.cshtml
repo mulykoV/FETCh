@@ -1,0 +1,95 @@
+﻿@model FETChModels.Models.Course
+
+@{
+    ViewData["Title"] = "Додати новий курс";
+}
+
+<h2 class="mt-3">➕ Додати новий курс</h2>
+
+<form asp-action="Create" method="post" class="mt-4">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="Title" class="form-label">Назва курсу</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Subtitle" class="form-label">Підзаголовок</label>
+            <input asp-for="Subtitle" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Опис курсу</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <label asp-for="Language" class="form-label">Мова</label>
+            <input asp-for="Language" class="form-control" placeholder="Наприклад: uk, en" />
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="DurationHours" class="form-label">Тривалість (годин)</label>
+            <input asp-for="DurationHours" type="number" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Категорія</label>
+            <div class="input-group">
+                <select asp-for="CategoryId" class="form-select">
+                    <option value="">-- Виберіть категорію --</option>
+                    @foreach (var category in ViewBag.Categories as List<FETChModels.Models.CourseCategory>)
+                    {
+                        <option value="@category.Id">@category.Name</option>
+                    }
+                </select>
+                <a class="btn btn-outline-primary" asp-controller="AdminCategories" asp-action="Create">
+                    ➕ Додати категорію
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="form-check mt-4">
+                <input asp-for="IsFree" class="form-check-input" />
+                <label asp-for="IsFree" class="form-check-label">Безкоштовний</label>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Price" class="form-label">Ціна</label>
+            <input asp-for="Price" type="number" step="0.01" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label asp-for="PriceCurrency" class="form-label">Валюта</label>
+            <input asp-for="PriceCurrency" class="form-control" placeholder="UAH, USD" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label asp-for="ImageUrl" class="form-label">Посилання на зображення</label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="BannerImageUrl" class="form-label">Банер курсу</label>
+            <input asp-for="BannerImageUrl" class="form-control" placeholder="https://..." />
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-success">✅ Зберегти</button>
+        <a asp-action="Index" class="btn btn-secondary">↩️ Назад до списку</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

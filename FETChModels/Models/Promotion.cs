@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
-    public class Promotion
+    public class Promotion //???
     {
         public int Id { get; set; }                        // Унікальний ідентифікатор акції
         public string Title { get; set; }                  // Назва акції

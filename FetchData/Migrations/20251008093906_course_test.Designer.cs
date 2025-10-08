@@ -4,6 +4,7 @@ using FetchData.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FetchData.Migrations
 {
     [DbContext(typeof(FETChDbContext))]
-    partial class FETChDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251008093906_course_test")]
+    partial class course_test
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,10 +206,11 @@ namespace FetchData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PriceCurrency")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PromotionId")
@@ -314,6 +318,9 @@ namespace FetchData.Migrations
                         .HasColumnType("time");
 
                     b.Property<int>("ModuleId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Order")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")

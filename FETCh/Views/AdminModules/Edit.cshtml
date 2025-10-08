@@ -1,0 +1,31 @@
+﻿@model FETChModels.Models.Module
+
+@{
+    ViewData["Title"] = "Редагувати модуль";
+}
+
+<h2 class="mt-3">✏️ Редагувати модуль</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="CourseId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Назва модуля</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Опис модуля</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Зберегти</button>
+    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn btn-secondary">↩️ Назад до курсу</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
