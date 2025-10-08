@@ -9,11 +9,11 @@ namespace FETChModels.Models
 {
     public class UserCourse
     {
-        public string UserId { get; set; }                 // Ідентифікатор користувача (FK)
-        public ApplicationUser User { get; set; }                     // Навігаційна властивість на користувача
+        public string? UserId { get; set; }                 // Ідентифікатор користувача (FK)
+        public ApplicationUser? User { get; set; }                     // Навігаційна властивість на користувача
 
         public int CourseId { get; set; }                  // Ідентифікатор курсу (FK)
-        public Course Course { get; set; }                 // Навігаційна властивість на курс
+        public Course? Course { get; set; }                 // Навігаційна властивість на курс
 
         public DateTime EnrolledDate { get; set; }         // Дата запису на курс
         public bool IsCompleted { get; set; }              // Чи завершив курс користувач
