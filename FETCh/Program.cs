@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FetchData.Data;
 using FETChModels.Models;
+using FetchData.Interfaces;
+using FetchData.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,12 +13,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
+//builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
-//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<FETChDbContext>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromMinutes(5);
+});
+
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
@@ -58,3 +66,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+

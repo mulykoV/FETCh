@@ -2,14 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using FETCh.Constants;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -20,6 +12,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using System.Text;
+using System.Text.Encodings.Web;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace FETCh.Areas.Identity.Pages.Account
 {
@@ -31,13 +34,15 @@ namespace FETCh.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _config;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration config)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -45,6 +50,7 @@ namespace FETCh.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _config = config;
         }
 
         /// <summary>
@@ -73,6 +79,11 @@ namespace FETCh.Areas.Identity.Pages.Account
         public class InputModel
         {
             public string?  Name { get; set; }
+
+
+            [DataType(DataType.Password)]
+            [Display(Name = "Secret key")]
+            public string? Secret { get; set; }
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -123,9 +134,27 @@ namespace FETCh.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
+                if (!string.IsNullOrEmpty(Input.Secret))
+                {
+                    var adminSecret = _config["AdminSettings:SecretKey"];
+                    if (Input.Secret != adminSecret)
+                    {
+                        ModelState.AddModelError(string.Empty, "Невірна секретна фраза для адміністратора.");
+                        return Page(); // зупиняємо реєстрацію і повертаємо помилку
+                    }
+                }
+
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+                    if (!string.IsNullOrEmpty(Input.Secret))
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.Admin.ToString());
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+                    }
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -137,8 +166,9 @@ namespace FETCh.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await SendEmailAsync(Input.Email, "Підтвердження Електроної пошти",
+                        $"Це посилання створено автоматично й буде дійсне 5 хвилин!!!" +
+                        $"Будь ласка, щоб підтвердити вашу електрону пошту <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>натисність сюди</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -158,6 +188,40 @@ namespace FETCh.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
+        {
+            try
+            {
+                var smtpHost = _config["EmailSettings:SmtpHost"]; 
+                var smtpPort = int.Parse(_config["EmailSettings:SmtpPort"]); 
+                var smtpUser = _config["EmailSettings:SmtpUser"]; 
+                var smtpPass = _config["EmailSettings:SmtpPass"];
+
+                using (var client = new SmtpClient(smtpHost, smtpPort))
+                {
+                    client.Credentials = new NetworkCredential(smtpUser, smtpPass);
+                    client.EnableSsl = true;
+
+                    using (var mailMessage = new MailMessage())
+                    {
+                        mailMessage.From = new MailAddress(smtpUser, "FETCh System");
+                        mailMessage.To.Add(email);
+                        mailMessage.Subject = subject;
+                        mailMessage.Body = htmlMessage;
+                        mailMessage.IsBodyHtml = true;
+
+                        await client.SendMailAsync(mailMessage);
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         private ApplicationUser CreateUser()

@@ -33,3 +33,5 @@ artifacts/
 =======
 /.vs
 >>>>>>> 82bd780bd5ca4dc055a4604657e349d9c05d0753
+/FetchData/Migrations/20250930225322_mx3.0.cs
+/FetchData/Migrations/20250930225322_mx3.0.Designer.cs
