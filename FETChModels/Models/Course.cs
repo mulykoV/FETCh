@@ -9,27 +9,28 @@ namespace FETChModels.Models
 {
     public class Course
     {
-        public int Id { get; set; }                        // Унікальний ідентифікатор курсу
-        public string Title { get; set; }                  // Назва курсу
-        public string Subtitle { get; set; }               // Підзаголовок або короткий опис курсу
-        public string Description { get; set; }           // Детальний опис курсу
-        public string Language { get; set; }              // Мова курсу ("ua", "en" тощо)
-        public bool IsFree { get; set; }                  // Чи безкоштовний курс
-        public decimal? Price { get; set; }                // Ціна курсу (якщо платний)
-        public string? PriceCurrency { get; set; }         // Валюта (UAH, USD)
-        public DateTime? StartDate { get; set; }          // Дата початку курсу (якщо є)
-        public DateTime? EndDate { get; set; }            // Дата завершення курсу (якщо є)
-        public string? ImageUrl { get; set; }              // Зображення/обкладинка курсу
-        public string? BannerImageUrl { get; set; }        // Банер курсу (для головної сторінки)
-        public int DurationHours { get; set; }            // Орієнтовна тривалість курсу у годинах
-        public CourseCategory? Category { get; set; }      // Категорія курсу (зовнішня модель)
-        public int CategoryId { get; set; }               // Ідентифікатор категорії (FK)
-        public ICollection<Module>? Modules { get; set; }  // Список модулів курсу
-        public ICollection<Lecture>? Lectures { get; set; }// Лекції, якщо вони не в модулях
-        public ICollection<CourseTag>? CourseTags { get; set; } // Теги курсу (для фільтрів/пошуку)
+        public int Id { get; set; }                        // Г“Г­ВіГЄГ Г«ГјГ­ГЁГ© ВіГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГіГ°Г±Гі
+        public required string Title { get; set; }                  // ГЌГ Г§ГўГ  ГЄГіГ°Г±Гі
+        public required string Subtitle { get; set; }               // ГЏВіГ¤Г§Г ГЈГ®Г«Г®ГўГ®ГЄ Г ГЎГ® ГЄГ®Г°Г®ГІГЄГЁГ© Г®ГЇГЁГ± ГЄГіГ°Г±Гі
+        public string? Description { get; set; }           // Г„ГҐГІГ Г«ГјГ­ГЁГ© Г®ГЇГЁГ± ГЄГіГ°Г±Гі
+        public required string Language { get; set; }              // ГЊГ®ГўГ  ГЄГіГ°Г±Гі ("ua", "en" ГІГ®Г№Г®)
+        public bool IsFree { get; set; }                  // Г—ГЁ ГЎГҐГ§ГЄГ®ГёГІГ®ГўГ­ГЁГ© ГЄГіГ°Г±
+        [Precision(18, 2)] // ГџГЄГ№Г® Г§Г­Г Г·ГҐГ­Г­Гї ГўГЁГµГ®Г¤ГЁГІГј Г§Г  Г°Г Г¬ГЄГЁ (Г­Г ГЇГ°ГЁГЄГ«Г Г¤, ГЎВіГ«ГјГёГҐ Г­ВіГ¦ 18 Г¶ГЁГґГ° Г ГЎГ® ГЎВіГ«ГјГёГҐ 2 Г§Г­Г ГЄВіГў ГЇВіГ±Г«Гї ГЄГ®Г¬ГЁ)
+        public decimal Price { get; set; }                // Г–ВіГ­Г  ГЄГіГ°Г±Гі (ГїГЄГ№Г® ГЇГ«Г ГІГ­ГЁГ©)
+        public string? PriceCurrency { get; set; }         // Г‚Г Г«ГѕГІГ  (UAH, USD)
+        public DateTime? StartDate { get; set; }          // Г„Г ГІГ  ГЇГ®Г·Г ГІГЄГі ГЄГіГ°Г±Гі (ГїГЄГ№Г® Вє)
+        public DateTime? EndDate { get; set; }            // Г„Г ГІГ  Г§Г ГўГҐГ°ГёГҐГ­Г­Гї ГЄГіГ°Г±Гі (ГїГЄГ№Г® Вє)
+        public string? ImageUrl { get; set; }              // Г‡Г®ГЎГ°Г Г¦ГҐГ­Г­Гї/Г®ГЎГЄГ«Г Г¤ГЁГ­ГЄГ  ГЄГіГ°Г±Гі
+        public string? BannerImageUrl { get; set; }        // ГЃГ Г­ГҐГ° ГЄГіГ°Г±Гі (Г¤Г«Гї ГЈГ®Г«Г®ГўГ­Г®Вї Г±ГІГ®Г°ВіГ­ГЄГЁ)
+        public int DurationHours { get; set; }            // ГЋГ°ВіВєГ­ГІГ®ГўГ­Г  ГІГ°ГЁГўГ Г«ВіГ±ГІГј ГЄГіГ°Г±Гі Гі ГЈГ®Г¤ГЁГ­Г Гµ
+        public required CourseCategory Category { get; set; }      // ГЉГ ГІГҐГЈГ®Г°ВіГї ГЄГіГ°Г±Гі (Г§Г®ГўГ­ВіГёГ­Гї Г¬Г®Г¤ГҐГ«Гј)
+        public int CategoryId { get; set; }               // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГ ГІГҐГЈГ®Г°ВіВї (FK)
+        public ICollection<Module>? Modules { get; set; }  // Г‘ГЇГЁГ±Г®ГЄ Г¬Г®Г¤ГіГ«ВіГў ГЄГіГ°Г±Гі
+        public ICollection<Lecture>? Lectures { get; set; }// Г‹ГҐГЄГ¶ВіВї, ГїГЄГ№Г® ГўГ®Г­ГЁ Г­ГҐ Гў Г¬Г®Г¤ГіГ«ГїГµ
+        public ICollection<CourseTag>? CourseTags { get; set; } // Г’ГҐГЈГЁ ГЄГіГ°Г±Гі (Г¤Г«Гї ГґВіГ«ГјГІГ°ВіГў/ГЇГ®ГёГіГЄГі)
         [NotMapped]
-        public ICollection<UserCourse>? Enrollments { get; set; } // Користувачі, записані на курс
-        public ICollection<Review>? Reviews { get; set; } = new List<Review>();
-        public ICollection<UserCourse>? UserCourses { get; set; } = new List<UserCourse>();
+        public ICollection<UserCourse>? Enrollments { get; set; } // ГЉГ®Г°ГЁГ±ГІГіГўГ Г·Ві, Г§Г ГЇГЁГ±Г Г­Ві Г­Г  ГЄГіГ°Г±
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public ICollection<UserCourse> UserCourses { get; set; } = new List<UserCourse>();
     }
 }

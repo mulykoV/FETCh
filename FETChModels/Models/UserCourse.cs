@@ -9,14 +9,14 @@ namespace FETChModels.Models
 {
     public class UserCourse
     {
-        public string UserId { get; set; }                 // Ідентифікатор користувача (FK)
-        public ApplicationUser User { get; set; }          // Навігаційна властивість на користувача
+        public string? UserId { get; set; }                 // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г  (FK)
+        public ApplicationUser? User { get; set; }                     // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г 
 
-        public int CourseId { get; set; }                  // Ідентифікатор курсу (FK)
-        public Course Course { get; set; }                 // Навігаційна властивість на курс
+        public int CourseId { get; set; }                  // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГіГ°Г±Гі (FK)
+        public Course? Course { get; set; }                 // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГіГ°Г±
 
-        public DateTime EnrolledDate { get; set; }         // Дата запису на курс
-        public bool IsCompleted { get; set; }              // Чи завершив курс користувач
-        public DateTime? CompletedDate { get; set; }       // Дата завершення (якщо завершив)
+        public DateTime EnrolledDate { get; set; }         // Г„Г ГІГ  Г§Г ГЇГЁГ±Гі Г­Г  ГЄГіГ°Г±
+        public bool IsCompleted { get; set; }              // Г—ГЁ Г§Г ГўГҐГ°ГёГЁГў ГЄГіГ°Г± ГЄГ®Г°ГЁГ±ГІГіГўГ Г·
+        public DateTime? CompletedDate { get; set; }       // Г„Г ГІГ  Г§Г ГўГҐГ°ГёГҐГ­Г­Гї (ГїГЄГ№Г® Г§Г ГўГҐГ°ГёГЁГў)
     }
 }

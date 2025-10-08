@@ -9,14 +9,14 @@ namespace FETChModels.Models
 {
     public class UserLectureProgress
     {
-        public string UserId { get; set; }                 // Ідентифікатор користувача (FK)
-        public ApplicationUser User { get; set; }          // Навігаційна властивість на користувача
+        public string? UserId { get; set; }                 // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г  (FK)
+        public ApplicationUser? User { get; set; }                     // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  ГЄГ®Г°ГЁГ±ГІГіГўГ Г·Г 
 
-        public int LectureId { get; set; }                 // Ідентифікатор лекції (FK)
-        public Lecture Lecture { get; set; }               // Навігаційна властивість на лекцію
+        public int LectureId { get; set; }                 // ВІГ¤ГҐГ­ГІГЁГґВіГЄГ ГІГ®Г° Г«ГҐГЄГ¶ВіВї (FK)
+        public Lecture? Lecture { get; set; }               // ГЌГ ГўВіГЈГ Г¶ВіГ©Г­Г  ГўГ«Г Г±ГІГЁГўВіГ±ГІГј Г­Г  Г«ГҐГЄГ¶ВіГѕ
 
-        public bool Watched { get; set; }                  // Чи переглянута лекція
-        public DateTime? WatchedDate { get; set; }         // Дата перегляду
-        public double ProgressPercentage { get; set; }     // ??? Відсоток прогресу лекції
+        public bool Watched { get; set; }                  // Г—ГЁ ГЇГҐГ°ГҐГЈГ«ГїГ­ГіГІГ  Г«ГҐГЄГ¶ВіГї
+        public DateTime? WatchedDate { get; set; }         // Г„Г ГІГ  ГЇГҐГ°ГҐГЈГ«ГїГ¤Гі
+        public double ProgressPercentage { get; set; }     // ??? Г‚ВіГ¤Г±Г®ГІГ®ГЄ ГЇГ°Г®ГЈГ°ГҐГ±Гі Г«ГҐГЄГ¶ВіВї
     }
 }

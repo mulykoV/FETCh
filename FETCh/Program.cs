@@ -12,7 +12,6 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
-
 //builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 
@@ -23,7 +22,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromMinutes(5);
 });
 
-//������� ���
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
@@ -66,3 +65,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
