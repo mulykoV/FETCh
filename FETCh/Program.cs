@@ -11,10 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
- //�������� DbContext � ���� ������� �� ������ ���������� �������
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
-builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
+//builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -24,7 +23,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromMinutes(5);
 });
 
-//������� ���
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
@@ -67,3 +66,4 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
