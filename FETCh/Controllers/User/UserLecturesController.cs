@@ -1,32 +1,27 @@
-﻿using FetchData.Data;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FETCh.Controllers.User
 {
     [Authorize(Roles = "User")]
     public class UserLecturesController : Controller
     {
-        private readonly FETChDbContext _context;
+        private readonly IFETChRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserLecturesController(FETChDbContext context, UserManager<ApplicationUser> userManager)
+        public UserLecturesController(IFETChRepository repository, UserManager<ApplicationUser> userManager)
         {
-            _context = context;
+            _repository = repository;
             _userManager = userManager;
         }
 
         // Перегляд лекції
         public async Task<IActionResult> Details(int id)
         {
-            var lecture = await _context.Lectures
-                .Include(l => l.Module)
-                    .ThenInclude(m => m.Course)
-                .FirstOrDefaultAsync(l => l.Id == id);
-
+            var lecture = await _repository.GetLectureByIdAsync(id);
             if (lecture == null) return NotFound();
 
             return View(lecture);
@@ -40,9 +35,13 @@ namespace FETCh.Controllers.User
             if (userId == null)
                 return RedirectToAction("Login", "Account");
 
-            var progress = await _context.UserLectureProgresses
-                .FirstOrDefaultAsync(p => p.UserId == userId && p.LectureId == lectureId);
+            // Отримуємо лекцію (перевірка існування)
+            var lecture = await _repository.GetLectureByIdAsync(lectureId);
+            if (lecture == null)
+                return NotFound();
 
+            // Перевіряємо, чи є запис прогресу
+            var progress = await _repository.GetUserLectureProgressAsync(userId, lectureId);
             if (progress == null)
             {
                 progress = new UserLectureProgress
@@ -53,20 +52,18 @@ namespace FETCh.Controllers.User
                     WatchedDate = DateTime.UtcNow,
                     ProgressPercentage = 100
                 };
-                _context.UserLectureProgresses.Add(progress);
+                await _repository.AddUserLectureProgressAsync(progress);
             }
             else
             {
                 progress.Watched = true;
                 progress.WatchedDate = DateTime.UtcNow;
                 progress.ProgressPercentage = 100;
-                _context.UserLectureProgresses.Update(progress);
+                await _repository.UpdateUserLectureProgressAsync(progress);
             }
 
-            await _context.SaveChangesAsync();
             TempData["Message"] = "✅ Лекцію позначено як переглянуту!";
             return RedirectToAction("Details", new { id = lectureId });
         }
-
     }
 }

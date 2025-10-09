@@ -1,5 +1,6 @@
 ﻿using FetchData.Data;
 using FetchData.Interfaces;
+using FETChModels.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace FetchData.Repositories
 {
-     public class BaseSQLServrRepository<TDbContext> : IFETChRepository
+     public class BaseSQLServrRepository<TDbContext> : IRepository
         where TDbContext : FETChDbContext
     {
         private FETChDbContext db;
@@ -48,6 +49,11 @@ namespace FetchData.Repositories
         public async Task<T?> ReadSingleAsync<T>(Expression<Func<T, bool>> expression) where T : class
         {
             return await ReadAll<T>().SingleOrDefaultAsync(expression);
+        }
+
+        public async Task<bool> ExistsAsync<T>(Expression<Func<T, bool>> expression) where T : class
+        {
+            return await All<T>().AnyAsync(expression);
         }
 
         public async Task<IQueryable<T?>> ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class

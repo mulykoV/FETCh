@@ -1,22 +1,22 @@
-﻿using FetchData.Data;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace FETCh.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminLecturesController : Controller
     {
-        private readonly FETChDbContext _context;
+        private readonly IFETChRepository _repository;
 
-        public AdminLecturesController(FETChDbContext context)
+        public AdminLecturesController(IFETChRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // -------------------- СТВОРЕННЯ ЛЕКЦІЇ --------------------
+        // -------------------- CREATE --------------------
         public IActionResult Create(int moduleId)
         {
             var lecture = new Lecture { ModuleId = moduleId };
@@ -29,17 +29,16 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Lectures.Add(lecture);
-                await _context.SaveChangesAsync();
+                await _repository.AddLectureAsync(lecture);
                 return RedirectToAction("Details", "AdminModules", new { id = lecture.ModuleId });
             }
             return View(lecture);
         }
 
-        // -------------------- РЕДАГУВАННЯ ЛЕКЦІЇ --------------------
+        // -------------------- EDIT --------------------
         public async Task<IActionResult> Edit(int id)
         {
-            var lecture = await _context.Lectures.FindAsync(id);
+            var lecture = await _repository.GetLectureByIdAsync(id);
             if (lecture == null) return NotFound();
             return View(lecture);
         }
@@ -50,19 +49,16 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Lectures.Update(lecture);
-                await _context.SaveChangesAsync();
+                await _repository.UpdateLectureAsync(lecture);
                 return RedirectToAction("Details", "AdminModules", new { id = lecture.ModuleId });
             }
             return View(lecture);
         }
 
-        // -------------------- ВИДАЛЕННЯ ЛЕКЦІЇ --------------------
+        // -------------------- DELETE --------------------
         public async Task<IActionResult> Delete(int id)
         {
-            var lecture = await _context.Lectures
-                .Include(l => l.Module)
-                .FirstOrDefaultAsync(l => l.Id == id);
+            var lecture = await _repository.GetLectureByIdAsync(id);
             if (lecture == null) return NotFound();
             return View(lecture);
         }
@@ -71,22 +67,18 @@ namespace FETCh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var lecture = await _context.Lectures.FindAsync(id);
+            var lecture = await _repository.GetLectureByIdAsync(id);
             if (lecture == null) return NotFound();
 
-            _context.Lectures.Remove(lecture);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "AdminModules", new { id = lecture.ModuleId });
+            int moduleId = lecture.ModuleId;
+            await _repository.DeleteLectureAsync(id);
+            return RedirectToAction("Details", "AdminModules", new { id = moduleId });
         }
 
-        // -------------------- ДЕТАЛІ ЛЕКЦІЇ --------------------
+        // -------------------- DETAILS --------------------
         public async Task<IActionResult> Details(int id)
         {
-            var lecture = await _context.Lectures
-                .Include(l => l.Module)
-                .ThenInclude(m => m.Course)
-                .FirstOrDefaultAsync(l => l.Id == id);
-
+            var lecture = await _repository.GetLectureByIdAsync(id);
             if (lecture == null) return NotFound();
             return View(lecture);
         }

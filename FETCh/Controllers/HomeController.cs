@@ -1,31 +1,43 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+using FetchData.Interfaces;
 using FETChModels.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace FETCh.Controllers;
-
-public class HomeController : Controller
+namespace FETCh.Controllers
 {
-    private readonly ILogger<HomeController> _logger;
-
-    public HomeController(ILogger<HomeController> logger)
+    public class HomeController : Controller
     {
-        _logger = logger;
-    }
+        private readonly ILogger<HomeController> _logger;
+        private readonly IFETChRepository _repository;
 
-    public IActionResult Index()
-    {
-        return View();
-    }
+        public HomeController(ILogger<HomeController> logger, IFETChRepository repository)
+        {
+            _logger = logger;
+            _repository = repository;
+        }
 
-    public IActionResult Privacy()
-    {
-        return View();
-    }
+        // -------------------- ГОЛОВНА СТОРІНКА --------------------
+        public async Task<IActionResult> Index()
+        {
+            // Наприклад, показуємо список усіх курсів
+            var courses = await _repository.GetAllCoursesAsync();
+            return View(courses); // передаємо курси у View
+        }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        // -------------------- ПРО ПОЛІТИКУ КОНФІДЕНЦІЙНОСТІ --------------------
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        // -------------------- СТОРІНКА ПОМИЛКИ --------------------
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            });
+        }
     }
 }

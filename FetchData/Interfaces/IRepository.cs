@@ -20,6 +20,8 @@ namespace FetchData.Interfaces
 
         Task<T?> ReadSingleAsync<T>(Expression<Func<T, bool>> expression) where T : class;
 
+        Task<bool> ExistsAsync<T>(Expression<Func<T, bool>> expression) where T : class;
+
         Task<int> AddAsync<T>(T item) where T : class;
         Task<int> UpdateAsync<T>(T item) where T : class;
         Task<int> RemoveAsync<T>(T item) where T : class;
