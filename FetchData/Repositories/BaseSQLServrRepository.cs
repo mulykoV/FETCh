@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 namespace FetchData.Repositories
 {
      public class BaseSQLServrRepository<TDbContext> : IRepository
-        where TDbContext : FETChDbContext
+        where TDbContext : DbContext
     {
-        private FETChDbContext db;
+        private DbContext db;
 
-        public BaseSQLServrRepository(FETChDbContext db)
+        public BaseSQLServrRepository(TDbContext db)
         {
             this.db = db;
         }

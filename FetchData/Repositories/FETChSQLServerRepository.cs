@@ -41,8 +41,7 @@ namespace FetchData.Repositories
 
         public async Task AddCategoryAsync(CourseCategory category)
         {
-            await Db.CourseCategories.AddAsync(category);
-            await Db.SaveChangesAsync();
+            await AddAsync(category);
         }
 
         public async Task UpdateCategoryAsync(CourseCategory category)
