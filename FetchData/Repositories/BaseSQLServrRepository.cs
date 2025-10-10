@@ -25,23 +25,23 @@ namespace FetchData.Repositories
         protected TDbContext Db { get; set;}
         public async Task<int> AddAsync<T>(T item) where T : class
         {
-            Db.Entry(item).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+            await Db.Set<T>().AddAsync(item);
             return await Db.SaveChangesAsync();
         }
 
-        public IQueryable<T?> All<T>() where T : class
+        public IQueryable<T> All<T>() where T : class
         {
             return Db.Model.FindEntityType(typeof(T)) != null
                 ? Db.Set<T>().AsQueryable()
                 : new Collection<T>().AsQueryable();
         }
 
-        public async Task<T?> FirstOrDefaultAsynk<T>(Expression<Func<T, bool>> expression) where T : class
+        public async Task<T?> FirstOrDefaultAsync<T>(Expression<Func<T, bool>> expression) where T : class
         {
             return await All<T>().FirstOrDefaultAsync(expression);
         }
 
-        public IQueryable<T?> ReadAll<T>() where T : class
+        public IQueryable<T> ReadAll<T>() where T : class
         {
             return All<T>().AsNoTracking();
         }
@@ -56,7 +56,7 @@ namespace FetchData.Repositories
             return await All<T>().AnyAsync(expression);
         }
 
-        public async Task<IQueryable<T?>> ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class
+        public IQueryable<T> ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class
         {
             return ReadAll<T>().Where(expression);
         }
@@ -93,7 +93,7 @@ namespace FetchData.Repositories
             return await Db.SaveChangesAsync();
         }
 
-        IQueryable<T?> IRepository.ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class
+        IQueryable<T> IRepository.ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class
         {
             throw new NotImplementedException();
         }
