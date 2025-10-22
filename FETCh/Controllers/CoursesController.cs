@@ -1,23 +1,31 @@
-﻿using FetchData.Data.Repositories;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FetchData.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IFETChRepository _repository;
 
-        public CoursesController(IUnitOfWork unitOfWork)
+        public CoursesController(IFETChRepository repository)
         {
-            _unitOfWork = unitOfWork;
+            _repository = repository;
         }
 
-        // Отримати список курсів
+        
         public async Task<IActionResult> Index()
         {
-            var courses = await _unitOfWork.Courses.GetAllAsync();
+            var courses = await _repository.ReadAll<Course>().ToListAsync();
             return View(courses);
+        }
+
+        // Форма створення курсу
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
         }
 
         // Додати курс
@@ -26,8 +34,7 @@ namespace FetchData.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _unitOfWork.Courses.AddAsync(course);
-                await _unitOfWork.SaveChangesAsync();
+                await _repository.AddAsync(course);
                 return RedirectToAction(nameof(Index));
             }
             return View(course);

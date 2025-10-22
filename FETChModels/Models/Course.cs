@@ -23,7 +23,7 @@ namespace FETChModels.Models
         public string? ImageUrl { get; set; }              // Çîáðàæåííÿ/îáêëàäèíêà êóðñó
         public string? BannerImageUrl { get; set; }        // Áàíåð êóðñó (äëÿ ãîëîâíî¿ ñòîð³íêè)
         public int DurationHours { get; set; }            // Îð³ºíòîâíà òðèâàë³ñòü êóðñó ó ãîäèíàõ
-        public required CourseCategory Category { get; set; }      // Êàòåãîð³ÿ êóðñó (çîâí³øíÿ ìîäåëü)
+        public required CourseCategory? Category { get; set; }      // Êàòåãîð³ÿ êóðñó (çîâí³øíÿ ìîäåëü)
         public int CategoryId { get; set; }               // ²äåíòèô³êàòîð êàòåãîð³¿ (FK)
         public ICollection<Module>? Modules { get; set; }  // Ñïèñîê ìîäóë³â êóðñó
         public ICollection<Lecture>? Lectures { get; set; }// Ëåêö³¿, ÿêùî âîíè íå â ìîäóëÿõ

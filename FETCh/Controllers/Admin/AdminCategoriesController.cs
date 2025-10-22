@@ -1,8 +1,7 @@
-﻿using FetchData.Data;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
 namespace FETCh.Controllers
@@ -10,29 +9,24 @@ namespace FETCh.Controllers
     [Authorize(Roles = "Admin")]
     public class AdminCategoriesController : Controller
     {
-        private readonly FETChDbContext _context;
+        private readonly IFETChRepository _repository;
 
-        public AdminCategoriesController(FETChDbContext context)
+        public AdminCategoriesController(IFETChRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
         // GET: /AdminCategories
         public async Task<IActionResult> Index()
         {
-            var categories = await _context.CourseCategories
-                .Include(c => c.Courses) // щоб бачити кількість курсів у категорії
-                .ToListAsync();
+            var categories = await _repository.GetAllCategoriesAsync();
             return View(categories);
         }
 
         // GET: /AdminCategories/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var category = await _context.CourseCategories
-                .Include(c => c.Courses)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+            var category = await _repository.GetCategoryByIdAsync(id);
             if (category == null)
                 return NotFound();
 
@@ -52,8 +46,7 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.CourseCategories.Add(category);
-                await _context.SaveChangesAsync();
+                await _repository.AddCategoryAsync(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -62,7 +55,7 @@ namespace FETCh.Controllers
         // GET: /AdminCategories/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var category = await _context.CourseCategories.FindAsync(id);
+            var category = await _repository.GetCategoryByIdAsync(id);
             if (category == null)
                 return NotFound();
 
@@ -79,8 +72,7 @@ namespace FETCh.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.CourseCategories.Update(category);
-                await _context.SaveChangesAsync();
+                await _repository.UpdateCategoryAsync(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -89,10 +81,7 @@ namespace FETCh.Controllers
         // GET: /AdminCategories/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _context.CourseCategories
-                .Include(c => c.Courses)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
+            var category = await _repository.GetCategoryByIdAsync(id);
             if (category == null)
                 return NotFound();
 
@@ -104,21 +93,18 @@ namespace FETCh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.CourseCategories.FindAsync(id);
+            var category = await _repository.GetCategoryByIdAsync(id);
             if (category == null)
                 return NotFound();
 
-            // Можна додати перевірку: якщо у категорії є курси, не дозволяти видаляти
-            if (await _context.Courses.AnyAsync(c => c.CategoryId == id))
+            if (await _repository.CategoryHasCoursesAsync(id))
             {
                 ModelState.AddModelError("", "Неможливо видалити категорію, яка містить курси.");
                 return View(category);
             }
 
-            _context.CourseCategories.Remove(category);
-            await _context.SaveChangesAsync();
+            await _repository.DeleteCategoryAsync(category);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }

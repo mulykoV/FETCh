@@ -1,21 +1,22 @@
-﻿using FetchData.Data;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace FETCh.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminModulesController : Controller
     {
-        private readonly FETChDbContext _context;
+        private readonly IFETChRepository _repository;
 
-        public AdminModulesController(FETChDbContext context)
+        public AdminModulesController(IFETChRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
+        // -------------------- CREATE --------------------
         public IActionResult Create(int courseId)
         {
             var module = new Module { CourseId = courseId };
@@ -28,17 +29,16 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Modules.Add(module);
-                await _context.SaveChangesAsync();
+                await _repository.AddModuleAsync(module);
                 return RedirectToAction("Details", "AdminCourses", new { id = module.CourseId });
             }
             return View(module);
         }
 
-        // GET: /AdminModules/Edit/5
+        // -------------------- EDIT --------------------
         public async Task<IActionResult> Edit(int id)
         {
-            var module = await _context.Modules.FindAsync(id);
+            var module = await _repository.GetModuleByIdAsync(id);
             if (module == null) return NotFound();
             return View(module);
         }
@@ -49,21 +49,17 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Modules.Update(module);
-                await _context.SaveChangesAsync();
+                await _repository.UpdateModuleAsync(module);
                 return RedirectToAction("Details", "AdminCourses", new { id = module.CourseId });
             }
             return View(module);
         }
 
-        // GET: /AdminModules/Delete/5
+        // -------------------- DELETE --------------------
         public async Task<IActionResult> Delete(int id)
         {
-            var module = await _context.Modules
-                .Include(m => m.Course)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var module = await _repository.GetModuleByIdAsync(id);
             if (module == null) return NotFound();
-
             return View(module);
         }
 
@@ -71,22 +67,19 @@ namespace FETCh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var module = await _context.Modules.FindAsync(id);
+            var module = await _repository.GetModuleByIdAsync(id);
             if (module == null) return NotFound();
 
-            _context.Modules.Remove(module);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "AdminCourses", new { id = module.CourseId });
+            int courseId = module.CourseId;
+            await _repository.DeleteModuleAsync(id);
+
+            return RedirectToAction("Details", "AdminCourses", new { id = courseId });
         }
 
-        // GET: /AdminModules/Details/5
+        // -------------------- DETAILS --------------------
         public async Task<IActionResult> Details(int id)
         {
-            var module = await _context.Modules
-                .Include(m => m.Lectures)
-                .Include(m => m.Course)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var module = await _repository.GetModuleByIdAsync(id);
             if (module == null) return NotFound();
             return View(module);
         }

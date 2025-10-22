@@ -14,11 +14,13 @@ namespace FetchData.Interfaces
 
         IQueryable<T?> ReadWhere<T>(Expression<Func<T, bool>> expression) where T : class;
 
-        Task<T?> FirstOrDefaultAsynk<T>(Expression<Func<T, bool>> expression) where T : class;
+        Task<T?> FirstOrDefaultAsync<T>(Expression<Func<T, bool>> expression) where T : class;
 
         Task<T?> SingleAsync<T>(Expression<Func<T, bool>> expression) where T : class;
 
         Task<T?> ReadSingleAsync<T>(Expression<Func<T, bool>> expression) where T : class;
+
+        Task<bool> ExistsAsync<T>(Expression<Func<T, bool>> expression) where T : class;
 
         Task<int> AddAsync<T>(T item) where T : class;
         Task<int> UpdateAsync<T>(T item) where T : class;

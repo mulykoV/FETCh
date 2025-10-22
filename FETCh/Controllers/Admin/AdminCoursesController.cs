@@ -1,53 +1,42 @@
-﻿using FetchData.Data;
+﻿using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace FETCh.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminCoursesController : Controller
     {
-        private readonly FETChDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IFETChRepository _repository;
 
-        public AdminCoursesController(FETChDbContext context, UserManager<ApplicationUser> userManager)
+        public AdminCoursesController(IFETChRepository repository)
         {
-            _context = context;
-            _userManager = userManager;
+            _repository = repository;
         }
 
-        // -------------------- INDEX --------------------
+        // INDEX
         public async Task<IActionResult> Index()
         {
-            var courses = await _context.Courses
-                .Include(c => c.Category)
-                .ToListAsync();
+            var courses = await _repository.GetAllCoursesAsync();
             return View(courses);
         }
 
-        // -------------------- DETAILS --------------------
+        // DETAILS
         public async Task<IActionResult> Details(int id)
         {
-            var course = await _context.Courses
-                .Include(c => c.Modules)
-                .ThenInclude(m => m.Lectures)
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-
+            var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
 
-            ViewBag.Users = await _userManager.Users.ToListAsync();
+            ViewBag.Users = await _repository.GetAllUsersAsync();
             return View(course);
         }
 
-        // -------------------- CREATE --------------------
+        // CREATE
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = _context.CourseCategories.ToList();
+            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
             return View();
         }
 
@@ -57,25 +46,22 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Courses.Add(model);
-                await _context.SaveChangesAsync();
+                await _repository.AddCourseAsync(model);
                 return RedirectToAction(nameof(Index));
             }
 
-            
-            ViewBag.Categories = _context.CourseCategories.ToList();
+            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
             return View(model);
         }
 
-        // -------------------- EDIT --------------------
+        // EDIT
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
 
-            ViewBag.Categories = _context.CourseCategories.ToList();
-
+            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
             return View(course);
         }
 
@@ -87,21 +73,19 @@ namespace FETCh.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Update(updated);
-                await _context.SaveChangesAsync();
+                await _repository.UpdateCourseAsync(updated);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = _context.CourseCategories.ToList();
-
+            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
             return View(updated);
         }
 
-        // -------------------- DELETE --------------------
+        // DELETE
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
+            var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
             return View(course);
         }
@@ -110,41 +94,24 @@ namespace FETCh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var course = await _context.Courses.FindAsync(id);
-            if (course != null)
-            {
-                _context.Courses.Remove(course);
-                await _context.SaveChangesAsync();
-            }
+            await _repository.DeleteCourseAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        // -------------------- ЗАПИС НА КУРС --------------------
-
+        // ENROLL
         public async Task<IActionResult> EnrollUser(int courseId, string userId)
         {
-            // перевірка, чи користувач уже записаний
-            var exists = await _context.UserCourses
-                .FirstOrDefaultAsync(uc => uc.CourseId == courseId && uc.UserId == userId);
-
-            if (exists != null)
+            if (await _repository.IsUserEnrolledAsync(courseId, userId))
             {
                 TempData["Message"] = "Користувач уже записаний на цей курс!";
-                return RedirectToAction("Details", new { id = courseId });
+            }
+            else
+            {
+                await _repository.EnrollUserAsync(courseId, userId);
+                TempData["Message"] = "Користувач успішно записаний на курс!";
             }
 
-            _context.UserCourses.Add(new UserCourse
-            {
-                CourseId = courseId,
-                UserId = userId,
-                EnrolledDate = DateTime.UtcNow,
-                IsCompleted = false
-            });
-
-            await _context.SaveChangesAsync();
-            TempData["Message"] = "Користувач успішно записаний на курс!";
             return RedirectToAction("Details", new { id = courseId });
         }
-
     }
 }

@@ -4,16 +4,26 @@ using FetchData.Data;
 using FETChModels.Models;
 using FetchData.Interfaces;
 using FetchData.Repositories;
+using FETCh.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
+var appConfig = new AppConfiguration();
+builder.Configuration.Bind(appConfig);
+builder.Services.AddSingleton(appConfig);
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("sharedsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
-//builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
+builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -22,7 +32,7 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromMinutes(5);
 });
 
-
+builder.Services.AddSingleton(appConfig);
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
