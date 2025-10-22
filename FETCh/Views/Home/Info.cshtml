@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Application Info";
+    var config = ViewBag.Config as FETCh.Configurations.AppConfiguration;
+    var env = ViewBag.Environment as string ?? "Unknown";
+}
+
+<div style="background:#1e1e1e; color:#0f0; padding:2rem; border-radius:12px; font-family:'Consolas', monospace; max-width:600px; margin:auto; box-shadow:0 0 20px rgba(0,255,0,0.2);">
+    <h2 style="margin-bottom:1rem;">> Application Info</h2>
+    <ul style="list-style:none; padding:0; line-height:1.6;">
+        <li><b>Environment:</b> @env</li>
+        <li><b>Application Name:</b> @config.ApplicationName</li>
+        <li><b>Project Mode:</b> <span id="projectMode">@config.ProjectSettings.Mode</span></li>
+        <li><b>Notifications Enabled:</b> @(config.ProjectSettings.EnableNotifications ? "Yes" : "No")</li>
+        <li><b>Default Connection:</b> @config.ConnectionStrings.DefaultConnection</li>
+    </ul>
+
+    <button id="toggleModeBtn" style="margin-top:1rem; padding:0.5rem 1rem; background:#0f0; color:#111; border:none; border-radius:6px; cursor:pointer;">
+        Toggle Mode
+    </button>
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById("toggleModeBtn").addEventListener("click", () => {
+            fetch('@Url.Action("ToggleMode")', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("projectMode").textContent = data.Mode;
+                });
+        });
+    </script>
+}
