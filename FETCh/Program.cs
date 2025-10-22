@@ -22,6 +22,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
+
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
