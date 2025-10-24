@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using FetchData.Data;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using FETChModels.Models;
 using FetchData.Interfaces;
 using FetchData.Repositories;
@@ -10,7 +12,7 @@ using FETCh.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Конфігурація з різних файлів
+// ГЉГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї Г§ Г°ВіГ§Г­ГЁГµ ГґГ Г©Г«ВіГў
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("sharedsettings.json", optional: false, reloadOnChange: true)
@@ -18,18 +20,18 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
-// Строго типізована конфігурація
+// Г‘ГІГ°Г®ГЈГ® ГІГЁГЇВіГ§Г®ГўГ Г­Г  ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї
 var appConfig = new AppConfiguration();
 builder.Configuration.Bind(appConfig);
 builder.Services.AddSingleton(appConfig);
 
-// Підключення до БД
+// ГЏВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Гї Г¤Г® ГЃГ„
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
-// DI для репозиторію
+// DI Г¤Г«Гї Г°ГҐГЇГ®Г§ГЁГІГ®Г°ВіГѕ
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -47,7 +49,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.S
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// AddPartitionedLimiter with AddPolicy (основне)
+// AddPartitionedLimiter with AddPolicy (Г®Г±Г­Г®ГўГ­ГҐ)
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy<string>("UserPartitioned", context =>
@@ -57,12 +59,14 @@ builder.Services.AddRateLimiter(options =>
             partitionKey: isAuthenticated ? "auth" : "anon",
             factory: _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = isAuthenticated ? 100 : 10, // 100 for authenticated, 10 for anonymous
+                PermitLimit = isAuthenticated ? 100 : 20, // 100 for authenticated, 10 for anonymous
                 Window = TimeSpan.FromMinutes(1),
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                 QueueLimit = 0
             });
+        
     });
+    options.RejectionStatusCode = 429;
 });
 var app = builder.Build();
 
@@ -77,9 +81,9 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseRateLimiter(); // Rate Limiting middleware
 
 app.UseAuthentication();
@@ -90,6 +94,7 @@ app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
+    .RequireRateLimiting("UserPartitioned")
     .WithStaticAssets();
 
 app.MapRazorPages()
