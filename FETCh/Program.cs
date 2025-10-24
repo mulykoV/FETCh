@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using FetchData.Data;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
@@ -9,9 +11,8 @@ using FetchData.Repositories;
 using FETCh.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
-var appConfig = new AppConfiguration();
-builder.Configuration.Bind(appConfig);
-builder.Services.AddSingleton(appConfig);
+
+// Êîíô³ãóðàö³ÿ ç ð³çíèõ ôàéë³â
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("sharedsettings.json", optional: false, reloadOnChange: true)
@@ -19,12 +20,18 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
+// Ñòðîãî òèï³çîâàíà êîíô³ãóðàö³ÿ
+var appConfig = new AppConfiguration();
+builder.Configuration.Bind(appConfig);
+builder.Services.AddSingleton(appConfig);
+
+// Ï³äêëþ÷åííÿ äî ÁÄ
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
+// DI äëÿ ðåïîçèòîð³þ
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -34,15 +41,15 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromMinutes(5);
 });
 
-builder.Services.AddSingleton(appConfig);
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<FETChDbContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
-// AddPartitionedLimiter with AddPolicy
+// AddPartitionedLimiter with AddPolicy (îñíîâíå)
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy<string>("UserPartitioned", context =>
@@ -63,7 +70,7 @@ builder.Services.AddRateLimiter(options =>
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -77,7 +84,8 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseRateLimiter();
+app.UseRateLimiter(); // Rate Limiting middleware
+
 app.UseAuthentication();
 app.UseAuthorization();
 
