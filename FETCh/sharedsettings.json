@@ -1,17 +1,17 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=aspnet-FETCh-2bf06c42-99c5-4e35-b7e1-968fdadd122f;Trusted_Connection=True;MultipleActiveResultSets=true",
-    "FETChDbContextConnection": "Server=(localdb)\\mssqllocaldb;Database=FETCh;Trusted_Connection=True;MultipleActiveResultSets=true"
+    "DefaultConnection": "",
+    "FETChDbContextConnection": ""
   },
   "AllowedHosts": "*",
   "AdminSettings": {
-    "SecretKey": "MySuperSecret123"
+    "SecretKey": ""
   },
   "EmailSettings": {
     "SmtpHost": "smtp.gmail.com",
     "SmtpPort": "587",
-    "SmtpUser": "vovamulyka@gmail.com",
-    "SmtpPass": "egam wfba qlzy bvsr"
+    "SmtpUser": "",
+    "SmtpPass": ""
   },
   "Logging": {
     "LogLevel": {
