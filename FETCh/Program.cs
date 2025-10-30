@@ -10,63 +10,74 @@ using FETCh.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Конфігурація з різних файлів
+// -------------------- CONFIGURATION --------------------
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("sharedsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddUserSecrets<Program>(optional: true)
     .AddEnvironmentVariables();
 
-// Строго типізована конфігурація
+// Г‘ГІГ°Г®ГЈГ® ГІГЁГЇВіГ§Г®ГўГ Г­Г  ГЄГ®Г­ГґВіГЈГіГ°Г Г¶ВіГї
 var appConfig = new AppConfiguration();
 builder.Configuration.Bind(appConfig);
 builder.Services.AddSingleton(appConfig);
 
-// Підключення до БД
+// ГЏВіГ¤ГЄГ«ГѕГ·ГҐГ­Г­Гї Г¤Г® ГЃГ„
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
-// DI для репозиторію
+// DI Г¤Г«Гї Г°ГҐГЇГ®Г§ГЁГІГ®Г°ВіГѕ
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+// -------------------- IDENTITY --------------------
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
     options.TokenLifespan = TimeSpan.FromMinutes(5);
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<FETChDbContext>()
-    .AddDefaultUI()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = true;
+})
+.AddEntityFrameworkStores<FETChDbContext>()
+.AddDefaultUI()
+.AddDefaultTokenProviders();
 
+// -------------------- MVC --------------------
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// AddPartitionedLimiter with AddPolicy (основне)
+// AddPartitionedLimiter with AddPolicy (Г®Г±Г­Г®ГўГ­ГҐ)
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy<string>("UserPartitioned", context =>
     {
         bool isAuthenticated = context.User?.Identity?.IsAuthenticated ?? false;
+
         return RateLimitPartition.GetFixedWindowLimiter(
             partitionKey: isAuthenticated ? "auth" : "anon",
             factory: _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = isAuthenticated ? 100 : 10, // 100 for authenticated, 10 for anonymous
+                PermitLimit = isAuthenticated ? 100 : 20, // 100 for authenticated, 10 for anonymous
                 Window = TimeSpan.FromMinutes(1),
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                 QueueLimit = 0
             });
+        
     });
+    options.RejectionStatusCode = 429;
 });
+
+// -------------------- BUILD APP --------------------
 var app = builder.Build();
 
-// Pipeline
+// -------------------- PIPELINE --------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
@@ -79,7 +90,6 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseRateLimiter(); // Rate Limiting middleware
 
 app.UseAuthentication();
@@ -90,15 +100,15 @@ app.MapStaticAssets();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
+    .RequireRateLimiting("UserPartitioned")
     .WithStaticAssets();
 
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
+// -------------------- SEED ROLES --------------------
 using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedRolesAsync(scope.ServiceProvider);
 }
 
 app.Run();
-
