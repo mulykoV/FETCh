@@ -32,5 +32,7 @@ namespace FETChModels.Models
         public ICollection<UserCourse>? Enrollments { get; set; } // Êîðèñòóâà÷³, çàïèñàí³ íà êóðñ
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<UserCourse> UserCourses { get; set; } = new List<UserCourse>();
+
+        public string AuthorId { get; set; } = string.Empty;
     }
 }

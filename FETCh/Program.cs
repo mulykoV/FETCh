@@ -1,12 +1,14 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
+using FETCh.Authorization;
+using FETCh.Configurations;
 using FetchData.Data;
-using FETChModels.Models;
 using FetchData.Interfaces;
 using FetchData.Repositories;
-using FETCh.Configurations;
+using FETChModels.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +36,7 @@ if (string.IsNullOrEmpty(connectionString))
         "Make sure it's defined in your user-secrets or environment variables.");
 }
 
-Console.WriteLine($"✅ Using connection string: {connectionString}");
+Console.WriteLine($"Using connection string: {connectionString}");
 
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
@@ -42,6 +44,35 @@ builder.Services.AddDbContext<FETChDbContext>(options =>
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// -------------------- AUTHORIZATION POLICY --------------------
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("VerifiedClientOnly", policy =>
+    {
+        policy.RequireClaim("IsVerifiedClient", "true");
+    });
+});
+builder.Services.AddScoped<IAuthorizationHandler, IsCourseAuthorHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("PremiumOnly", policy =>
+        policy.Requirements.Add(new MinimumWorkingHoursRequirement(100)));
+});
+//builder.Services.AddSingleton<IAuthorizationHandler, MinimumWorkingHoursHandler>();
+
+builder.Services.AddScoped<IAuthorizationHandler, MinimumWorkingHoursHandler>();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ForumAccess", policy =>
+        policy.Requirements.Add(new ForumAccessRequirement()));
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, ForumAccessHandler>();
+
 
 // -------------------- IDENTITY --------------------
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
@@ -72,7 +103,7 @@ builder.Services.AddRateLimiter(options =>
             partitionKey: isAuthenticated ? "auth" : "anon",
             factory: _ => new FixedWindowRateLimiterOptions
             {
-                PermitLimit = isAuthenticated ? 100 : 20,
+                PermitLimit = isAuthenticated ? 100 : 4,
                 Window = TimeSpan.FromMinutes(1),
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
                 QueueLimit = 0
@@ -98,10 +129,13 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
+
+
 
 app.MapStaticAssets();
 

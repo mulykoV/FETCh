@@ -1,6 +1,8 @@
-﻿using FetchData.Interfaces;
+﻿using FETCh.Authorization;
+using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FETCh.Controllers
@@ -9,10 +11,17 @@ namespace FETCh.Controllers
     public class AdminCoursesController : Controller
     {
         private readonly IFETChRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AdminCoursesController(IFETChRepository repository)
+        public AdminCoursesController(
+            IFETChRepository repository,
+            UserManager<ApplicationUser> userManager,
+            IAuthorizationService authorizationService)
         {
             _repository = repository;
+            _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
         // INDEX
@@ -46,6 +55,8 @@ namespace FETCh.Controllers
         {
             if (ModelState.IsValid)
             {
+                model.AuthorId = _userManager.GetUserId(User);
+
                 await _repository.AddCourseAsync(model);
                 return RedirectToAction(nameof(Index));
             }
@@ -61,9 +72,19 @@ namespace FETCh.Controllers
             var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
 
+            // Ресурсна авторизація
+            var authResult = await _authorizationService
+                .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             ViewBag.Categories = await _repository.GetAllCategoriesAsync();
             return View(course);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -71,8 +92,21 @@ namespace FETCh.Controllers
         {
             if (id != updated.Id) return NotFound();
 
+            var course = await _repository.GetCourseByIdAsync(id);
+            if (course == null) return NotFound();
+
+            var authResult = await _authorizationService
+                .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
+                updated.AuthorId = course.AuthorId;
+
                 await _repository.UpdateCourseAsync(updated);
                 return RedirectToAction(nameof(Index));
             }
@@ -81,12 +115,21 @@ namespace FETCh.Controllers
             return View(updated);
         }
 
+
         // DELETE
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
+            var authResult = await _authorizationService
+                    .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             return View(course);
         }
 
@@ -94,6 +137,17 @@ namespace FETCh.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var course = await _repository.GetCourseByIdAsync(id);
+            if (course == null) return NotFound();
+
+            var authResult = await _authorizationService
+                .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
             await _repository.DeleteCourseAsync(id);
             return RedirectToAction(nameof(Index));
         }

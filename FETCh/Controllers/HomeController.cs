@@ -1,8 +1,11 @@
-using System.Diagnostics;
+using FETCh.Authorization;
 using FETCh.Configurations;
 using FetchData.Interfaces;
 using FETChModels.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FETCh.Controllers
 {
@@ -12,13 +15,22 @@ namespace FETCh.Controllers
         private readonly IFETChRepository _repository;
         private readonly AppConfiguration _config;
         private readonly IWebHostEnvironment _env;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IFETChRepository repository, AppConfiguration config, IWebHostEnvironment env)
+        public HomeController(ILogger<HomeController> logger, 
+                                IFETChRepository repository, 
+                                AppConfiguration config, 
+                                IWebHostEnvironment env,
+                                UserManager<ApplicationUser> userManager,
+                                IAuthorizationService authorizationService)
         {
             _logger = logger;
             _repository = repository;
             _config = config;
             _env = env;
+            _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
         // -------------------- √ŒÀŒ¬Õ¿ —“Œ–≤Õ ¿ --------------------
@@ -46,9 +58,42 @@ namespace FETCh.Controllers
         }
 
 
+        // -------------------- —“Œ–≤Õ ¿ œ–≈Ã≤”Ã --------------------
+        [Authorize(Policy = "VerifiedClientOnly")]
+        [HttpGet]
+        public async Task<IActionResult> Premium()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(User, null, "PremiumOnly");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return View(); // œÓÍ‡ÁÛ∫ÏÓ ÒÚÓ≥ÌÍÛ Premium
+        }
+
+        // -------------------- —“Œ–≤Õ ¿ ‘Œ–”Ã --------------------
+        [Authorize(Policy = "VerifiedClientOnly")]
+        [HttpGet]
+        public async Task<IActionResult> Forum()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(User, null, "ForumAccess");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return View();
+        }
+
+        //[Authorize]
+        [Authorize(Policy = "VerifiedClientOnly")]
         [HttpGet]
         public IActionResult Info()
         {
+
             return Json(new
             {
                 Environment = _env.EnvironmentName,

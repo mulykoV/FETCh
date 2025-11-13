@@ -1,10 +1,12 @@
 ﻿using FetchData.Interfaces;
 using FETChModels.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FETCh.Controllers
 {
+    [Authorize]
     public class UserCoursesController : Controller
     {
         private readonly IFETChRepository _repository;
