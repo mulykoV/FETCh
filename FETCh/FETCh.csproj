@@ -22,4 +22,14 @@
     <ProjectReference Include="..\FETChModels\FETChModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\HomeController.pl.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Views\Home\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "",
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=FetchDataDb;Trusted_Connection=True;MultipleActiveResultSets=true",
     "FETChDbContextConnection": ""
   },
   "AllowedHosts": "*",

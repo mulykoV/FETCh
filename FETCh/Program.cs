@@ -1,12 +1,15 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Threading.RateLimiting;
+using FETCh.Configurations;
 using FetchData.Data;
-using FETChModels.Models;
 using FetchData.Interfaces;
 using FetchData.Repositories;
-using FETCh.Configurations;
+using FETChModels.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,23 @@ builder.Configuration
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddUserSecrets<Program>(optional: true)
     .AddEnvironmentVariables();
+
+// 1. Додаємо підтримку локалізації, вказуючи папку з ресурсами "Resources"
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new CultureInfo("uk-UA"),
+        new CultureInfo("en-US"),
+        new CultureInfo("pl-PL")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("uk-UA");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 
 // Ñòðîãî òèï³çîâàíà êîíô³ãóðàö³ÿ
 var appConfig = new AppConfiguration();
@@ -74,8 +94,32 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = 429;
 });
 
+// Додаємо MVC з підтримкою локалізації Views та DataAnnotations (для валідації моделей)
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
 // -------------------- BUILD APP --------------------
 var app = builder.Build();
+
+// 2. Налаштування підтримуваних культур (Крок 4)
+var supportedCultures = new[]
+{
+    new CultureInfo("uk-UA"), // Базова (українська)
+    new CultureInfo("en-US"), // Англійська
+    new CultureInfo("pl-PL")  // Польська (третя культура)
+};
+
+// 3. Додаємо Middleware у конвеєр (Крок 5)
+// ВАЖЛИВО: Ставимо це ДО UseRouting та UseStaticFiles (якщо файли залежать від мови)
+var localizationOptions = new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("uk-UA"), // Культура за замовчуванням
+    SupportedCultures = supportedCultures,   // Формати дат/чисел
+    SupportedUICultures = supportedCultures  // Ресурси (тексти)
+};
+app.UseRequestLocalization(localizationOptions);
+
 
 // -------------------- PIPELINE --------------------
 if (app.Environment.IsDevelopment())

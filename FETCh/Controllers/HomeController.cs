@@ -1,8 +1,10 @@
-using System.Diagnostics;
 using FETCh.Configurations;
 using FetchData.Interfaces;
 using FETChModels.Models;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization; // Потрібний простір імен
+using System.Diagnostics;
 
 namespace FETCh.Controllers
 {
@@ -12,23 +14,42 @@ namespace FETCh.Controllers
         private readonly IFETChRepository _repository;
         private readonly AppConfiguration _config;
         private readonly IWebHostEnvironment _env;
+        private readonly IStringLocalizer<HomeController> _localizer;
 
-        public HomeController(ILogger<HomeController> logger, IFETChRepository repository, AppConfiguration config, IWebHostEnvironment env)
+       
+        public HomeController(ILogger<HomeController> logger, IFETChRepository repository, AppConfiguration config, IWebHostEnvironment env, IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _repository = repository;
             _config = config;
             _env = env;
+            _localizer = localizer;
         }
 
         // -------------------- ГОЛОВНА СТОРІНКА --------------------
         public async Task<IActionResult> Index()
         {
+            
+            // Отримуємо рядок з ресурсу за ключем
+            ViewData["Message"] = _localizer["WelcomeMessage"];
+            ViewData["subtext1"] = _localizer["subtext1"];
             // Наприклад, показуємо список усіх курсів
             var courses = await _repository.GetAllCoursesAsync();
             return View(courses); // передаємо курси у View
         }
 
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            // Встановлюємо куки
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
+        }
         // -------------------- ПРО ПОЛІТИКУ КОНФІДЕНЦІЙНОСТІ --------------------
         public IActionResult Privacy()
         {
