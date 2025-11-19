@@ -118,9 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="subtext1" xml:space="preserve">
-    <value>Świat się zmienia.</value>
+    <value>Przyszłość tworzą ci, którzy już dziś naciskają "commit".</value>
   </data>
   <data name="WelcomeMessage" xml:space="preserve">
-    <value>Przyszłość tworzą ci, którzy już dziś naciskają "commit".</value>
+    <value>Świat się zmienia.</value>
   </data>
 </root>
