@@ -134,29 +134,25 @@ builder.Services.AddRateLimiter(options =>
 });
 
 // Додаємо MVC з підтримкою локалізації Views та DataAnnotations (для валідації моделей)
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
     .AddDataAnnotationsLocalization();
 
+
 // -------------------- BUILD APP --------------------
 var app = builder.Build();
 
-// 2. Налаштування підтримуваних культур (Крок 4)
-var supportedCultures = new[]
-{
-    new CultureInfo("uk-UA"), // Базова (українська)
-    new CultureInfo("en-US"), // Англійська
-    new CultureInfo("pl-PL")  // Польська (третя культура)
-};
+// 1. Створюємо список мов (просто рядками, так простіше)
+var supportedCultures = new[] { "uk", "en-US", "pl-PL" };
 
-// 3. Додаємо Middleware у конвеєр (Крок 5)
-// ВАЖЛИВО: Ставимо це ДО UseRouting та UseStaticFiles (якщо файли залежать від мови)
-var localizationOptions = new RequestLocalizationOptions
-{
-    DefaultRequestCulture = new RequestCulture("uk-UA"), // Культура за замовчуванням
-    SupportedCultures = supportedCultures,   // Формати дат/чисел
-    SupportedUICultures = supportedCultures  // Ресурси (тексти)
-};
+// 2. Налаштовуємо опції
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("uk") // Мова за замовчуванням
+    .AddSupportedCultures(supportedCultures)    // Формати чисел/дат
+    .AddSupportedUICultures(supportedCultures); // Текстові ресурси
+
+// 3. Активуємо локалізацію
 app.UseRequestLocalization(localizationOptions);
 
 

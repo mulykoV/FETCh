@@ -1,4 +1,5 @@
 ﻿using FETCh.Authorization;
+using FETCh.Models.ViewModels;
 using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -31,11 +32,7 @@ namespace FETCh.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             var courses = await _repository.GetAllCoursesAsync();
-
-            var pagedCourses = courses
-                .OrderBy(c => c.Id)
-                .ToPagedList(page, PAGE_SIZE);
-
+            var pagedCourses = courses.OrderBy(c => c.Id).ToPagedList(page, PAGE_SIZE);
             return View(pagedCourses);
         }
 
@@ -49,56 +46,93 @@ namespace FETCh.Controllers
             return View(course);
         }
 
-        // CREATE
+        // CREATE GET
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
-            return View();
+            var vm = new CourseViewModel
+            {
+                Categories = await _repository.GetAllCategoriesAsync()
+            };
+            return View(vm);
         }
 
+        // CREATE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Course model)
+        public async Task<IActionResult> Create(CourseViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                model.AuthorId = _userManager.GetUserId(User);
+                var course = new Course
+                {
+                    Title = vm.Title,
+                    Subtitle = vm.Subtitle,
+                    Description = vm.Description,
+                    Language = vm.Language,
+                    IsFree = vm.IsFree,
+                    Price = vm.Price,
+                    PriceCurrency = vm.PriceCurrency,
+                    StartDate = vm.StartDate,
+                    EndDate = vm.EndDate,
+                    ImageUrl = vm.ImageUrl,
+                    BannerImageUrl = vm.BannerImageUrl,
+                    DurationHours = vm.DurationHours,
+                    ContactEmail = vm.ContactEmail,
+                    CategoryId = vm.CategoryId,
+                    AuthorId = _userManager.GetUserId(User)
+                };
 
-                await _repository.AddCourseAsync(model);
+                await _repository.AddCourseAsync(course);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
-            return View(model);
+            vm.Categories = await _repository.GetAllCategoriesAsync();
+            return View(vm);
         }
 
-        // EDIT
+        // EDIT GET
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
 
-            // Ресурсна авторизація
             var authResult = await _authorizationService
                 .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
 
-            if (!authResult.Succeeded)
-            {
-                return Forbid();
-            }
+            if (!authResult.Succeeded) return Forbid();
 
-            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
-            return View(course);
+            var vm = new CourseViewModel
+            {
+                Id = course.Id,
+                Title = course.Title,
+                Subtitle = course.Subtitle,
+                Description = course.Description,
+                Language = course.Language,
+                IsFree = course.IsFree,
+                Price = course.Price,
+                PriceCurrency = course.PriceCurrency,
+                StartDate = course.StartDate,
+                EndDate = course.EndDate,
+                ImageUrl = course.ImageUrl,
+                BannerImageUrl = course.BannerImageUrl,
+                DurationHours = course.DurationHours,
+                ContactEmail = course.ContactEmail,
+                ConfirmContactEmail = course.ContactEmail,
+                CategoryId = course.CategoryId,
+                Categories = await _repository.GetAllCategoriesAsync()
+            };
+
+            return View(vm);
         }
 
-
+        // EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Course updated)
+        public async Task<IActionResult> Edit(int id, CourseViewModel vm)
         {
-            if (id != updated.Id) return NotFound();
+            if (id != vm.Id) return NotFound();
 
             var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
@@ -106,21 +140,31 @@ namespace FETCh.Controllers
             var authResult = await _authorizationService
                 .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
 
-            if (!authResult.Succeeded)
-            {
-                return Forbid();
-            }
+            if (!authResult.Succeeded) return Forbid();
 
             if (ModelState.IsValid)
             {
-                updated.AuthorId = course.AuthorId;
+                course.Title = vm.Title;
+                course.Subtitle = vm.Subtitle;
+                course.Description = vm.Description;
+                course.Language = vm.Language;
+                course.IsFree = vm.IsFree;
+                course.Price = vm.Price;
+                course.PriceCurrency = vm.PriceCurrency;
+                course.StartDate = vm.StartDate;
+                course.EndDate = vm.EndDate;
+                course.ImageUrl = vm.ImageUrl;
+                course.BannerImageUrl = vm.BannerImageUrl;
+                course.DurationHours = vm.DurationHours;
+                course.ContactEmail = vm.ContactEmail;
+                course.CategoryId = vm.CategoryId;
 
-                await _repository.UpdateCourseAsync(updated);
+                await _repository.UpdateCourseAsync(course);
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Categories = await _repository.GetAllCategoriesAsync();
-            return View(updated);
+            vm.Categories = await _repository.GetAllCategoriesAsync();
+            return View(vm);
         }
 
 
@@ -174,6 +218,42 @@ namespace FETCh.Controllers
             }
 
             return RedirectToAction("Details", new { id = courseId });
+        }
+
+        // AJAX: Перевірка унікальності назви курсу
+        [AcceptVerbs("GET", "POST")]
+        public async Task<IActionResult> CheckTitle(string title)
+        {
+            // Правильний асинхронний виклик
+            var allCourses = await _repository.GetAllCoursesAsync();
+
+            // Перевірка в пам'яті (якщо репозиторій повертає List/IEnumerable)
+            bool exists = allCourses.Any(c => c.Title.ToLower() == title.ToLower());
+
+            if (exists)
+            {
+                return Json($"Назва '{title}' вже використовується.");
+            }
+
+            return Json(true);
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public IActionResult CheckPriceLogic(decimal price, bool isFree)
+        {
+            // Ситуація 1: Курс позначено як безкоштовний, але вказана ціна
+            if (isFree && price > 0)
+            {
+                return Json("Безкоштовний курс повинен мати ціну 0.00");
+            }
+
+            // Ситуація 2: Курс платний (галочка знята), але ціна 0
+            if (!isFree && price <= 0)
+            {
+                return Json("Платний курс не може коштувати 0.00. Вкажіть ціну або позначте як 'Безкоштовний'.");
+            }
+
+            return Json(true);
         }
     }
 }
