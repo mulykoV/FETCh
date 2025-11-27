@@ -1,7 +1,10 @@
-using FETCh.Authorization;
 using FETCh.Configurations;
 using FetchData.Interfaces;
 using FETChModels.Models;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization; 
+using FETCh.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,39 +18,57 @@ namespace FETCh.Controllers
         private readonly IFETChRepository _repository;
         private readonly AppConfiguration _config;
         private readonly IWebHostEnvironment _env;
+        private readonly IStringLocalizer<HomeController> _localizer;
         private readonly IAuthorizationService _authorizationService;
         private readonly UserManager<ApplicationUser> _userManager;
-
         public HomeController(ILogger<HomeController> logger, 
                                 IFETChRepository repository, 
                                 AppConfiguration config, 
                                 IWebHostEnvironment env,
                                 UserManager<ApplicationUser> userManager,
-                                IAuthorizationService authorizationService)
+                                IAuthorizationService authorizationService,  
+                                IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _repository = repository;
             _config = config;
             _env = env;
+            _localizer = localizer;
             _userManager = userManager;
             _authorizationService = authorizationService;
         }
 
-        // -------------------- ÃÎËÎÂÍÀ ÑÒÎĞ²ÍÊÀ --------------------
+        // -------------------- ÃƒÃÃ‹ÃÃ‚ÃÃ€ Ã‘Ã’ÃÃÂ²ÃÃŠÃ€ --------------------
         public async Task<IActionResult> Index()
         {
-            // Íàïğèêëàä, ïîêàçóºìî ñïèñîê óñ³õ êóğñ³â
+            
+            // ÃÃ²Ã°Ã¨Ã¬Ã³ÂºÃ¬Ã® Ã°Ã¿Ã¤Ã®Ãª Ã§ Ã°Ã¥Ã±Ã³Ã°Ã±Ã³ Ã§Ã  ÃªÃ«Ã¾Ã·Ã¥Ã¬
+            ViewData["Message"] = _localizer["WelcomeMessage"];
+            ViewData["subtext1"] = _localizer["subtext1"];
+            // ÃÃ Ã¯Ã°Ã¨ÃªÃ«Ã Ã¤, Ã¯Ã®ÃªÃ Ã§Ã³ÂºÃ¬Ã® Ã±Ã¯Ã¨Ã±Ã®Ãª Ã³Ã±Â³Ãµ ÃªÃ³Ã°Ã±Â³Ã¢
             var courses = await _repository.GetAllCoursesAsync();
-            return View(courses); // ïåğåäàºìî êóğñè ó View
+            return View(courses); // Ã¯Ã¥Ã°Ã¥Ã¤Ã ÂºÃ¬Ã® ÃªÃ³Ã°Ã±Ã¨ Ã³ View
         }
 
-        // -------------------- ÏĞÎ ÏÎË²ÒÈÊÓ ÊÎÍÔ²ÄÅÍÖ²ÉÍÎÑÒ² --------------------
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            // Ã‚Ã±Ã²Ã Ã­Ã®Ã¢Ã«Ã¾ÂºÃ¬Ã® ÃªÃ³ÃªÃ¨
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
+
+            return LocalRedirect(returnUrl);
+        }
+        // -------------------- ÃÃÃ ÃÃÃ‹Â²Ã’ÃˆÃŠÃ“ ÃŠÃÃÃ”Â²Ã„Ã…ÃÃ–Â²Ã‰ÃÃÃ‘Ã’Â² --------------------
         public IActionResult Privacy()
         {
             return View();
         }
 
-        // -------------------- ÑÒÎĞ²ÍÊÀ ÏÎÌÈËÊÈ --------------------
+        // -------------------- Ã‘Ã’ÃÃÂ²ÃÃŠÃ€ ÃÃÃŒÃˆÃ‹ÃŠÃˆ --------------------
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -58,7 +79,7 @@ namespace FETCh.Controllers
         }
 
 
-        // -------------------- ÑÒÎĞ²ÍÊÀ ÏĞÅÌ²ÓÌ --------------------
+        // -------------------- Ã‘Ã’ÃÃÂ²ÃÃŠÃ€ ÃÃÃ…ÃŒÂ²Ã“ÃŒ --------------------
         [Authorize(Policy = "VerifiedClientOnly")]
         [HttpGet]
         public async Task<IActionResult> Premium()
@@ -70,10 +91,10 @@ namespace FETCh.Controllers
                 return Forbid();
             }
 
-            return View(); // Ïîêàçóºìî ñòîğ³íêó Premium
+            return View(); // ÃÃ®ÃªÃ Ã§Ã³ÂºÃ¬Ã® Ã±Ã²Ã®Ã°Â³Ã­ÃªÃ³ Premium
         }
 
-        // -------------------- ÑÒÎĞ²ÍÊÀ ÔÎĞÓÌ --------------------
+        // -------------------- Ã‘Ã’ÃÃÂ²ÃÃŠÃ€ Ã”ÃÃÃ“ÃŒ --------------------
         [Authorize(Policy = "VerifiedClientOnly")]
         [HttpGet]
         public async Task<IActionResult> Forum()

@@ -1,11 +1,13 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
     ViewData["Title"] = "Welcome";
 }
 
 <section class="hero-split">
     <div class="hero-half dark-side chess-layout scroll-animate">
-        <h1 class="pixel-title">Світ змінюється.</h1>
-        <p class="subtext">Майбутнє творять ті, хто вже сьогодні натискає "commit".</p>
+        <h1 class="pixel-title">@ViewData["Message"]</h1>
+        <p class="subtext">@ViewData["subtext1"]</p>
         <img class="hero-img" src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB" alt="Tech future">
     </div>
 
@@ -69,7 +71,31 @@
             <p>
                 Ми не просто в університеті — ми в серцях студентів! Тут народжуються ідеї, створюються проєкти та формується справжня спільнота, де кожен може проявити себе.
             </p>
+            <hr />
+            <h3>Demonstration of Formats</h3>
+            <p>Current Culture: @System.Globalization.CultureInfo.CurrentCulture.DisplayName</p>
+            <p>Date: @DateTime.Now.ToShortDateString()</p>
+            @{
+                // Базова сума в гривнях
+                decimal amountInUah = 12345.67m;
+                decimal displayAmount = amountInUah;
 
+                // Отримуємо поточну культуру
+                var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+
+                // Проста імітація курсів (можна замінити на актуальні)
+                if (culture == "en-US")
+                {
+                    displayAmount = amountInUah / 41.5m; // Ділимо на курс долара
+                }
+                else if (culture == "pl-PL")
+                {
+                    displayAmount = amountInUah / 10.2m; // Ділимо на курс злотого
+                }
+            }
+
+            <p>Currency: @(displayAmount.ToString("C"))</p>
+            <p>Number: @(1234.56.ToString("N2"))</p>
         </div>
         <div class="info-img">
             <img src="~/lib/F2.png" alt="Локація">
