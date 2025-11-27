@@ -4,6 +4,8 @@ using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList;
+using X.PagedList.Extensions;
 
 namespace FETCh.Controllers
 {
@@ -13,6 +15,7 @@ namespace FETCh.Controllers
         private readonly IFETChRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
+        private const int PAGE_SIZE = 1;
 
         public AdminCoursesController(
             IFETChRepository repository,
@@ -25,10 +28,15 @@ namespace FETCh.Controllers
         }
 
         // INDEX
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var courses = await _repository.GetAllCoursesAsync();
-            return View(courses);
+
+            var pagedCourses = courses
+                .OrderBy(c => c.Id)
+                .ToPagedList(page, PAGE_SIZE);
+
+            return View(pagedCourses);
         }
 
         // DETAILS

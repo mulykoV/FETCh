@@ -3,6 +3,7 @@ using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using X.PagedList.Extensions;
 
 namespace FETCh.Controllers
 {
@@ -11,7 +12,7 @@ namespace FETCh.Controllers
     {
         private readonly IFETChRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        private const int PAGE_SIZE = 1;
         public UserCoursesController(IFETChRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
@@ -19,10 +20,14 @@ namespace FETCh.Controllers
         }
 
         // -------------------- СПИСОК КУРСІВ --------------------
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
             var courses = await _repository.GetAllCoursesAsync();
-            return View(courses);
+            var paged = courses
+                .OrderBy(c => c.Id)
+                .ToPagedList(page, PAGE_SIZE);
+
+            return View(paged);
         }
 
         // -------------------- ДЕТАЛІ КУРСУ --------------------
