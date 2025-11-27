@@ -2,34 +2,64 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FETChModels.Models
 {
     public class Course
     {
-        public int Id { get; set; }                        // Óí³êàëüíèé ³äåíòèô³êàòîð êóðñó
-        public required string Title { get; set; }                  // Íàçâà êóðñó
-        public required string Subtitle { get; set; }               // Ï³äçàãîëîâîê àáî êîðîòêèé îïèñ êóðñó
-        public string? Description { get; set; }           // Äåòàëüíèé îïèñ êóðñó
-        public required string Language { get; set; }              // Ìîâà êóðñó ("ua", "en" òîùî)
-        public bool IsFree { get; set; }                  // ×è áåçêîøòîâíèé êóðñ
-        [Precision(18, 2)] // ßêùî çíà÷åííÿ âèõîäèòü çà ðàìêè (íàïðèêëàä, á³ëüøå í³æ 18 öèôð àáî á³ëüøå 2 çíàê³â ï³ñëÿ êîìè)
-        public decimal Price { get; set; }                // Ö³íà êóðñó (ÿêùî ïëàòíèé)
-        public string? PriceCurrency { get; set; }         // Âàëþòà (UAH, USD)
-        public DateTime? StartDate { get; set; }          // Äàòà ïî÷àòêó êóðñó (ÿêùî º)
-        public DateTime? EndDate { get; set; }            // Äàòà çàâåðøåííÿ êóðñó (ÿêùî º)
-        public string? ImageUrl { get; set; }              // Çîáðàæåííÿ/îáêëàäèíêà êóðñó
-        public string? BannerImageUrl { get; set; }        // Áàíåð êóðñó (äëÿ ãîëîâíî¿ ñòîð³íêè)
-        public int DurationHours { get; set; }            // Îð³ºíòîâíà òðèâàë³ñòü êóðñó ó ãîäèíàõ
-        public required CourseCategory? Category { get; set; }      // Êàòåãîð³ÿ êóðñó (çîâí³øíÿ ìîäåëü)
-        public int CategoryId { get; set; }               // ²äåíòèô³êàòîð êàòåãîð³¿ (FK)
-        public ICollection<Module>? Modules { get; set; }  // Ñïèñîê ìîäóë³â êóðñó
-        public ICollection<Lecture>? Lectures { get; set; }// Ëåêö³¿, ÿêùî âîíè íå â ìîäóëÿõ
-        public ICollection<CourseTag>? CourseTags { get; set; } // Òåãè êóðñó (äëÿ ô³ëüòð³â/ïîøóêó)
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Назва курсу є обов'язковою")]
+        [StringLength(100, MinimumLength = 5)]
+        [Display(Name = "Назва курсу")]
+        public string Title { get; set; }
+
+        [Required(ErrorMessage = "Підзаголовок обов'язковий")]
+        [StringLength(200)]
+        public string Subtitle { get; set; }
+
+        public string? Description { get; set; }
+
+        [Required(ErrorMessage = "Вкажіть мову курсу")]
+        public string Language { get; set; }
+
+        public bool IsFree { get; set; }
+
+        [Range(0, 100000)]
+        [Precision(18, 2)]
+        [Display(Name = "Ціна курсу")]
+        public decimal Price { get; set; }
+
+        public string? PriceCurrency { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? BannerImageUrl { get; set; }
+
+        [Range(1, 500)]
+        public int DurationHours { get; set; }
+
+        // Тут залишаємо тільки саме поле Email.
+        // ConfirmContactEmail тут НЕ ПОТРІБЕН (його немає в таблиці БД)
+        [Required(ErrorMessage = "Вкажіть Email куратора")]
+        [EmailAddress]
+        [Display(Name = "Email куратора")]
+        public string ContactEmail { get; set; } = string.Empty;
+
+        // --- ЗВЕРНИ УВАГУ: Я ВИДАЛИВ ConfirmContactEmail ЗВІДСИ ---
+        // Воно залишається тільки у CourseViewModel, бо в базі його зберігати не треба.
+
+        public int CategoryId { get; set; }
+        public CourseCategory? Category { get; set; }
+
+        public ICollection<Module>? Modules { get; set; }
+        public ICollection<Lecture>? Lectures { get; set; }
+        public ICollection<CourseTag>? CourseTags { get; set; }
+
         [NotMapped]
-        public ICollection<UserCourse>? Enrollments { get; set; } // Êîðèñòóâà÷³, çàïèñàí³ íà êóðñ
+        public ICollection<UserCourse>? Enrollments { get; set; }
+
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<UserCourse> UserCourses { get; set; } = new List<UserCourse>();
 
