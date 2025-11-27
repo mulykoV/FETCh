@@ -81,7 +81,7 @@ namespace FetchData.Data
             modelBuilder.Entity<Course>()
                 .HasMany(c => c.UserCourses)
                 .WithOne(uc => uc.Course)
-                .HasForeignKey(uc => uc.CourseId);
+                .HasForeignKey(uc => uc.CourseId); 
 
             // Lecture ↔ UserLectureProgress (one-to-many)
             modelBuilder.Entity<Lecture>()

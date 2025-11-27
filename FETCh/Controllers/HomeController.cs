@@ -3,7 +3,11 @@ using FetchData.Interfaces;
 using FETChModels.Models;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization; // Потрібний простір імен
+using Microsoft.Extensions.Localization; 
+using FETCh.Authorization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace FETCh.Controllers
@@ -15,33 +19,41 @@ namespace FETCh.Controllers
         private readonly AppConfiguration _config;
         private readonly IWebHostEnvironment _env;
         private readonly IStringLocalizer<HomeController> _localizer;
-
-       
-        public HomeController(ILogger<HomeController> logger, IFETChRepository repository, AppConfiguration config, IWebHostEnvironment env, IStringLocalizer<HomeController> localizer)
+        private readonly IAuthorizationService _authorizationService;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public HomeController(ILogger<HomeController> logger, 
+                                IFETChRepository repository, 
+                                AppConfiguration config, 
+                                IWebHostEnvironment env,
+                                UserManager<ApplicationUser> userManager,
+                                IAuthorizationService authorizationService,  
+                                IStringLocalizer<HomeController> localizer)
         {
             _logger = logger;
             _repository = repository;
             _config = config;
             _env = env;
             _localizer = localizer;
+            _userManager = userManager;
+            _authorizationService = authorizationService;
         }
 
-        // -------------------- ГОЛОВНА СТОРІНКА --------------------
+        // -------------------- ГѓГЋГ‹ГЋГ‚ГЌГЂ Г‘Г’ГЋГђВІГЌГЉГЂ --------------------
         public async Task<IActionResult> Index()
         {
             
-            // Отримуємо рядок з ресурсу за ключем
+            // ГЋГІГ°ГЁГ¬ГіВєГ¬Г® Г°ГїГ¤Г®ГЄ Г§ Г°ГҐГ±ГіГ°Г±Гі Г§Г  ГЄГ«ГѕГ·ГҐГ¬
             ViewData["Message"] = _localizer["WelcomeMessage"];
             ViewData["subtext1"] = _localizer["subtext1"];
-            // Наприклад, показуємо список усіх курсів
+            // ГЌГ ГЇГ°ГЁГЄГ«Г Г¤, ГЇГ®ГЄГ Г§ГіВєГ¬Г® Г±ГЇГЁГ±Г®ГЄ ГіГ±ВіГµ ГЄГіГ°Г±ВіГў
             var courses = await _repository.GetAllCoursesAsync();
-            return View(courses); // передаємо курси у View
+            return View(courses); // ГЇГҐГ°ГҐГ¤Г ВєГ¬Г® ГЄГіГ°Г±ГЁ Гі View
         }
 
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            // Встановлюємо куки
+            // Г‚Г±ГІГ Г­Г®ГўГ«ГѕВєГ¬Г® ГЄГіГЄГЁ
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
@@ -50,13 +62,13 @@ namespace FETCh.Controllers
 
             return LocalRedirect(returnUrl);
         }
-        // -------------------- ПРО ПОЛІТИКУ КОНФІДЕНЦІЙНОСТІ --------------------
+        // -------------------- ГЏГђГЋ ГЏГЋГ‹ВІГ’Г€ГЉГ“ ГЉГЋГЌГ”ВІГ„Г…ГЌГ–ВІГ‰ГЌГЋГ‘Г’ВІ --------------------
         public IActionResult Privacy()
         {
             return View();
         }
 
-        // -------------------- СТОРІНКА ПОМИЛКИ --------------------
+        // -------------------- Г‘Г’ГЋГђВІГЌГЉГЂ ГЏГЋГЊГ€Г‹ГЉГ€ --------------------
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
@@ -67,9 +79,42 @@ namespace FETCh.Controllers
         }
 
 
+        // -------------------- Г‘Г’ГЋГђВІГЌГЉГЂ ГЏГђГ…ГЊВІГ“ГЊ --------------------
+        [Authorize(Policy = "VerifiedClientOnly")]
+        [HttpGet]
+        public async Task<IActionResult> Premium()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(User, null, "PremiumOnly");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return View(); // ГЏГ®ГЄГ Г§ГіВєГ¬Г® Г±ГІГ®Г°ВіГ­ГЄГі Premium
+        }
+
+        // -------------------- Г‘Г’ГЋГђВІГЌГЉГЂ Г”ГЋГђГ“ГЊ --------------------
+        [Authorize(Policy = "VerifiedClientOnly")]
+        [HttpGet]
+        public async Task<IActionResult> Forum()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(User, null, "ForumAccess");
+
+            if (!authResult.Succeeded)
+            {
+                return Forbid();
+            }
+
+            return View();
+        }
+
+        //[Authorize]
+        [Authorize(Policy = "VerifiedClientOnly")]
         [HttpGet]
         public IActionResult Info()
         {
+
             return Json(new
             {
                 Environment = _env.EnvironmentName,

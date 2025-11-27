@@ -1,3 +1,4 @@
+using FETCh.Authorization;
 using FETCh.Configurations;
 using FetchData.Data;
 using FetchData.Interfaces;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,16 +46,53 @@ var appConfig = new AppConfiguration();
 builder.Configuration.Bind(appConfig);
 builder.Services.AddSingleton(appConfig);
 
-// Ï³äêëþ÷åííÿ äî ÁÄ
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+// -------------------- DATABASE --------------------
+var connectionString = builder.Configuration.GetConnectionString("FETChDbContextConnection");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException(
+        "❌ Connection string 'FETChDbContextConnection' not found. " +
+        "Make sure it's defined in your user-secrets or environment variables.");
+}
+
+Console.WriteLine($"Using connection string: {connectionString}");
+
 builder.Services.AddDbContext<FETChDbContext>(options =>
     options.UseSqlServer(connectionString, b => b.MigrationsAssembly("FetchData")));
 
-// DI äëÿ ðåïîçèòîð³þ
 builder.Services.AddScoped<IFETChRepository, FETChSQLServerRepository>();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+// -------------------- AUTHORIZATION POLICY --------------------
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("VerifiedClientOnly", policy =>
+    {
+        policy.RequireClaim("IsVerifiedClient", "true");
+    });
+});
+builder.Services.AddScoped<IAuthorizationHandler, IsCourseAuthorHandler>();
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("PremiumOnly", policy =>
+        policy.Requirements.Add(new MinimumWorkingHoursRequirement(100)));
+});
+//builder.Services.AddSingleton<IAuthorizationHandler, MinimumWorkingHoursHandler>();
+
+builder.Services.AddScoped<IAuthorizationHandler, MinimumWorkingHoursHandler>();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("ForumAccess", policy =>
+        policy.Requirements.Add(new ForumAccessRequirement()));
+});
+
+builder.Services.AddScoped<IAuthorizationHandler, ForumAccessHandler>();
+
 
 // -------------------- IDENTITY --------------------
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
@@ -73,7 +112,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// AddPartitionedLimiter with AddPolicy (îñíîâíå)
+// -------------------- RATE LIMITING --------------------
 builder.Services.AddRateLimiter(options =>
 {
     options.AddPolicy<string>("UserPartitioned", context =>
@@ -134,10 +173,12 @@ else
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseRateLimiter(); // Rate Limiting middleware
-
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
+
+
 
 app.MapStaticAssets();
 

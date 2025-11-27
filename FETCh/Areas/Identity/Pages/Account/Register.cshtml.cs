@@ -19,6 +19,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
@@ -62,7 +63,7 @@ namespace FETCh.Areas.Identity.Pages.Account
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
+        ///     directly from your code.This API may change or be removed in future releases.
         /// </summary>
         public string ReturnUrl { get; set; }
 
@@ -111,6 +112,11 @@ namespace FETCh.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+
+
+            [Display(Name = "Я верифікований клієнт")]
+            public bool IsVerifiedClient { get; set; }
         }
 
 
@@ -154,6 +160,13 @@ namespace FETCh.Areas.Identity.Pages.Account
                     {
                         await _userManager.AddToRoleAsync(user, Roles.User.ToString());
                     }
+
+                    if (Input.IsVerifiedClient)
+                    {
+                        await _userManager.AddClaimAsync(user, new Claim("IsVerifiedClient", "true"));
+                    }
+
+                    await _userManager.AddClaimAsync(user, new System.Security.Claims.Claim("WorkingHours", "0"));
 
                     _logger.LogInformation("User created a new account with password.");
 

@@ -1,6 +1,29 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<section class="hero-split">
+    <div class="hero-half dark-side chess-layout scroll-animate">
+        <h1 class="pixel-title">@ViewData["Title"]</h1>
+        <p class="subtext">Use this page to detail your site's privacy policy.</p>
+
+        <img class="hero-img"
+             src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB"
+             alt="Privacy">
+    </div>
+
+    <div class="hero-half light-side scroll-animate right">
+        <h1 class="pixel-title">Policy</h1>
+        <p>
+            This page describes how your site handles private data.
+        </p>
+
+        <div class="console-line">
+            <span>fetch /privacy</span><span class="cursor">|</span>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
+}
