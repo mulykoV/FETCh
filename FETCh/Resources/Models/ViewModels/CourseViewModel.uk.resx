@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+
+	<data name="CourseTitle" xml:space="preserve"><value>Назва курсу</value></data>
+	<data name="Subtitle" xml:space="preserve"><value>Підзаголовок</value></data>
+	<data name="Description" xml:space="preserve"><value>Опис</value></data>
+	<data name="Language" xml:space="preserve"><value>Мова викладання</value></data>
+	<data name="IsFree" xml:space="preserve"><value>Курс безкоштовний?</value></data>
+	<data name="Price" xml:space="preserve"><value>Ціна</value></data>
+	<data name="Currency" xml:space="preserve"><value>Валюта</value></data>
+	<data name="Duration" xml:space="preserve"><value>Тривалість (год)</value></data>
+	<data name="CuratorContacts" xml:space="preserve"><value>Контакти куратора</value></data>
+	<data name="CuratorEmail" xml:space="preserve"><value>Email куратора</value></data>
+	<data name="ConfirmEmail" xml:space="preserve"><value>Підтвердіть Email</value></data>
+	<data name="Category" xml:space="preserve"><value>Категорія</value></data>
+	<data name="SelectCategory" xml:space="preserve"><value>Оберіть категорію...</value></data>
+	<data name="ImageUrl" xml:space="preserve"><value>URL картинки</value></data>
+	<data name="BannerUrl" xml:space="preserve"><value>URL банера</value></data>
+	<data name="SaveButton" xml:space="preserve"><value>Зберегти курс</value></data>
+	<data name="BackToList" xml:space="preserve"><value>Назад до списку</value></data>
+	<data name="PageHeader" xml:space="preserve"><value>Створити новий курс</value></data>
+	<data name="PageTitle" xml:space="preserve"><value>Новий курс</value></data>
+
+	<data name="TitleRequired" xml:space="preserve"><value>Введіть назву курсу</value></data>
+	<data name="TitleLengthError" xml:space="preserve"><value>Назва має бути від 5 до 100 символів</value></data>
+	<data name="SubtitleRequired" xml:space="preserve"><value>Підзаголовок обов'язковий</value></data>
+	<data name="PriceRangeError" xml:space="preserve"><value>Ціна повинна бути додатною</value></data>
+	<data name="DurationRangeError" xml:space="preserve"><value>Тривалість від 1 до 500 годин</value></data>
+	<data name="EmailRequired" xml:space="preserve"><value>Введіть Email</value></data>
+	<data name="EmailFormatError" xml:space="preserve"><value>Невірний формат Email</value></data>
+	<data name="ConfirmEmailRequired" xml:space="preserve"><value>Підтвердіть Email</value></data>
+	<data name="EmailMismatchError" xml:space="preserve"><value>Електронні адреси не співпадають</value></data>
+</root>

@@ -5,6 +5,7 @@ using FETChModels.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using X.PagedList;
 using X.PagedList.Extensions;
 
@@ -16,16 +17,23 @@ namespace FETCh.Controllers
         private readonly IFETChRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAuthorizationService _authorizationService;
-        private const int PAGE_SIZE = 1;
+
+        // ЗМІНЕНО: Тепер локалізатор прив'язаний до цього контролера
+        private readonly IStringLocalizer<AdminCoursesController> _localizer;
+
+        private const int PAGE_SIZE = 5;
 
         public AdminCoursesController(
             IFETChRepository repository,
             UserManager<ApplicationUser> userManager,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            // ЗМІНЕНО: Інжектуємо правильний локалізатор
+            IStringLocalizer<AdminCoursesController> localizer)
         {
             _repository = repository;
             _userManager = userManager;
             _authorizationService = authorizationService;
+            _localizer = localizer;
         }
 
         // INDEX
@@ -84,6 +92,9 @@ namespace FETCh.Controllers
                 };
 
                 await _repository.AddCourseAsync(course);
+
+                // ЗМІНЕНО: Використовуємо _localizer замість _sharedLocalizer
+                TempData["Message"] = _localizer["CourseCreatedSuccess"].Value;
                 return RedirectToAction(nameof(Index));
             }
 
@@ -160,6 +171,9 @@ namespace FETCh.Controllers
                 course.CategoryId = vm.CategoryId;
 
                 await _repository.UpdateCourseAsync(course);
+
+                // ЗМІНЕНО: Використовуємо _localizer замість _sharedLocalizer
+                TempData["Message"] = _localizer["CourseUpdatedSuccess"].Value;
                 return RedirectToAction(nameof(Index));
             }
 
@@ -167,20 +181,17 @@ namespace FETCh.Controllers
             return View(vm);
         }
 
-
         // DELETE
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
             var course = await _repository.GetCourseByIdAsync(id);
             if (course == null) return NotFound();
-            var authResult = await _authorizationService
-                    .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
 
-            if (!authResult.Succeeded)
-            {
-                return Forbid();
-            }
+            var authResult = await _authorizationService
+                .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
+
+            if (!authResult.Succeeded) return Forbid();
 
             return View(course);
         }
@@ -195,10 +206,7 @@ namespace FETCh.Controllers
             var authResult = await _authorizationService
                 .AuthorizeAsync(User, course, new IsCourseAuthorRequirement());
 
-            if (!authResult.Succeeded)
-            {
-                return Forbid();
-            }
+            if (!authResult.Succeeded) return Forbid();
 
             await _repository.DeleteCourseAsync(id);
             return RedirectToAction(nameof(Index));
@@ -209,31 +217,29 @@ namespace FETCh.Controllers
         {
             if (await _repository.IsUserEnrolledAsync(courseId, userId))
             {
-                TempData["Message"] = "Користувач уже записаний на цей курс!";
+                // ЗМІНЕНО: _localizer
+                TempData["Message"] = _localizer["AlreadyEnrolled"].Value;
             }
             else
             {
                 await _repository.EnrollUserAsync(courseId, userId);
-                TempData["Message"] = "Користувач успішно записаний на курс!";
+                // ЗМІНЕНО: _localizer
+                TempData["Message"] = _localizer["UserEnrolled"].Value;
             }
 
             return RedirectToAction("Details", new { id = courseId });
         }
 
-        // AJAX: Перевірка унікальності назви курсу
+        // AJAX VALIDATION
         [AcceptVerbs("GET", "POST")]
         public async Task<IActionResult> CheckTitle(string title)
         {
-            // Правильний асинхронний виклик
-            var allCourses = await _repository.GetAllCoursesAsync();
-
-            // Перевірка в пам'яті (якщо репозиторій повертає List/IEnumerable)
-            bool exists = allCourses.Any(c => c.Title.ToLower() == title.ToLower());
+            var exists = (await _repository.GetAllCoursesAsync())
+                .Any(c => c.Title.ToLower() == title.ToLower());
 
             if (exists)
-            {
-                return Json($"Назва '{title}' вже використовується.");
-            }
+                // ЗМІНЕНО: _localizer
+                return Json(_localizer["TitleTaken", title].Value);
 
             return Json(true);
         }
@@ -241,17 +247,11 @@ namespace FETCh.Controllers
         [AcceptVerbs("GET", "POST")]
         public IActionResult CheckPriceLogic(decimal price, bool isFree)
         {
-            // Ситуація 1: Курс позначено як безкоштовний, але вказана ціна
             if (isFree && price > 0)
-            {
-                return Json("Безкоштовний курс повинен мати ціну 0.00");
-            }
+                return Json(_localizer["FreeCoursePriceError"].Value);
 
-            // Ситуація 2: Курс платний (галочка знята), але ціна 0
             if (!isFree && price <= 0)
-            {
-                return Json("Платний курс не може коштувати 0.00. Вкажіть ціну або позначте як 'Безкоштовний'.");
-            }
+                return Json(_localizer["PaidCoursePriceError"].Value);
 
             return Json(true);
         }
