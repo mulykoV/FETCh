@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+
+	<data name="CourseTitle" xml:space="preserve"><value>Course Title</value></data>
+	<data name="Subtitle" xml:space="preserve"><value>Subtitle</value></data>
+	<data name="Description" xml:space="preserve"><value>Description</value></data>
+	<data name="Language" xml:space="preserve"><value>Language</value></data>
+	<data name="IsFree" xml:space="preserve"><value>Is Free?</value></data>
+	<data name="Price" xml:space="preserve"><value>Price</value></data>
+	<data name="Currency" xml:space="preserve"><value>Currency</value></data>
+	<data name="Duration" xml:space="preserve"><value>Duration (hours)</value></data>
+	<data name="CuratorContacts" xml:space="preserve"><value>Curator Contacts</value></data>
+	<data name="CuratorEmail" xml:space="preserve"><value>Curator Email</value></data>
+	<data name="ConfirmEmail" xml:space="preserve"><value>Confirm Email</value></data>
+	<data name="Category" xml:space="preserve"><value>Category</value></data>
+	<data name="SelectCategory" xml:space="preserve"><value>Select a category...</value></data>
+	<data name="ImageUrl" xml:space="preserve"><value>Image URL</value></data>
+	<data name="BannerUrl" xml:space="preserve"><value>Banner URL</value></data>
+	<data name="SaveButton" xml:space="preserve"><value>Save Course</value></data>
+	<data name="BackToList" xml:space="preserve"><value>Back to List</value></data>
+	<data name="PageHeader" xml:space="preserve"><value>Create New Course</value></data>
+	<data name="PageTitle" xml:space="preserve"><value>New Course</value></data>
+
+	<data name="TitleRequired" xml:space="preserve"><value>Please enter course title</value></data>
+	<data name="TitleLengthError" xml:space="preserve"><value>Title must be between 5 and 100 characters</value></data>
+	<data name="SubtitleRequired" xml:space="preserve"><value>Subtitle is required</value></data>
+	<data name="PriceRangeError" xml:space="preserve"><value>Price must be positive</value></data>
+	<data name="DurationRangeError" xml:space="preserve"><value>Duration must be between 1 and 500 hours</value></data>
+	<data name="EmailRequired" xml:space="preserve"><value>Email is required</value></data>
+	<data name="EmailFormatError" xml:space="preserve"><value>Invalid email format</value></data>
+	<data name="ConfirmEmailRequired" xml:space="preserve"><value>Please confirm email</value></data>
+	<data name="EmailMismatchError" xml:space="preserve"><value>Emails do not match</value></data>
+</root>

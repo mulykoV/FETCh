@@ -12,7 +12,19 @@
     <View_SelectedScaffolderCategoryPath>root/Common/MVC/View</View_SelectedScaffolderCategoryPath>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Resources\Controllers\AdminCoursesController.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Controllers\AdminCoursesController.uk.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resources\Controllers\HomeController.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Models\ViewModels\CourseViewModel.en.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Models\ViewModels\CourseViewModel.uk.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

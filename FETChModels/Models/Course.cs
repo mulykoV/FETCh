@@ -40,15 +40,11 @@ namespace FETChModels.Models
         [Range(1, 500)]
         public int DurationHours { get; set; }
 
-        // Тут залишаємо тільки саме поле Email.
-        // ConfirmContactEmail тут НЕ ПОТРІБЕН (його немає в таблиці БД)
         [Required(ErrorMessage = "Вкажіть Email куратора")]
         [EmailAddress]
         [Display(Name = "Email куратора")]
         public string ContactEmail { get; set; } = string.Empty;
 
-        // --- ЗВЕРНИ УВАГУ: Я ВИДАЛИВ ConfirmContactEmail ЗВІДСИ ---
-        // Воно залишається тільки у CourseViewModel, бо в базі його зберігати не треба.
 
         public int CategoryId { get; set; }
         public CourseCategory? Category { get; set; }

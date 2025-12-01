@@ -1,5 +1,5 @@
 ﻿using FETChModels.Models;
-using Microsoft.AspNetCore.Mvc; // Не забудь цей using для [Remote]
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace FETCh.Models.ViewModels
@@ -9,27 +9,28 @@ namespace FETCh.Models.ViewModels
         public int Id { get; set; }
 
         // 1. Remote Validation
-        [Remote(action: "CheckTitle", controller: "AdminCourses", ErrorMessage = "Така назва курсу вже зайнята!")]
+        // ErrorMessage тут — це ключ ресурсу, якщо сервер впаде або поверне false
+        [Remote(action: "CheckTitle", controller: "AdminCourses", ErrorMessage = "TitleTaken")]
         [Required(ErrorMessage = "TitleRequired")]
-        [StringLength(100, MinimumLength = 5, ErrorMessage = "Назва має бути від 5 до 100 символів")]
-        [Display(Name = "Назва курсу")]
+        [StringLength(100, MinimumLength = 5, ErrorMessage = "TitleLengthError")]
+        [Display(Name = "CourseTitle")] // Можна теж використовувати ключ, якщо налаштовано
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Підзаголовок обов'язковий")]
-        [StringLength(200, ErrorMessage = "Максимум 200 символів")]
+        [Required(ErrorMessage = "SubtitleRequired")]
+        [StringLength(200, ErrorMessage = "SubtitleLengthError")]
         public string Subtitle { get; set; }
 
         public string? Description { get; set; }
 
-        [Required(ErrorMessage = "Вкажіть мову курсу")]
+        [Required(ErrorMessage = "LanguageRequired")]
         public string Language { get; set; }
 
         public bool IsFree { get; set; }
 
         // 2. Range Validation
-        [Range(0, 100000, ErrorMessage = "PriceRange")]
-        [Remote(action: "CheckPriceLogic", controller: "AdminCourses", AdditionalFields = "IsFree", ErrorMessage = "Некоректна ціна для обраного статусу (Безкоштовний/Платний)")]
-        [Display(Name = "Ціна курсу")]
+        [Range(0, 100000, ErrorMessage = "PriceRangeError")]
+        [Remote(action: "CheckPriceLogic", controller: "AdminCourses", AdditionalFields = "IsFree", ErrorMessage = "PriceLogicError")]
+        [Display(Name = "Price")]
         public decimal Price { get; set; }
 
         public string? PriceCurrency { get; set; }
@@ -38,23 +39,23 @@ namespace FETCh.Models.ViewModels
         public string? ImageUrl { get; set; }
         public string? BannerImageUrl { get; set; }
 
-        [Range(1, 500, ErrorMessage = "Тривалість має бути від 1 до 500 годин")]
-        [Display(Name = "Тривалість (год)")]
+        [Range(1, 500, ErrorMessage = "DurationRangeError")]
+        [Display(Name = "Duration")]
         public int DurationHours { get; set; }
 
         // 3. Email Address
         [Required(ErrorMessage = "EmailRequired")]
-        [EmailAddress(ErrorMessage = "EmailFormat")]
-        [Display(Name = "Email куратора")]
+        [EmailAddress(ErrorMessage = "EmailFormatError")]
+        [Display(Name = "CuratorEmail")]
         public string ContactEmail { get; set; } = string.Empty;
 
-        // 4. Compare Validation (Тільки у ViewModel!)
-        [Required(ErrorMessage = "Підтвердіть Email")]
-        [Compare("ContactEmail", ErrorMessage = "Email адреси не співпадають")]
-        [Display(Name = "Підтвердження Email")]
+        // 4. Compare Validation
+        [Required(ErrorMessage = "ConfirmEmailRequired")]
+        [Compare("ContactEmail", ErrorMessage = "EmailMismatchError")]
+        [Display(Name = "ConfirmEmail")]
         public string ConfirmContactEmail { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Оберіть категорію")]
+        [Required(ErrorMessage = "CategoryRequired")]
         public int CategoryId { get; set; }
 
         public List<CourseCategory>? Categories { get; set; }
