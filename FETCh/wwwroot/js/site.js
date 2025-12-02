@@ -134,9 +134,9 @@ if (canvas) {
     canvas.height = window.innerHeight;
 
     // === ОГОЛОШЕННЯ ЗМІННИХ (Всередині IF) ===
-    const logo = "MATRIX";
+    const logo = "FETCh";
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Набір символів
-    const fontSize = 16;
+    const fontSize = 100;
 
     // Центруємо логотип
     let logoX = canvas.width / 2 - (logo.length * fontSize) / 2;

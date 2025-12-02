@@ -1,108 +1,277 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Identity
+@using FETChModels.Models
+@using FetchData.Data
+
 @inject IViewLocalizer Localizer
+@inject UserManager<FETChModels.Models.ApplicationUser> UserManager
+@inject FETChDbContext Context
+
 @{
-    ViewData["Title"] = "Welcome";
+    ViewData["Title"] = "System Root";
+
+    // --- ЛОГІКА ОТРИМАННЯ ДАНИХ (Виконується тут, зверху) ---
+
+    // Створюємо порожній список, щоб не було помилок, якщо юзер гість
+    var myCourses = new List<FETChModels.Models.UserCourse>();
+    int userLevel = 1; // Базовий рівень
+
+    if (User.Identity.IsAuthenticated)
+    {
+        var userId = UserManager.GetUserId(User);
+        if (userId != null)
+        {
+            // Спроба отримати курси.
+            // УВАГА: Якщо таблиця називається інакше (наприклад Enrollments), зміни UserCourses на правильну назву.
+            try
+            {
+                myCourses = Context.UserCourses
+                                .Include(uc => uc.Course)
+                                .Where(uc => uc.UserId == userId)
+                                .ToList();
+
+                // Рівень = 1 + кількість курсів
+                userLevel = 1 + myCourses.Count;
+            }
+            catch
+            {
+                // Якщо бази ще немає або помилка - ігноруємо, щоб сайт не впав
+            }
+        }
+    }
 }
 
-<section class="hero-split">
-    <div class="hero-half dark-side chess-layout scroll-animate">
-        <h1 class="pixel-title">@ViewData["Message"]</h1>
-        <p class="subtext">@ViewData["subtext1"]</p>
-        <img class="hero-img" src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB" alt="Tech future">
-    </div>
+@if (User.Identity.IsAuthenticated)
+{
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="admin-dashboard fade-in">
+            <div class="container pt-5">
+                <div class="row mb-4">
+                    <div class="col-12 text-center">
+                        <h1 class="glitch-text" data-text="ПЕРЕХОПЛЕННЯ СИСТЕМИ">ПЕРЕХОПЛЕННЯ СИСТЕМИ</h1>
+                        <p class="pixel-text text-danger">ДОСТУП АДМІНІСТРАТОРА НАДАНО</p>
+                    </div>
+                </div>
 
-    <div class="hero-half light-side scroll-animate right">
-        <h1 class="pixel-title">Гра: <span id="score">0</span> коммітів</h1>
-        <p>Натискай кнопку якомога швидше за <b>10 секунд</b>!</p>
+                <div class="row g-4">
+                    <div class="col-md-8">
+                        <div class="cyber-card danger-border h-100">
+                            <h3 class="card-header-pixel"><span class="blink">_</span>СИСТЕМНІ ЛОГИ</h3>
+                            <div class="terminal-window" id="adminTerminal"></div>
+                        </div>
+                    </div>
 
-        <!-- Консольна лінія -->
-        <div class="console-line" id="consoleLine">
-            <span id="typedText"></span><span class="cursor">|</span>
+                    <div class="col-md-4">
+                        <div class="cyber-card h-100">
+                            <h3 class="card-header-pixel">ПАНЕЛЬ КЕРУВАННЯ</h3>
+                            <div class="d-grid gap-3 mt-3">
+                                <a asp-controller="AdminCourses" asp-action="Index" class="btn-cyber btn-block">
+                                    [ КЕРУВАННЯ КУРСАМИ ]
+                                </a>
+                                <a asp-controller="Users" asp-action="Index" class="btn-cyber btn-block">
+                                    [ БАЗА КОРИСТУВАЧІВ ]
+                                </a>
+                                <button class="btn-cyber btn-danger-glow" onclick="alert('СИМУЛЯЦІЯ ОЧИЩЕННЯ СИСТЕМИ')">
+                                    ⚠️ ОЧИСТИТИ КЕШ
+                                </button>
+                            </div>
+                            <hr class="neon-line" />
+                            <div class="server-status">
+                                <p>ЦП (CPU): <span id="cpuVal">12</span>%</p>
+                                <div class="progress-bar-pixel"><div style="width: 12%"></div></div>
+                                <p class="mt-2">ОЗП (RAM): <span id="ramVal">45</span>%</p>
+                                <div class="progress-bar-pixel"><div style="width: 45%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="user-dashboard fade-in">
+            <div class="container pt-5">
+                <div class="row align-items-center mb-5">
+                    <div class="col-md-8">
+                        <h1 class="pixel-title">З поверненням, Агенте <span class="text-neon">@User.Identity.Name</span></h1>
+                        <p class="subtext typing-effect">З'єднання встановлено. Очікування вводу...</p>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <div class="id-card">
+                            <div class="id-header">ID_КАРТКА_FETCH</div>
+                            <div class="id-body">
+                                <p>РОЛЬ: <span class="text-neon">СТУДЕНТ</span></p>
+                                <p>СТАТУС: <span class="text-neon">ОНЛАЙН</span></p>
+                                <p>РІВЕНЬ: <span class="text-neon">@userLevel</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- тільки одна кнопка -->
-            <button class="console-btn" id="commitBtn" type="button" aria-label="Commit">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M8 1a.5.5 0 0 1 .5.5V7h5.5a.5.5 0 0 1 0 1H8.5v5.5a.5.5 0 0 1-1 0V8H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z" />
-                </svg>
-            </button>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="cyber-card hover-effect h-100">
+                            <h3>> АКТИВНІ_МІСІЇ</h3>
+                            <p class="text-muted mb-4">Продовжити навчання:</p>
+
+                            @if (myCourses.Any())
+                            {
+                                @foreach (var item in myCourses)
+                                {
+                                    // Якщо у тебе немає поля Progress, тут буде 0 або рандом
+                                    var progress = 0;
+
+                                    <div class="mission-item mb-4">
+                                        <div class="d-flex justify-content-between pixel-text" style="font-size: 0.8rem;">
+                                            <span class="text-white">@item.Course.Title</span>
+                                            <span class="text-neon">@progress%</span>
+                                        </div>
+                                        <div class="progress-bar-pixel mt-1">
+                                            <div style="width: @progress%"></div>
+                                        </div>
+                                        <div class="text-end mt-1">
+                                            <a asp-controller="UserCourses" asp-action="Details" asp-route-id="@item.CourseId" class="btn-link-pixel text-muted" style="font-size: 10px;">
+                                                [ ПРОДОВЖИТИ ]
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="terminal-alert">
+                                    > НЕМАЄ АКТИВНИХ МІСІЙ.
+                                    <br>
+                                    > ЗАПИШІТЬСЯ НА КУРС ЧЕРЕЗ АРХІВ.
+                                </div>
+                            }
+
+                            <div class="mt-auto text-center pt-3">
+                                <a asp-controller="UserCourses" asp-action="MyCourses" class="btn-link-pixel">
+                                    ВСІ МІСІЇ >>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="cyber-card hover-effect h-100">
+                            <h3>> АРХІВ_ДАНИХ</h3>
+                            <p class="text-muted">Отримати нові знання:</p>
+                            <ul class="pixel-list">
+                                <li>Доступні нові протоколи...</li>
+                                <li>Очікуються оновлення системи...</li>
+                            </ul>
+                            <div class="mt-auto text-center pt-3">
+                                <a asp-controller="UserCourses" asp-action="Index" class="btn-link-pixel">
+                                    ДОСТУП ДО АРХІВІВ >>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <section class="hero-split">
+        <div class="hero-half dark-side chess-layout scroll-animate">
+            <h1 class="pixel-title">@ViewData["Message"]</h1>
+            <p class="subtext">@ViewData["subtext1"]</p>
+            <img class="hero-img" src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB" alt="Tech future">
         </div>
 
-        <!-- таймер -->
-        <p id="timer">Час: 10</p>
+        <div class="hero-half light-side scroll-animate right">
+            <h1 class="pixel-title">Гра: <span id="score">0</span> коммітів</h1>
+            <p>Натискай кнопку якомога швидше за <b>10 секунд</b>!</p>
 
-        <!-- результат -->
-        <div id="resultBox" class="result-box hidden" aria-live="polite"></div>
-        <!-- Додаємо прихований контейнер із URL -->
-        <div id="registerUrl" data-url="@Url.Page("/Account/Register", new { area = "Identity" })" style="display:none;"></div>
+            <div class="console-line" id="consoleLine">
+                <span id="typedText"></span><span class="cursor">|</span>
+                <button class="console-btn" id="commitBtn" type="button" aria-label="Commit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 1a.5.5 0 0 1 .5.5V7h5.5a.5.5 0 0 1 0 1H8.5v5.5a.5.5 0 0 1-1 0V8H2a.5.5 0 0 1 0-1h5.5V1.5A.5.5 0 0 1 8 1z" />
+                    </svg>
+                </button>
+            </div>
 
-    </div>
-</section>
-
-<section class="marquee-info scroll-animate" id="about-tablo">
-    <div class="marquee">
-        <h2 class="pixel-title">Хто ми?</h2>
-        <h2 class="pixel-title">Хто ми?</h2>
-    </div>
-    <div class="marquee-content split split-30-70">
-        <div class="info-img">
-            <img src="/lib/FETCh.png" alt="Моє фото">
+            <p id="timer">Час: 10</p>
+            <div id="resultBox" class="result-box hidden" aria-live="polite"></div>
+            <div id="registerUrl" data-url="@Url.Page("/Account/Register", new { area = "Identity" })" style="display:none;"></div>
         </div>
-        <div class="info-text">
-            <h2>Ми — студентський парламент FIT:Community</h2>
-            <p>
-                Ми робимо студентське життя яскравим і захопливим! Курси, хакатони, марафони, воркшопи та інноваційні проєкти — усе це для того, щоб кожен студент міг розвиватися, створювати та втілювати свої ідеї. Приєднуйся до нас і стань частиною спільноти, де навчання перетворюється на пригоду, а кожен день приносить нові можливості!
-            </p>
+    </section>
+
+    <section class="marquee-info scroll-animate" id="about-tablo">
+        <div class="marquee">
+            <h2 class="pixel-title">Хто ми?</h2>
+            <h2 class="pixel-title">Хто ми?</h2>
         </div>
-    </div>
-</section>
-
-<section class="fullwidth-image scroll-animate" id="about">
-    <img src="/lib/F1.png" alt="Презентація" class="full-img">
-</section>
-
-<section class="marquee-info scroll-animate" id="where-tablo">
-    <div class="marquee">
-        <h2 class="marquee-text">Де ми?</h2>
-        <h2 class="marquee-text">Де ми?</h2>
-    </div>
-    <div class="marquee-content split split-70-30">
-        <div class="info-text">
-            <h2>Наша локація</h2>
-            <p>
-                Ми не просто в університеті — ми в серцях студентів! Тут народжуються ідеї, створюються проєкти та формується справжня спільнота, де кожен може проявити себе.
-            </p>
-            <hr />
-            <h3>Demonstration of Formats</h3>
-            <p>Current Culture: @System.Globalization.CultureInfo.CurrentCulture.DisplayName</p>
-            <p>Date: @DateTime.Now.ToShortDateString()</p>
-            @{
-                // Базова сума в гривнях
-                decimal amountInUah = 12345.67m;
-                decimal displayAmount = amountInUah;
-
-                // Отримуємо поточну культуру
-                var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
-
-                // Проста імітація курсів (можна замінити на актуальні)
-                if (culture == "en-US")
-                {
-                    displayAmount = amountInUah / 41.5m; // Ділимо на курс долара
-                }
-                else if (culture == "pl-PL")
-                {
-                    displayAmount = amountInUah / 10.2m; // Ділимо на курс злотого
-                }
-            }
-
-            <p>Currency: @(displayAmount.ToString("C"))</p>
-            <p>Number: @(1234.56.ToString("N2"))</p>
+        <div class="marquee-content split split-30-70">
+            <div class="info-img">
+                <img src="/lib/FETCh.png" alt="Моє фото">
+            </div>
+            <div class="info-text">
+                <h2>Ми — студентський парламент FIT:Community</h2>
+                <p>
+                    Ми робимо студентське життя яскравим і захопливим!
+                </p>
+            </div>
         </div>
-        <div class="info-img">
-            <img src="~/lib/F2.png" alt="Локація">
+    </section>
+
+    <section class="fullwidth-image scroll-animate" id="about">
+        <img src="/lib/F1.png" alt="Презентація" class="full-img">
+    </section>
+
+    <section class="marquee-info scroll-animate" id="where-tablo">
+        <div class="marquee">
+            <h2 class="marquee-text">Де ми?</h2>
+            <h2 class="marquee-text">Де ми?</h2>
         </div>
-    </div>
-</section>
+        <div class="marquee-content split split-70-30">
+            <div class="info-text">
+                <h2>Наша локація</h2>
+                <p>Ми в серцях студентів!</p>
+            </div>
+            <div class="info-img">
+                <img src="~/lib/F2.png" alt="Локація">
+            </div>
+        </div>
+    </section>
+}
+
 
 @section Scripts {
     <script src="~/js/site.js"></script>
+    <script>
+        // === СКРИПТ ТІЛЬКИ ДЛЯ АДМІНА ===
+        const terminal = document.getElementById('adminTerminal');
+        if (terminal) {
+            const logs = [
+                "Сканування портів...", "Користувач 'agent007' під'єднався.", "Цілісність бази даних: 100%",
+                "Виявлено сплеск трафіку.", "Брандмауер: Активний", "Система в нормі."
+            ];
+            setInterval(() => {
+                const p = document.createElement('div');
+                p.className = 'log-line';
+                const time = new Date().toLocaleTimeString();
+                p.innerHTML = `<span class="text-muted">[${time}]</span> > ${logs[Math.floor(Math.random() * logs.length)]}`;
+                terminal.appendChild(p);
+                terminal.scrollTop = terminal.scrollHeight;
+                if (terminal.children.length > 10) terminal.removeChild(terminal.firstChild);
+            }, 1500);
+
+            setInterval(() => {
+                const cpu = document.getElementById('cpuVal');
+                const ram = document.getElementById('ramVal');
+                if(cpu) cpu.innerText = Math.floor(Math.random() * 30) + 10;
+                if(ram) ram.innerText = Math.floor(Math.random() * 20) + 40;
+            }, 2000);
+        }
+    </script>
 }

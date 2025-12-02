@@ -123,6 +123,38 @@
     </script>
 }
 <style>
+    .login-card {
+        width: 100%; /* Займає доступну ширину */
+        max-width: 400px; /* АЛЕ не більше 400 пікселів! Це зупинить розтягування */
+        margin: 0 auto; /* Центруємо картку */
+        display: flex;
+        flex-direction: column; /* Елементи один під одним */
+    }
+
+    /* Переконайся, що твої поля налаштовані так: */
+    .unified-input {
+        width: 100%; /* 100% від батьківського блоку (який тепер 400px макс) */
+        box-sizing: border-box; /* Рамки враховуються всередину */
+        /* Твій попередній стиль */
+        color: #111 !important;
+        background: #f3f3f3;
+        border: 1px solid #ccc;
+        padding: 12px 15px;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+        transition: all 0.3s ease;
+    }
+
+    /* Щоб довгий текст помилки не ламав ширину, а переносився на новий рядок */
+    .text-danger {
+        word-wrap: break-word; /* Розривати довгі слова */
+        white-space: normal; /* Звичайний перенос тексту */
+        display: block; /* Щоб займав окремий рядок */
+        font-size: 0.85rem; /* Трохи менший шрифт для помилок */
+        margin-top: 5px;
+    }
+
     .console-container {
         max-width: 540px;
         margin-top: 10px;

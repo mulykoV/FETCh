@@ -542,4 +542,1154 @@ body {
         box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
     }
 
+/* Планета біла за замовчуванням */
+.planet-icon {
+    font-size: 22px;
+    color: #fff !important; /* біла */
+    position: relative;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
 
+    /* Псевдоелемент для зеленої підсвітки під іконкою */
+    .planet-icon::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -5px; /* відступ під іконкою */
+        width: 0%;
+        height: 2px;
+        background-color: #0f0; /* зелений */
+        transition: width 0.3s ease;
+    }
+
+    /* Hover ефекти */
+    .planet-icon:hover {
+        color: #0f0 !important; /* сама планета стає зеленою */
+        cursor: pointer;
+        transform: scale(1.1); /* легке збільшення при hover */
+    }
+
+        .planet-icon:hover::after {
+            width: 100%; /* зелена підсвітка знизу */
+        }
+
+/* 1. Гарантуємо, що стандартне підкреслення (яке конфліктує зі стрілкою) вимкнене */
+.remove-arrow::after {
+    display: none !important;
+}
+
+/* 2. Створюємо НОВЕ підкреслення через ::before (щоб не залежати від стрілки) */
+.remove-arrow::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px; /* Та сама позиція знизу */
+    width: 0%; /* Початкова ширина 0 */
+    height: 2px;
+    background: #0f0; /* Зелений колір */
+    transition: width 0.3s;
+}
+
+/* 3. Анімація: коли наводимо на посилання, лінія розширюється */
+.remove-arrow:hover::before {
+    width: 100%;
+}
+
+/* 4. При наведенні текст теж стає зеленим */
+.remove-arrow:hover {
+    color: #0f0 !important;
+}
+
+/* 2. Налаштування кольору планети */
+.planet-icon {
+    color: #fff !important; /* Планета біла */
+    display: flex; /* Щоб іконка була по центру */
+    align-items: center;
+    padding: 8px 15px; /* Трохи відступів */
+    transition: color 0.3s ease;
+}
+
+    /* 3. При наведенні планета стає зеленою */
+    .planet-icon:hover {
+        color: #0f0 !important;
+        cursor: pointer;
+        text-shadow: 0 0 5px #0f0; /* Легке світіння */
+    }
+
+/* === Фікс меню === */
+
+/* 1. Прибираємо підкреслення у всіх посилань меню (для Адміна) */
+.nav-link-custom {
+    text-decoration: none !important;
+}
+
+/* 2. Робимо кнопку "Вийти" ідентичною до посилань */
+.logout-btn {
+    background: none; 
+    border: none; 
+    padding: 0; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    height: 100%; 
+}
+
+/* Вирівнювання форми, в якій лежить кнопка */
+.navbar-nav form {
+    display: flex;
+    align-items: center;
+}
+
+/* === DASHBOARD STYLES (NOVELTY) === */
+
+/* Спільне */
+.fade-in {
+    animation: fadeIn 1s ease-in-out;
+}
+
+.text-neon {
+    color: #0f0;
+    text-shadow: 0 0 5px #0f0;
+}
+
+/* Картки */
+.cyber-card {
+    background: #000;
+    border: 1px solid #333;
+    padding: 20px;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.05);
+    transition: all 0.3s;
+}
+
+    .cyber-card.hover-effect:hover {
+        border-color: #0f0;
+        box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .cyber-card.danger-border {
+        border-color: #ff3333; /* Червоний для адміна */
+        box-shadow: 0 0 10px rgba(255, 51, 51, 0.1);
+    }
+
+.card-header-pixel {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 14px;
+    color: #fff;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.danger-border .card-header-pixel {
+    color: #ff3333;
+    border-bottom-color: #ff3333;
+}
+
+/* Кнопки */
+.btn-cyber {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background: #111;
+    color: #0f0;
+    border: 1px solid #0f0;
+    font-family: 'Courier New', monospace;
+    text-align: left;
+    text-decoration: none;
+    transition: 0.2s;
+    margin-bottom: 10px;
+}
+
+    .btn-cyber:hover {
+        background: #0f0;
+        color: #000;
+    }
+
+.btn-danger-glow {
+    color: #ff3333;
+    border-color: #ff3333;
+}
+
+    .btn-danger-glow:hover {
+        background: #ff3333;
+        color: #000;
+    }
+
+.btn-link-pixel {
+    color: #0f0;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    text-decoration: none;
+}
+
+    .btn-link-pixel:hover {
+        text-decoration: underline;
+    }
+
+/* Адмін Термінал */
+.terminal-window {
+    background: #0a0a0a;
+    height: 200px;
+    overflow-y: hidden;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #ff3333; /* Червоний текст для адмін логів */
+    padding: 10px;
+    border-left: 2px solid #ff3333;
+}
+
+.log-line {
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 51, 51, 0.1);
+}
+
+/* ID Card для Юзера */
+.id-card {
+    border: 2px solid #0f0;
+    padding: 15px;
+    background: rgba(0, 255, 0, 0.05);
+    display: inline-block;
+    text-align: left;
+    width: 200px;
+}
+
+.id-header {
+    background: #0f0;
+    color: #000;
+    font-weight: bold;
+    text-align: center;
+    margin: -15px -15px 15px -15px;
+    padding: 5px;
+}
+
+/* Прогрес бар піксельний */
+.progress-bar-pixel {
+    height: 10px;
+    background: #333;
+    width: 100%;
+    margin-top: 5px;
+}
+
+    .progress-bar-pixel div {
+        height: 100%;
+        background: #0f0;
+        /* Ефект смужок */
+        background-image: linear-gradient( 45deg, rgba(0,0,0,1) 25%, transparent 25%, transparent 50%, rgba(0,0,0,1) 50%, rgba(0,0,0,1) 75%, transparent 75%, transparent );
+        background-size: 10px 10px;
+    }
+
+/* Глітч ефект для заголовку адміна */
+.glitch-text {
+    position: relative;
+    color: #ff3333;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 2rem;
+}
+
+    .glitch-text::before,
+    .glitch-text::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+    }
+
+    .glitch-text::before {
+        left: 2px;
+        text-shadow: -1px 0 blue;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim 5s infinite linear alternate-reverse;
+    }
+
+    .glitch-text::after {
+        left: -2px;
+        text-shadow: -1px 0 red;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim2 5s infinite linear alternate-reverse;
+    }
+
+@keyframes glitch-anim {
+    0% {
+        clip: rect(12px, 9999px, 5px, 0);
+    }
+
+    5% {
+        clip: rect(34px, 9999px, 15px, 0);
+    }
+
+    10% {
+        clip: rect(4px, 9999px, 86px, 0);
+    }
+    /* ... можна додати більше кадрів ... */
+    100% {
+        clip: rect(67px, 9999px, 23px, 0);
+    }
+}
+
+@keyframes glitch-anim2 {
+    0% {
+        clip: rect(2px, 9999px, 35px, 0);
+    }
+
+    100% {
+        clip: rect(87px, 9999px, 93px, 0);
+    }
+}
+
+/* === PRIVACY POLICY: REFINED CYBER STYLE === */
+
+.privacy-section {
+    min-height: 100vh;
+    overflow: hidden;
+    background: #000;
+}
+
+/* --- ЛІВА СТОРОНА (СКАНЕР) --- */
+.cyber-grid-bg {
+    /* Фонова сітка для атмосфери */
+    background-image: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    background-position: center center;
+    border-right: 2px solid #111;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.scanner-container {
+    padding: 30px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #111;
+    border-radius: 10px;
+}
+
+.security-scanner {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    border: 3px solid #333;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #050505;
+    box-shadow: 0 0 25px rgba(0,0,0,0.9) inset;
+    overflow: hidden;
+    margin: 0 auto;
+    transition: all 0.5s ease;
+}
+
+.blink-border {
+    animation: borderBlink 1.5s infinite alternate;
+}
+
+.success-border {
+    border-color: #0f0;
+    box-shadow: 0 0 30px rgba(0, 255, 0, 0.2) inset, 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+@keyframes borderBlink {
+    from {
+        border-color: #333;
+        box-shadow: 0 0 10px rgba(255,0,0,0.1);
+    }
+
+    to {
+        border-color: #ff3333;
+        box-shadow: 0 0 20px rgba(255,0,0,0.4);
+    }
+}
+
+.lock-icon {
+    color: #ff3333;
+    transition: all 0.5s ease;
+    z-index: 2;
+    filter: drop-shadow(0 0 5px rgba(255,0,0,0.5));
+}
+
+.scan-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #0f0;
+    box-shadow: 0 0 15px #0f0, 0 0 5px #fff;
+    animation: scanMove 2.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+    z-index: 1;
+    opacity: 0.7;
+}
+
+@keyframes scanMove {
+    0% {
+        top: -10%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 110%;
+        opacity: 0;
+    }
+}
+
+.status-text {
+    margin-top: 25px;
+    font-size: 1.4rem;
+    color: #ff3333;
+    font-weight: bold;
+    text-shadow: 0 0 5px currentColor;
+    letter-spacing: 2px;
+}
+
+.cyber-meta p {
+    font-size: 0.8rem;
+    color: #555;
+    margin-bottom: 5px;
+    text-align: left;
+}
+
+/* --- ПРАВА СТОРОНА (ДОКУМЕНТ) --- */
+.document-area {
+    position: relative;
+    background: #111; /* Темніший фон для контрасту */
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Оверлей шифрування (Заміна блюру) */
+.encryption-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a; /* Майже чорний */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+    overflow: hidden;
+}
+
+/* Цифровий шум на фоні оверлею */
+.digital-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.encryption-overlay.decrypting {
+    opacity: 0;
+    transform: scale(1.1); /* Ефект "розчинення" */
+    filter: brightness(2); /* Яскравий спалах перед зникненням */
+}
+
+.overlay-content {
+    text-align: center;
+    z-index: 2;
+    border: 2px solid #ff3333;
+    padding: 40px;
+    background: rgba(20, 0, 0, 0.8);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.cyber-glitch-btn {
+    background: transparent;
+    color: #ff3333;
+    border: 2px solid #ff3333;
+    padding: 15px 30px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255,0,0,0.3);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+    .cyber-glitch-btn:hover {
+        background: #ff3333;
+        color: #000;
+        box-shadow: 0 0 20px #ff3333;
+    }
+
+/* Рамка документа */
+.document-wrapper {
+    width: 90%;
+    max-width: 800px;
+    height: 90%;
+    padding: 20px;
+}
+
+.document-frame {
+    border: 2px solid #333;
+    background: #080808; /* Дуже темний сірий */
+    padding: 50px;
+    height: 100%;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    position: relative;
+    overflow-y: auto;
+}
+
+    /* Декоративні кутики для рамки */
+    .document-frame::before, .document-frame::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #0f0;
+    }
+
+    .document-frame::before {
+        top: 0;
+        left: 0;
+        border-right: none;
+        border-bottom: none;
+    }
+
+    .document-frame::after {
+        bottom: 0;
+        right: 0;
+        border-left: none;
+        border-top: none;
+    }
+
+
+.doc-meta {
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    color: #444;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.cyber-line {
+    border-top: 2px solid #222;
+    margin-bottom: 30px;
+}
+
+.document-content {
+    font-family: 'Courier New', monospace;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #ccc; /* Світло-сірий текст */
+}
+
+.scramble-target {
+    color: #ff3333; /* Спочатку червоні заголовки */
+    transition: color 0.5s;
+}
+
+    .scramble-target.decoding {
+        color: #fff;
+        text-shadow: 0 0 5px #fff;
+    }
+
+    .scramble-target.decoded {
+        color: #0f0; /* Зелені після розшифровки */
+        text-shadow: 0 0 5px #0f0;
+    }
+
+/* Чорні маркери (REDACTED) */
+.redacted {
+    background-color: #111;
+    color: transparent; /* Текст невидимий */
+    padding: 2px 5px;
+    border: 1px solid #333;
+    transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: help;
+    position: relative;
+}
+
+    /* Коли розкрито */
+    .redacted.revealed {
+        background-color: transparent;
+        color: #0f0; /* Зелений текст */
+        border-color: transparent;
+        border-bottom: 2px solid #0f0; /* Підкреслення замість рамки */
+        text-shadow: 0 0 8px rgba(0,255,0,0.5);
+        animation: textGlitchIn 0.5s ease-out; /* Ефект появи */
+    }
+
+@keyframes textGlitchIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-5px);
+        filter: blur(2px);
+    }
+
+    50% {
+        opacity: 0.7;
+        transform: translateX(2px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
+}
+
+/* Блимання */
+.blink {
+    animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* --- ПРАВА СТОРОНА (ДОКУМЕНТ) --- */
+.document-area {
+    position: relative;
+    background: #080808;
+    padding: 0;
+    /* Прибираємо flex-центрування, щоб блок зайняв все місце */
+    display: block;
+    height: 100vh; /* Фіксуємо висоту на весь екран */
+    overflow: hidden;
+}
+
+/* Оверлей шифрування */
+.encryption-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20;
+    transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* (Стилі для .digital-noise, .encryption-overlay.decrypting, .overlay-content, .cyber-glitch-btn залишаємо ті самі...) */
+.digital-noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.encryption-overlay.decrypting {
+    opacity: 0;
+    transform: scale(1.1);
+    filter: brightness(2);
+}
+
+.overlay-content {
+    text-align: center;
+    z-index: 2;
+    border: 2px solid #ff3333;
+    padding: 40px;
+    background: rgba(20, 0, 0, 0.8);
+    box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+    border-radius: 5px;
+}
+
+.cyber-glitch-btn {
+    background: transparent;
+    color: #ff3333;
+    border: 2px solid #ff3333;
+    padding: 15px 30px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9rem;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(255,0,0,0.3);
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+    .cyber-glitch-btn:hover {
+        background: #ff3333;
+        color: #000;
+        box-shadow: 0 0 20px #ff3333;
+    }
+
+
+/* === ГОЛОВНІ ЗМІНИ ТУТ === */
+
+/* Обгортка тепер займає все місце */
+.document-wrapper {
+    width: 100%;
+    height: 100%;
+    padding: 0; /* Ніяких відступів */
+    max-width: none; /* Прибираємо обмеження ширини */
+}
+
+/* Рамка документа перетворюється на панель */
+.document-frame {
+    border: none; /* Прибираємо рамку по колу */
+    border-left: 2px solid #333; /* Залишаємо тільки лінію розділення зліва */
+    background: #080808;
+    padding: 60px 80px; /* Внутрішні відступи для тексту */
+    height: 100%;
+    box-shadow: none;
+    position: relative;
+    overflow-y: auto; /* Скрол тільки тут */
+    /* Стилізація скролбару */
+    scrollbar-width: thin;
+    scrollbar-color: #333 #111;
+}
+
+    /* Webkit скролбар (Chrome, Safari, Edge) */
+    .document-frame::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    .document-frame::-webkit-scrollbar-track {
+        background: #111;
+    }
+
+    .document-frame::-webkit-scrollbar-thumb {
+        background: #333;
+        border: 1px solid #111;
+    }
+
+        .document-frame::-webkit-scrollbar-thumb:hover {
+            background: #0f0;
+        }
+    /* Зелений при наведенні */
+
+    /* Прибираємо декоративні кутики, бо у нас тепер повний екран */
+    .document-frame::before, .document-frame::after {
+        display: none;
+    }
+
+/* === CYBER TABLE STYLES === */
+
+.cyber-container {
+    padding: 20px;
+    background: #000;
+    min-height: 80vh;
+}
+
+/* Обгортка таблиці */
+.cyber-table-wrapper {
+    border: 1px solid #333;
+    border-top: 2px solid #0f0;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+    overflow-x: auto;
+    background: #050505;
+}
+
+.cyber-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', monospace;
+    color: #bbb;
+}
+
+    .cyber-table thead {
+        background: #111;
+        border-bottom: 2px solid #333;
+    }
+
+    .cyber-table th {
+        padding: 15px;
+        text-align: left;
+        color: #0f0; /* Зелені заголовки */
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .cyber-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #222;
+        font-size: 0.95rem;
+        vertical-align: middle;
+    }
+
+    .cyber-table tbody tr {
+        transition: background 0.2s;
+    }
+
+        .cyber-table tbody tr:hover {
+            background: rgba(0, 255, 0, 0.05); /* Легке підсвічування при наведенні */
+        }
+
+/* Бейджі (Ціна/Безкоштовно) */
+.cyber-badge {
+    padding: 3px 8px;
+    border: 1px solid;
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Press Start 2P', cursive;
+}
+
+    .cyber-badge.free {
+        color: #0f0;
+        border-color: #0f0;
+        box-shadow: 0 0 5px rgba(0,255,0,0.2);
+    }
+
+    .cyber-badge.paid {
+        color: #ffcc00; /* Жовтий для платних */
+        border-color: #ffcc00;
+    }
+
+/* Дії (Кнопки в таблиці) */
+.action-cell {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+}
+
+.action-link {
+    text-decoration: none;
+    margin-left: 10px;
+    transition: 0.2s;
+    display: inline-block;
+}
+
+    .action-link.info {
+        color: #0dcaf0;
+    }
+
+        .action-link.info:hover {
+            text-shadow: 0 0 8px #0dcaf0;
+            transform: scale(1.1);
+        }
+
+    .action-link.warning {
+        color: #ffcc00;
+    }
+
+        .action-link.warning:hover {
+            text-shadow: 0 0 8px #ffcc00;
+            transform: scale(1.1);
+        }
+
+    .action-link.danger {
+        color: #ff3333;
+    }
+
+        .action-link.danger:hover {
+            text-shadow: 0 0 8px #ff3333;
+            transform: scale(1.1);
+        }
+
+/* Повідомлення про порожню таблицю */
+.terminal-alert {
+    font-family: 'Courier New', monospace;
+    color: #ff3333;
+    border: 1px dashed #ff3333;
+    padding: 20px;
+    text-align: center;
+    background: rgba(255, 51, 51, 0.05);
+}
+
+/* === ПАГІНАЦІЯ В СТИЛІ МАТРИЦІ === */
+
+.cyber-pagination .pagination {
+    margin: 0;
+}
+
+.cyber-pagination .page-item {
+    margin: 0 5px;
+}
+
+.cyber-pagination .page-link {
+    background: #000;
+    border: 1px solid #3;
+}
+
+/* === CYBER FORM ELEMENTS === */
+
+.cyber-form {
+    padding-bottom: 50px;
+}
+
+/* Лейбли */
+.pixel-label {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+    color: #0f0;
+    margin-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+}
+
+/* Інпути (Поля вводу) */
+.cyber-input {
+    width: 100%;
+    background: #050505;
+    border: 1px solid #333;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 0; /* Гострі кути */
+    transition: all 0.3s;
+}
+
+    .cyber-input:focus {
+        outline: none;
+        border-color: #0f0;
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+        background: #000;
+    }
+
+    /* Стиль для вимкненого інпута */
+    .cyber-input.disabled-input {
+        background: #111;
+        color: #555;
+        border-color: #222;
+        cursor: not-allowed;
+    }
+
+/* Обгортка для інпутів (для декорацій, якщо треба) */
+.input-wrapper {
+    position: relative;
+    margin-bottom: 5px;
+}
+
+/* Помилки валідації */
+.pixel-error {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #ff3333;
+    display: block;
+    margin-top: 5px;
+}
+
+/* Чекбокс */
+.cyber-checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.cyber-checkbox {
+    appearance: none; /* Прибираємо стандартний вигляд */
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+    background: #000;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .cyber-checkbox:checked {
+        border-color: #0f0;
+        box-shadow: 0 0 5px #0f0;
+    }
+
+        .cyber-checkbox:checked::after {
+            content: 'X';
+            color: #0f0;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            position: absolute;
+        }
+
+.checkbox-label {
+    cursor: pointer;
+    margin-bottom: 0;
+    color: #fff; /* Білий текст для чекбокса */
+}
+
+.cyber-checkbox:checked + .checkbox-label {
+    color: #0f0; /* Зелений коли вибрано */
+}
+
+/* Стилізація Select */
+select.cyber-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2300FF00%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 0.65em auto;
+}
+
+/* === ПРОФІЛЬ АГЕНТА === */
+
+/* Контейнер аватара */
+.agent-avatar-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+    border: 2px solid #333;
+    padding: 5px;
+    background: #000;
+    overflow: hidden;
+}
+
+.agent-avatar {
+    width: 100%;
+    height: 100%;
+    filter: grayscale(100%) contrast(1.2) brightness(0.8); /* Робить аватар ч/б і стильним */
+}
+
+/* Оверлей (сітка) поверх аватара */
+.avatar-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(rgba(0, 255, 0, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 255, 0, 0.1) 1px, transparent 1px);
+    background-size: 10px 10px;
+    pointer-events: none;
+}
+
+/* Скануюча лінія */
+.scan-line-vertical {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #0f0;
+    box-shadow: 0 0 10px #0f0;
+    z-index: 10;
+    animation: scanAvatar 3s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes scanAvatar {
+    0% {
+        top: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+/* Статистика агента */
+.agent-stats {
+    padding: 15px;
+    background: #050505;
+    border: 1px solid #222;
+}
+
+.pulse-width {
+    transition: width 1s ease-in-out;
+}
+
+/* Індикатор заблокованого поля */
+.lock-indicator {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff3333;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 10px;
+}
+
+/* Консольний блок */
+.console-box {
+    background: #000;
+    border-left: 3px solid #0f0;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+}
+
+/* === CYBER SIDEBAR MENU === */
+
+.cyber-nav .nav-link {
+    color: #555; /* Тьмяний колір для неактивних */
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.8rem;
+    padding: 15px 10px;
+    border-left: 2px solid transparent;
+    transition: all 0.3s;
+    text-transform: uppercase;
+}
+
+    .cyber-nav .nav-link:hover {
+        color: #0f0;
+        background: rgba(0, 255, 0, 0.05);
+        padding-left: 20px; /* Ефект зсуву при наведенні */
+    }
+
+    /* Активне посилання */
+    .cyber-nav .nav-link.active {
+        color: #0f0;
+        background: rgba(0, 255, 0, 0.1);
+        border-left: 4px solid #0f0;
+        text-shadow: 0 0 5px #0f0;
+        padding-left: 20px;
+    }
+
+/* === ВИПРАВЛЕННЯ ЧИТАБЕЛЬНОСТІ === */
+
+/* Робимо text-muted світлішим на темному фоні */
+.cyber-card .text-muted,
+.subtext,
+.pixel-list li {
+    color: #bbb !important; /* Світло-сірий */
+    text-shadow: 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* При наведенні на картку текст стає трохи білішим */
+.cyber-card:hover .text-muted {
+    color: #ddd !important;
+    transition: color 0.3s;
+}
+
+/* Колір заголовків у списках */
+.pixel-list li::before {
+    color: #0f0; /* Зелені маркери списку */
+}

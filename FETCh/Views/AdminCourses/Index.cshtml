@@ -4,77 +4,90 @@
 @model IPagedList<FETChModels.Models.Course>
 
 @{
-    ViewData["Title"] = "Список курсів";
+    ViewData["Title"] = "РЕЄСТР_КУРСІВ";
 }
 
-<h2 class="mt-3 pixel-title text-white">📚 @ViewData["Title"]</h2>
-
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-primary pixel-btn">➕ Додати курс</a>
-</div>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-info">Наразі немає жодного курсу.</div>
-}
-else
-{
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Назва</th>
-                    <th>Мова</th>
-                    <th>Ціна</th>
-                    <th>Безкоштовний</th>
-                    <th>Категорія</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Title</td>
-                        <td>@item.Language</td>
-                        <td>
-                            @if (item.IsFree)
-                            {
-                                <span class="badge bg-success">Безкоштовно</span>
-                            }
-                            else
-                            {
-                                @item.Price.ToString() @item.PriceCurrency
-                            }
-                        </td>
-                        <td>@(item.IsFree ? "Так" : "Ні")</td>
-                        <td>@item.Category?.Name</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info pixel-btn">Деталі</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning pixel-btn">Редагувати</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger pixel-btn">Видалити</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="БАЗА ДАНИХ КУРСІВ">БАЗА ДАНИХ КУРСІВ</h1>
+            <p class="pixel-text text-muted">> РІВЕНЬ ДОСТУПУ: АДМІНІСТРАТОР</p>
+        </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
-        @Html.PagedListPager(
-        Model,
-        page => Url.Action("Index", new { page }),
-        new PagedListRenderOptions
+    <div class="mb-4 text-end">
+        <a asp-action="Create" class="btn-cyber d-inline-block w-auto">
+            [ + ІНІЦІЮВАТИ НОВИЙ КУРС ]
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="terminal-alert">
+            <span class="blink">></span> СИСТЕМА НЕ ЗНАЙШЛА АКТИВНИХ ЗАПИСІВ.
+        </div>
+    }
+    else
+    {
+        <div class="cyber-table-wrapper">
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>НАЗВА</th>
+                        <th>МОВА</th>
+                        <th>ВАРТІСТЬ</th>
+                        <th>ДОСТУП</th>
+                        <th>КАТЕГОРІЯ</th>
+                        <th class="text-end">ОПЕРАЦІЇ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-bold text-white">@item.Title</td>
+                            <td>@item.Language</td>
+                            <td>
+                                @if (item.IsFree)
+                                {
+                                    <span class="cyber-badge free">БЕЗКОШТОВНО</span>
+                                }
+                                else
+                                {
+                                    <span class="cyber-badge paid">@item.Price.ToString() @item.PriceCurrency</span>
+                                }
+                            </td>
+                            <td>
+                                @(item.IsFree ? "ВІДКРИТИЙ" : "ЗАКРИТИЙ")
+                            </td>
+                            <td>@(item.Category?.Name ?? "НЕМАЄ")</td>
+                            <td class="text-end action-cell">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="action-link info" title="Деталі">[INFO]</a>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="action-link warning" title="Редагувати">[EDIT]</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="action-link danger" title="Видалити">[DEL]</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cyber-pagination mt-4">
+            @Html.PagedListPager(
+                     Model,
+                     page => Url.Action("Index", new { page }),
+                     new PagedListRenderOptions
         {
             DisplayLinkToFirstPage = PagedListDisplayMode.Always,
             DisplayLinkToLastPage = PagedListDisplayMode.Always,
             DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
             DisplayLinkToNextPage = PagedListDisplayMode.Always,
             MaximumPageNumbersToDisplay = 5,
-            UlElementClasses = new[] { "pagination" },
+            UlElementClasses = new[] { "pagination justify-content-center" },
             LiElementClasses = new[] { "page-item" },
-            PageClasses = new[] { "page-link" }
+            PageClasses = new[] { "page-link cyber-page-link" }
         }
-        )
+                     )
+        </div>
+    }
 </div>
-}
