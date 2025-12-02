@@ -1,29 +1,142 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "ПРОТОКОЛ_КОНФІДЕНЦІЙНОСТІ";
 }
 
-<section class="hero-split">
-    <div class="hero-half dark-side chess-layout scroll-animate">
-        <h1 class="pixel-title">@ViewData["Title"]</h1>
-        <p class="subtext">Use this page to detail your site's privacy policy.</p>
-
-        <img class="hero-img"
-             src="https://kpi.ua/files/styles/story/public/images/1125-7.jpg?itok=aPjwbLnB"
-             alt="Privacy">
+<section class="hero-split privacy-section">
+    <div class="hero-half dark-side center-content relative-box cyber-grid-bg">
+        <div class="scanner-container">
+            <div class="security-scanner blink-border">
+                <div class="scan-line"></div>
+                <div class="lock-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-shield-lock-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 0c-.69 0-1.843.265-2.928.56-1.11.3-2.229.655-2.887.87a1.54 1.54 0 0 0-1.044 1.262c-.596 4.477.787 7.795 2.465 9.99a11.777 11.777 0 0 0 2.517 2.453c.386.273.744.482 1.048.625.28.132.581.24.829.24s.548-.108.829-.24a7.159 7.159 0 0 0 1.048-.625 11.775 11.775 0 0 0 2.517-2.453c1.678-2.195 3.061-5.513 2.465-9.99a1.541 1.541 0 0 0-1.044-1.263 6.267 6.267 0 0 0-2.887-.87C9.843.266 8.69 0 8 0zm0 5a1.5 1.5 0 0 1 .5 2.915l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99A1.5 1.5 0 0 1 8 5z" />
+                    </svg>
+                </div>
+            </div>
+            <div class="status-text pixel-text blink" id="statusText">СИГНАЛ ЗАШИФРОВАНО</div>
+            <div class="mt-3 cyber-meta">
+                <p class="pixel-text">> ПРОТОКОЛ: TLS 1.3 (АКТИВНИЙ)</p>
+                <p class="pixel-text">> IP ЦІЛІ: @Context.Connection.RemoteIpAddress</p>
+                <p class="pixel-text">> ОЧІКУВАННЯ КЛЮЧА ДОСТУПУ...</p>
+            </div>
+        </div>
     </div>
 
-    <div class="hero-half light-side scroll-animate right">
-        <h1 class="pixel-title">Policy</h1>
-        <p>
-            This page describes how your site handles private data.
-        </p>
+    <div class="hero-half light-side right document-area">
+        
+        <div class="encryption-overlay" id="overlayLock">
+            <div class="digital-noise"></div>
+            <div class="overlay-content">
+                 <h2 class="pixel-title text-danger mb-4">ДОСТУП ЗАБОРОНЕНО</h2>
+                 <p class="pixel-text mb-4">Цей документ захищено алгоритмами шифрування військового рівня.</p>
+                 <button class="btn-decrypt cyber-glitch-btn" onclick="decryptData()">
+                    [ РОЗПОЧАТИ ДЕШИФРУВАННЯ ]
+                 </button>
+                 <div class="mt-3">
+                     <small class="pixel-text text-muted">Спроба силового взлому... <span class="blink">_</span></small>
+                 </div>
+            </div>
+        </div>
 
-        <div class="console-line">
-            <span>fetch /privacy</span><span class="cursor">|</span>
+        <div class="document-wrapper scroll-animate" id="secretDoc">
+            <div class="document-frame">
+                <div class="document-header">
+                    <h1 class="pixel-title text-uppercase header-glitch">ЦІЛКОМ_ТАЄМНО</h1>
+                    <div class="doc-meta">
+                        <span>РІВЕНЬ ДОПУСКУ: TOP SECRET // ULTRA</span>
+                        <span>ДАТА: @DateTime.Now.ToShortDateString()</span>
+                    </div>
+                    <hr class="cyber-line" />
+                </div>
+
+                <div class="document-content">
+                    <h3 class="scramble-target" data-value="1. ПЕРЕХОПЛЕННЯ ДАНИХ">1. XXXXX_XXXXXXX</h3>
+                    <p>
+                        Ми збираємо лише дані, необхідні для живлення <span class="redacted">ЯДРА МАТРИЦІ</span>. Ваша особиста інформація зберігається у <span class="redacted">СХОВИЩІ №99</span> і ніколи не передається <span class="redacted">ВОРОЖИМ АГЕНТАМ</span>.
+                    </p>
+                    <p>
+                        Використовуючи цей сайт, ви погоджуєтесь стати частиною <span class="redacted">ЦИФРОВОГО ОПОРУ</span>.
+                    </p>
+
+                    <h3 class="scramble-target" data-value="2. НЕЙРОННИЙ СЛІД (COOKIES)">2. C00K13_ERR0R_X4</h3>
+                    <p>
+                        Ми використовуємо cookies не для стеження, а для <span class="redacted">СТАБІЛЬНОСТІ СИСТЕМИ</span>. Відключення cookies може викликати локальний <span class="redacted">ЗБІЙ РЕАЛЬНОСТІ</span>.
+                    </p>
+
+                    <h3 class="scramble-target" data-value="3. СТАНДАРТИ ШИФРУВАННЯ">3. S3CUR1TY_NULL_PTR</h3>
+                    <p>
+                        Всі дані захищені багатошаровими <span class="redacted">КВАНТОВИМИ АЛГОРИТМАМИ</span>. Навіть ми не можемо прочитати ваші <span class="redacted">КОДИ ДОСТУПУ</span>.
+                    </p>
+                </div>
+                 <div class="console-line mt-5">
+                    <span class="text-muted">статус: кінець файлу. очікування вводу...</span><span class="cursor">_</span>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
 @section Scripts {
     <script src="~/js/site.js"></script>
+    <script>
+        function decryptData() {
+            const overlay = document.getElementById('overlayLock');
+            const statusText = document.getElementById('statusText');
+            const lockIcon = document.querySelector('.lock-icon');
+            const scanner = document.querySelector('.security-scanner');
+            
+            // 2. Анімація зникнення оверлею
+            overlay.classList.add('decrypting');
+            
+            setTimeout(() => {
+                overlay.style.display = 'none';
+
+                // 3. Зміна статусу зліва
+                statusText.innerText = "ДОСТУП ДОЗВОЛЕНО"; // Українська мова
+                statusText.style.color = "#0f0";
+                statusText.classList.remove('blink');
+                statusText.classList.add('text-neon');
+                
+                lockIcon.style.color = "#0f0";
+                lockIcon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-unlock-fill" viewBox="0 0 16 16"><path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2z"/></svg>';
+                scanner.classList.remove('blink-border');
+                scanner.classList.add('success-border');
+
+
+                // 4. Розшифровка заголовків (Матриця)
+                const headers = document.querySelectorAll('.scramble-target');
+                headers.forEach(header => {
+                    header.classList.add('decoding');
+                    const finalText = header.getAttribute('data-value');
+                    let iterations = 0;
+                    const interval = setInterval(() => {
+                        header.innerText = finalText.split('')
+                            .map((letter, index) => {
+                                if(index < iterations) return finalText[index];
+                                // Випадкові символи (включаючи кирилицю для ефекту)
+                                const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZабвгґдеєжзиіїйклмнопрстуфхцчшщьюя0123456789!#$%^&*";
+                                return chars[Math.floor(Math.random() * chars.length)];
+                            })
+                            .join('');
+                        
+                        if(iterations >= finalText.length) {
+                            clearInterval(interval);
+                            header.classList.remove('decoding');
+                            header.classList.add('decoded');
+                        }
+                        iterations += 1 / 3; 
+                    }, 30);
+                });
+
+                // 5. Розкриття чорних маркерів (Redacted) по черзі
+                const redactedItems = document.querySelectorAll('.redacted');
+                redactedItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('revealed');
+                    }, 500 + (index * 400)); 
+                });
+
+            }, 800); 
+        }
+    </script>
 }

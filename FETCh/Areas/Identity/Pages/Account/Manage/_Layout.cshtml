@@ -1,24 +1,31 @@
 ﻿@{
-    if (ViewData.TryGetValue("ParentLayout", out var parentLayout) && parentLayout !=  null)
+    if (ViewData.TryGetValue("ParentLayout", out var parentLayout))
     {
-        Layout = parentLayout.ToString();
+        Layout = (string)parentLayout;
     }
     else
     {
-        Layout = "/Areas/Identity/Pages/_Layout.cshtml";
+        Layout = "/Views/Shared/_Layout.cshtml";
     }
 }
 
-<h1>Manage your account</h1>
-
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-md-3">
-            <partial name="_ManageNav" />
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="СИСТЕМНІ НАЛАШТУВАННЯ">СИСТЕМНІ НАЛАШТУВАННЯ</h1>
+            <p class="pixel-text text-muted">> КОНФІГУРАЦІЯ ОБЛІКОВОГО ЗАПИСУ</p>
         </div>
-        <div class="col-md-9">
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="cyber-card h-100">
+                <h3 class="card-header-pixel">> НАВІГАЦІЯ</h3>
+                <partial name="_ManageNav" />
+            </div>
+        </div>
+
+        <div class="col-lg-9">
             @RenderBody()
         </div>
     </div>

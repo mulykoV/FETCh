@@ -3,107 +3,168 @@
 @inject IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = Localizer["PageTitle"]; 
+    ViewData["Title"] = "СТВОРЕННЯ_КУРСУ";
 }
 
-<h2 class="mt-3">➕ @Localizer["PageHeader"]</h2>
-
-<form asp-action="Create" method="post" class="mt-4">
-
-    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="Title" class="form-label">@Localizer["CourseTitle"]</label>
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="Subtitle" class="form-label">@Localizer["Subtitle"]</label>
-            <input asp-for="Subtitle" class="form-control" />
-            <span asp-validation-for="Subtitle" class="text-danger"></span>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="НОВИЙ ПРОТОКОЛ">НОВИЙ ПРОТОКОЛ</h1>
+            <p class="pixel-text text-muted">> ІНІЦІАЛІЗАЦІЯ СТВОРЕННЯ КУРСУ</p>
         </div>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">@Localizer["Description"]</label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Description" class="text-danger"></span>
-    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <form asp-action="Create" method="post" class="cyber-form">
 
-    <div class="card mb-4 bg-light border-info">
-        <div class="card-header text-info"><strong>📧 @Localizer["CuratorContacts"]</strong></div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-6">
-                    <label asp-for="ContactEmail" class="form-label">@Localizer["CuratorEmail"]</label>
-                    <input asp-for="ContactEmail" class="form-control" />
-                    <span asp-validation-for="ContactEmail" class="text-danger"></span>
+                <div asp-validation-summary="ModelOnly" class="terminal-alert mb-4"></div>
+
+                <div class="cyber-card mb-4">
+                    <h3 class="card-header-pixel">> ОСНОВНІ_ПАРАМЕТРИ</h3>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Title" class="pixel-label">НАЗВА КУРСУ:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="Title" class="cyber-input" placeholder="Введіть назву..." />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="Title" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Subtitle" class="pixel-label">ПІДЗАГОЛОВОК:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="Subtitle" class="cyber-input" placeholder="Короткий опис..." />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="Subtitle" class="pixel-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="pixel-label">ОПИС ПРОГРАМИ:</label>
+                        <div class="input-wrapper">
+                            <textarea asp-for="Description" class="cyber-input" rows="4"></textarea>
+                            <span class="input-border"></span>
+                        </div>
+                        <span asp-validation-for="Description" class="pixel-error"></span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label asp-for="ConfirmContactEmail" class="form-label">@Localizer["ConfirmEmail"]</label>
-                    <input asp-for="ConfirmContactEmail" class="form-control" />
-                    <span asp-validation-for="ConfirmContactEmail" class="text-danger"></span>
+
+                <div class="cyber-card danger-border mb-4">
+                    <h3 class="card-header-pixel text-danger">> КОНТАКТНІ_ДАНІ_КУРАТОРА [SECURE]</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="ContactEmail" class="pixel-label">EMAIL:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="ContactEmail" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="ContactEmail" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="ConfirmContactEmail" class="pixel-label">ПІДТВЕРДЖЕННЯ EMAIL:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="ConfirmContactEmail" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="ConfirmContactEmail" class="pixel-error"></span>
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <div class="cyber-card mb-4">
+                    <h3 class="card-header-pixel">> КОНФІГУРАЦІЯ</h3>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="Language" class="pixel-label">МОВА:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="Language" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="Language" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="DurationHours" class="pixel-label">ТРИВАЛІСТЬ (ГОД):</label>
+                            <div class="input-wrapper">
+                                <input asp-for="DurationHours" type="number" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="DurationHours" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="pixel-label" asp-for="CategoryId">КАТЕГОРІЯ:</label>
+                            <div class="input-wrapper">
+                                <select asp-for="CategoryId" class="cyber-input" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
+                                    <option value="">[ ОБЕРІТЬ КАТЕГОРІЮ ]</option>
+                                </select>
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="CategoryId" class="pixel-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 align-items-end">
+                        <div class="col-md-3">
+                            <div class="cyber-checkbox-wrapper mb-3">
+                                <input asp-for="IsFree" class="cyber-checkbox" id="IsFree" />
+                                <label asp-for="IsFree" class="pixel-label checkbox-label" for="IsFree">БЕЗКОШТОВНО</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Price" class="pixel-label">ВАРТІСТЬ:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="Price" type="number" step="0.01" class="cyber-input" id="Price" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="Price" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <label asp-for="PriceCurrency" class="pixel-label">ВАЛЮТА:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="PriceCurrency" class="cyber-input" id="PriceCurrency" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="PriceCurrency" class="pixel-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cyber-card mb-4">
+                    <h3 class="card-header-pixel">> МЕДІА_РЕСУРСИ</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label asp-for="ImageUrl" class="pixel-label">URL ЗОБРАЖЕННЯ:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="ImageUrl" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="ImageUrl" class="pixel-error"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="BannerImageUrl" class="pixel-label">URL БАНЕРА:</label>
+                            <div class="input-wrapper">
+                                <input asp-for="BannerImageUrl" class="cyber-input" />
+                                <span class="input-border"></span>
+                            </div>
+                            <span asp-validation-for="BannerImageUrl" class="pixel-error"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-5">
+                    <a asp-action="Index" class="btn-cyber btn-danger-glow w-auto px-4">
+                        < СКАСУВАТИ
+                    </a>
+                    <button type="submit" class="btn-cyber w-auto px-5">
+                        [ ЗБЕРЕГТИ ДАНІ ]
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <label asp-for="Language" class="form-label">@Localizer["Language"]</label>
-            <input asp-for="Language" class="form-control" />
-            <span asp-validation-for="Language" class="text-danger"></span>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="DurationHours" class="form-label">@Localizer["Duration"]</label>
-            <input asp-for="DurationHours" type="number" class="form-control" />
-            <span asp-validation-for="DurationHours" class="text-danger"></span>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label">@Localizer["Category"]</label>
-            <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))">
-                <option value="">@Localizer["SelectCategory"]</option>
-            </select>
-            <span asp-validation-for="CategoryId" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <div class="form-check mt-4">
-                <input asp-for="IsFree" class="form-check-input" />
-                <label asp-for="IsFree" class="form-check-label">@Localizer["IsFree"]</label>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <label asp-for="Price" class="form-label">@Localizer["Price"]</label>
-            <input asp-for="Price" type="number" step="0.01" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-        <div class="col-md-3">
-            <label asp-for="PriceCurrency" class="form-label">@Localizer["Currency"]</label>
-            <input asp-for="PriceCurrency" class="form-control" />
-            <span asp-validation-for="PriceCurrency" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-md-6">
-            <label asp-for="ImageUrl" class="form-label">@Localizer["ImageUrl"]</label>
-            <input asp-for="ImageUrl" class="form-control" />
-            <span asp-validation-for="ImageUrl" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="BannerImageUrl" class="form-label">@Localizer["BannerUrl"]</label>
-            <input asp-for="BannerImageUrl" class="form-control" />
-            <span asp-validation-for="BannerImageUrl" class="text-danger"></span>
-        </div>
-    </div>
-
-    <button type="submit" class="btn btn-success">✅ @Localizer["SaveButton"]</button>
-    <a asp-action="Index" class="btn btn-secondary">↩️ @Localizer["BackToList"]</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -114,10 +175,14 @@
                 if ($('#IsFree').is(':checked')) {
                     $('#Price').val(0);
                     $('#Price').prop('readonly', true);
-                    $('#Price').addClass('bg-light');
+                    $('#Price').addClass('disabled-input');
+                    $('#PriceCurrency').addClass('disabled-input');
+                    $('#PriceCurrency').prop('readonly', true);
                 } else {
                     $('#Price').prop('readonly', false);
-                    $('#Price').removeClass('bg-light');
+                    $('#Price').removeClass('disabled-input');
+                    $('#PriceCurrency').removeClass('disabled-input');
+                    $('#PriceCurrency').prop('readonly', false);
                     if ($('#Price').val() == 0) {
                          $('#Price').val('');
                     }

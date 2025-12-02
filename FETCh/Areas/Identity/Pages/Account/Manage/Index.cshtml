@@ -1,30 +1,100 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "ОСОБОВА СПРАВА";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
-<h3>@ViewData["Title"]</h3>
-<partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="ОСОБОВА СПРАВА">ОСОБОВА СПРАВА</h1>
+            <p class="pixel-text text-muted">> РІВЕНЬ ДОСТУПУ: ВЛАСНИК</p>
+        </div>
+    </div>
+
+    <partial name="_StatusMessage" for="StatusMessage" />
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="cyber-card h-100 text-center relative-box">
+                <h3 class="card-header-pixel">> БІОМЕТРІЯ</h3>
+
+                <div class="agent-avatar-container mt-3">
+                    <div class="scan-line-vertical"></div>
+                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=@Model.Username" alt="Avatar" class="agent-avatar">
+                    <div class="avatar-overlay"></div>
+                </div>
+
+                <div class="agent-stats mt-4 text-start">
+                    <p class="pixel-text mb-1">ІНТЕЛЕКТ:</p>
+                    <div class="progress-bar-pixel"><div style="width: 85%" class="pulse-width"></div></div>
+
+                    <p class="pixel-text mb-1 mt-3">НАВИЧКИ КОДУВАННЯ:</p>
+                    <div class="progress-bar-pixel"><div style="width: 60%" class="pulse-width"></div></div>
+
+                    <p class="pixel-text mb-1 mt-3">УДАЧА:</p>
+                    <div class="progress-bar-pixel"><div style="width: 12%" class="pulse-width"></div></div>
+                </div>
+
+                <div class="mt-4">
+                    <small class="text-muted pixel-text" style="font-size: 9px;">ID: @Guid.NewGuid().ToString().Substring(0, 8).ToUpper()</small>
+                </div>
             </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="cyber-card h-100">
+                <h3 class="card-header-pixel">> ДАНІ_ОБЛІКОВОГО_ЗАПИСУ</h3>
+
+                <form id="profile-form" method="post" class="mt-4">
+                    <div asp-validation-summary="ModelOnly" class="terminal-alert mb-3" role="alert"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Username" class="pixel-label">ПОЗИВНИЙ (USERNAME):</label>
+                        <div class="input-wrapper">
+                            <input asp-for="Username" class="cyber-input disabled-input" placeholder="Завантаження..." readonly />
+                            <span class="input-border"></span>
+                            <span class="lock-indicator">🔒 LOCKED</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Input.PhoneNumber" class="pixel-label">КАНАЛ ЗВ'ЯЗКУ (PHONE):</label>
+                        <div class="input-wrapper">
+                            <input asp-for="Input.PhoneNumber" class="cyber-input" placeholder="Введіть номер..." />
+                            <span class="input-border"></span>
+                        </div>
+                        <span asp-validation-for="Input.PhoneNumber" class="pixel-error"></span>
+                    </div>
+
+                    <div class="console-box mb-4">
+                        <p class="mb-0 text-success">> Статус системи: НОРМА</p>
+                        <p class="mb-0 text-muted">> Остання синхронізація: @DateTime.Now.ToShortTimeString()</p>
+                    </div>
+
+                    <button id="update-profile-button" type="submit" class="btn-cyber w-100">
+                        [ ОНОВИТИ ДАНІ ]
+                    </button>
+                </form>
             </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Невелика анімація для статів, щоб вони "дихали"
+        setInterval(() => {
+            document.querySelectorAll('.pulse-width').forEach(bar => {
+                const currentWidth = parseInt(bar.style.width);
+                const randomChange = Math.floor(Math.random() * 10) - 5; // -5 to +5
+                let newWidth = currentWidth + randomChange;
+                if(newWidth > 100) newWidth = 100;
+                if(newWidth < 10) newWidth = 10;
+                bar.style.width = newWidth + '%';
+            });
+        }, 1000);
+    </script>
 }

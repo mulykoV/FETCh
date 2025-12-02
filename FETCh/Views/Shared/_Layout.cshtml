@@ -18,61 +18,57 @@
     <!-- Navbar -->
     <header class="navbar-wrapper">
         <nav class="navbar navbar-expand-sm fixed-top custom-navbar shadow-lg">
-            <div class="container-fluid d-flex justify-content-between align-items-center">
-                <a class="navbar-brand pixel-brand" asp-area="" asp-controller="Home" asp-action="Index">
-                    FETCh
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarContent" aria-controls="navbarContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
-                    <ul class="navbar-nav gap-3">
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle nav-link-custom" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    ⚙️ Адмін
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="adminMenu">
-                                    <li>
-                                        <a class="dropdown-item pixel-text" asp-controller="AdminCourses" asp-action="Index">
-                                            📚 Керування курсами
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item pixel-text" asp-controller="AdminCourses" asp-action="Create">
-                                            ➕ Додати курс
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
+            <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
+                <ul class="navbar-nav gap-3 align-items-center">
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle nav-link-custom remove-arrow" href="#" id="adminMenu" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Адмін
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="adminMenu">
+                                <li>
+                                    <a class="dropdown-item pixel-text" asp-controller="AdminCourses" asp-action="Index">
+                                        Керування курсами
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item pixel-text" asp-controller="AdminCourses" asp-action="Create">
+                                        Додати курс
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item pixel-text" asp-controller="AdminCategories" asp-action="Create">
+                                        Додати категорію курса
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Index">Додому</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Privacy">Конфіденційність</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Info">Інформація</a>
+                    </li>
+                    @if (User.IsInRole("User"))
+                    {
                         <li class="nav-item">
-                            <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Index">Додому</a>
+                            <a class="nav-link nav-link-custom" asp-controller="UserCourses" asp-action="Index">Курси</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Privacy">Конфіденційність</a>
+                            <a class="nav-link nav-link-custom" asp-controller="UserCourses" asp-action="MyCourses">Мої курси</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom" asp-area="" asp-controller="Home" asp-action="Info">Інформація</a>
-                        </li>
-                        @if (User.IsInRole("User"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link nav-link-custom" asp-controller="UserCourses" asp-action="Index">Курси</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link nav-link-custom" asp-controller="UserCourses" asp-action="MyCourses">Мої курси</a>
-                            </li>
-                        }
-                        
-                    </ul>
+                    }
+
                     <partial name="_LoginPartial" />
                     @await Html.PartialAsync("_SelectLanguagePartial")
-                </div>
 
+                </ul>
             </div>
         </nav>
     </header>
@@ -90,10 +86,12 @@
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
