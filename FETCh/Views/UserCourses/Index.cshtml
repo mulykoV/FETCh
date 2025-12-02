@@ -47,8 +47,6 @@ else
                         <td>@item.Category?.Name</td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info pixel-btn">Деталі</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning pixel-btn">Редагувати</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger pixel-btn">Видалити</a>
                         </td>
                     </tr>
                 }
