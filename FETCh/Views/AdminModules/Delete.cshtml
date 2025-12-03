@@ -1,10 +1,55 @@
 ﻿@model FETChModels.Models.Module
 
-<h2> Видалити модуль: @Model.Title</h2>
-<p>Ви впевнені, що хочете видалити цей модуль?</p>
+@{
+    ViewData["Title"] = "ВИДАЛЕННЯ_МОДУЛЯ";
+}
 
-<form asp-action="Delete">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Так, видалити</button>
-    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn btn-secondary">Відміна</a>
-</form>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text text-danger" data-text="ВИДАЛЕННЯ СЕКТОРУ">ВИДАЛЕННЯ СЕКТОРУ</h1>
+            <div class="terminal-alert danger-alert mt-3">
+                <span class="blink">>>></span> КРИТИЧНЕ ПОПЕРЕДЖЕННЯ: ВИДАЛЕННЯ МОДУЛЯ ЗНИЩИТЬ ВСІ ВМІЩЕНІ ДАНІ. <span class="blink"><<<</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="cyber-card danger-border">
+                <h3 class="card-header-pixel text-danger">> ЦІЛЬОВИЙ БЛОК [MODULE]</h3>
+
+                <div class="p-3">
+                    <div class="mb-4">
+                        <span class="pixel-label text-danger">НАЗВА МОДУЛЯ:</span>
+                        <h2 class="text-white mt-1">@Model.Title</h2>
+                    </div>
+
+                    <div class="cyber-description" style="border-color: #ff3333;">
+                        <span class="pixel-label text-muted">ОПИС:</span>
+                        <p class="text-white mt-1">@Model.Description</p>
+
+                        <div class="mt-3 border-top border-danger pt-2">
+                            <span class="text-muted small">ПРИВ'ЯЗАНО ДО КУРСУ (ID):</span>
+                            <span class="text-neon">@Model.CourseId</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn-cyber w-auto px-4">
+                            < ВІДМІНИТИ
+                        </a>
+
+                        <button type="submit" class="btn-cyber btn-danger-glow w-auto px-4">
+                            [ 🗑️ ПІДТВЕРДИТИ ]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

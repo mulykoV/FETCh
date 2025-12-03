@@ -4,71 +4,87 @@
 @model IPagedList<FETChModels.Models.Course>
 
 @{
-    ViewData["Title"] = "Доступні курси";
+    ViewData["Title"] = "АРХІВ_КУРСІВ";
 }
 
-<h2 class="mt-3 pixel-title text-white">📚 @ViewData["Title"]</h2>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-info mt-3">Поки що немає доступних курсів.</div>
-}
-else
-{
-    <div class="table-responsive mt-3">
-        <table class="table table-bordered table-hover">
-            <thead class="table-light">
-                <tr>
-                    <th>Назва</th>
-                    <th>Мова</th>
-                    <th>Ціна</th>
-                    <th>Безкоштовний</th>
-                    <th>Категорія</th>
-                    <th>Дії</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Title</td>
-                        <td>@item.Language</td>
-                        <td>
-                            @if (item.IsFree)
-                            {
-                                <span class="badge bg-success">Безкоштовно</span>
-                            }
-                            else
-                            {
-                                @item.Price.ToString() @item.PriceCurrency
-                            }
-                        </td>
-                        <td>@(item.IsFree ? "Так" : "Ні")</td>
-                        <td>@item.Category?.Name</td>
-                        <td>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info pixel-btn">Деталі</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="АРХІВ ЗНАНЬ">АРХІВ ЗНАНЬ</h1>
+            <p class="pixel-text text-muted">> СПИСОК ДОСТУПНИХ ПРОТОКОЛІВ НАВЧАННЯ</p>
+        </div>
     </div>
 
-    <div class="d-flex justify-content-center mt-3">
-        @Html.PagedListPager(
-        Model,
-        page => Url.Action("Index", new { page }),
-        new PagedListRenderOptions
+    @if (!Model.Any())
+    {
+        <div class="terminal-alert">
+            <span class="blink">></span> ПОМИЛКА 404: ДОСТУПНІ КУРСИ НЕ ЗНАЙДЕНО. ЗАЧЕКАЙТЕ ОНОВЛЕННЯ БАЗИ ДАНИХ.
+        </div>
+    }
+    else
+    {
+        <div class="cyber-table-wrapper">
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>НАЗВА ПРОТОКОЛУ</th>
+                        <th>МОВА</th>
+                        <th>КАТЕГОРІЯ</th>
+                        <th>УМОВИ ДОСТУПУ</th>
+                        <th class="text-end">ДІЯ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong class="text-white">@item.Title</strong>
+                                @if (!string.IsNullOrEmpty(item.Subtitle))
+                                {
+                                    <br />
+                                    <span class="text-muted small">> @item.Subtitle</span>
+                                }
+                            </td>
+                            <td>@item.Language</td>
+                            <td>@(item.Category?.Name ?? "ЗАГАЛЬНЕ")</td>
+                            <td>
+                                @if (item.IsFree)
+                                {
+                                    <span class="cyber-badge free">OPEN_SOURCE (FREE)</span>
+                                }
+                                else
+                                {
+                                    <span class="cyber-badge paid">@item.Price.ToString() @item.PriceCurrency</span>
+                                }
+                            </td>
+                            <td class="text-end action-cell">
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn-link-pixel text-neon" style="font-size: 12px;">
+                                    [ >_ ОТРИМАТИ ДОСТУП ]
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="cyber-pagination mt-4">
+            @Html.PagedListPager(
+                     Model,
+                     page => Url.Action("Index", new { page }),
+                     new PagedListRenderOptions
         {
             DisplayLinkToFirstPage = PagedListDisplayMode.Always,
             DisplayLinkToLastPage = PagedListDisplayMode.Always,
             DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
             DisplayLinkToNextPage = PagedListDisplayMode.Always,
             MaximumPageNumbersToDisplay = 5,
-            UlElementClasses = new[] { "pagination" },
+            UlElementClasses = new[] { "pagination justify-content-center" },
             LiElementClasses = new[] { "page-item" },
-            PageClasses = new[] { "page-link" }
+            PageClasses = new[] { "page-link cyber-page-link" }
         }
-        )
+                     )
+        </div>
+    }
 </div>
-}

@@ -121,6 +121,9 @@
     <div class="modules-section">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="pixel-title">> СТРУКТУРА ДАНИХ (МОДУЛІ)</h3>
+            <a asp-action="Create" asp-controller="AdminLectures" asp-route-courseId="@Model.Id" class="btn-cyber w-auto">
+                + НОВА ЛЕКЦІЯ
+            </a>
             <a asp-action="Create" asp-controller="AdminModules" asp-route-courseId="@Model.Id" class="btn-cyber w-auto">
                 + НОВИЙ МОДУЛЬ
             </a>

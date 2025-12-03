@@ -1,28 +1,74 @@
 ﻿@model FETChModels.Models.Lecture
 
 @{
-    ViewData["Title"] = "Лекція: " + Model.Title;
+    ViewData["Title"] = "НАВЧАЛЬНИЙ_ПОТІК";
 }
 
-<h2 class="mt-3">@Model.Title</h2>
-
-@if (!string.IsNullOrEmpty(Model.VideoUrl))
-{
-    <div class="ratio ratio-16x9 mb-3">
-        <iframe src="@Model.VideoUrl" allowfullscreen></iframe>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="АКТИВНИЙ ПОТІК">АКТИВНИЙ ПОТІК</h1>
+            <p class="pixel-text text-muted">> ЗАВАНТАЖЕННЯ ДАНИХ [ID: @Model.Id]</p>
+        </div>
     </div>
-}
 
-<p>@Html.Raw(Model.Content)</p>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success mt-3">@TempData["Message"]</div>
-}
+            <div class="cyber-card mb-4 p-0 overflow-hidden video-terminal">
+                <div class="terminal-header d-flex justify-content-between px-3 py-2">
+                    <span class="text-neon blink">● RECIEVING_DATA</span>
+                    <span class="text-muted">SOURCE: @Model.Title</span>
+                </div>
 
-<form asp-action="MarkAsWatched" method="post" class="mt-3">
-    <input type="hidden" name="lectureId" value="@Model.Id" />
-    <button type="submit" class="btn btn-success">✅ Позначити як переглянуту</button>
-</form>
+                <div class="video-wrapper">
+                    @if (!string.IsNullOrEmpty(Model.VideoUrl))
+                    {
+                        <div class="ratio ratio-16x9 cyber-iframe-wrapper">
+                            <iframe src="@Model.VideoUrl" allowfullscreen title="@Model.Title"></iframe>
+                            <div class="video-overlay-grid pointer-events-none"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="no-signal-box">
+                            <h2 class="glitch-text" data-text="NO SIGNAL">NO SIGNAL</h2>
+                            <p class="pixel-text mt-2">> ВІДЕОМАТЕРІАЛИ ВІДСУТНІ</p>
+                        </div>
+                    }
+                </div>
+            </div>
 
-<a asp-action="Details" asp-controller="UserModules" asp-route-id="@Model.ModuleId" class="btn btn-secondary mt-3">⬅ Назад до модуля</a>
+            @if (TempData["Message"] != null)
+            {
+                <div class="terminal-alert success-alert mb-4">
+                    <span class="blink">></span> @TempData["Message"]
+                </div>
+            }
+
+            <div class="cyber-card mb-4">
+                <h3 class="card-header-pixel">> ТЕКСТОВИЙ_ПРОТОКОЛ</h3>
+                <div class="cyber-content-log">
+                    @Html.Raw(Model.Content)
+                </div>
+                <div class="console-line mt-3">
+                    <span class="text-muted">status: waiting for confirmation...</span><span class="cursor">_</span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <a asp-action="Details" asp-controller="UserModules" asp-route-id="@Model.ModuleId" class="btn-cyber w-auto px-4">
+                    < ПОВЕРНУТИСЯ ДО МОДУЛЯ
+                </a>
+
+                <form asp-action="MarkAsWatched" method="post" class="d-inline-block">
+                    <input type="hidden" name="lectureId" value="@Model.Id" />
+                    <button type="submit" class="btn-cyber success-glow w-auto px-4">
+                        [ ✅ ПІДТВЕРДИТИ ЗАВЕРШЕННЯ ]
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
