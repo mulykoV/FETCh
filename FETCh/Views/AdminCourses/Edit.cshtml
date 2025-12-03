@@ -1,4 +1,4 @@
-﻿@model FETChModels.Models.Course
+﻿@model FETCh.Models.ViewModels.CourseViewModel
 
 @{
     ViewData["Title"] = "Редагування курсу";
@@ -44,7 +44,7 @@
             <div class="input-group">
                 <select asp-for="CategoryId" class="form-select">
                     <option value="">-- Виберіть категорію --</option>
-                    @foreach (var category in ViewBag.Categories as List<FETChModels.Models.CourseCategory>)
+                    @foreach (var category in Model.Categories)
                     {
                         <option value="@category.Id">@category.Name</option>
                     }

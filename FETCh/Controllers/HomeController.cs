@@ -125,6 +125,13 @@ namespace FETCh.Controllers
             });
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Users()
+        {
+            var users = _userManager.Users.ToList();
+            return View(users);
+        }
+
         [HttpPost]
         public IActionResult ToggleMode()
         {
