@@ -1,123 +1,182 @@
 ﻿@model FETChModels.Models.Course
+@using FETChModels.Models
 
 @{
-    ViewData["Title"] = "Деталі курсу";
+    ViewData["Title"] = "ДЕТАЛІ ПРОТОКОЛУ";
 }
 
-<h2 class="mt-3">📘 Деталі курсу</h2>
-
-<div class="card shadow-sm mt-3 p-3">
-    <div class="row">
-        <div class="col-md-4">
-            @if (!string.IsNullOrEmpty(Model.ImageUrl))
-            {
-                <img src="@Model.ImageUrl" alt="@Model.Title" class="img-fluid rounded" />
-            }
-            else
-            {
-                <div class="bg-secondary text-white text-center p-5 rounded">Без зображення</div>
-            }
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="ДЕТАЛІ ПРОТОКОЛУ">ДЕТАЛІ ПРОТОКОЛУ</h1>
+            <p class="pixel-text text-muted">> ID СУТНОСТІ: @Model.Id.ToString().ToUpper()</p>
         </div>
+    </div>
 
-        <div class="col-md-8">
-            <h3>@Model.Title</h3>
-            @if (!string.IsNullOrEmpty(Model.Subtitle))
-            {
-                <h5 class="text-muted">@Model.Subtitle</h5>
-            }
-
-            <p class="mt-3"><strong>Мова:</strong> @Model.Language</p>
-            <p><strong>Тривалість:</strong> @Model.DurationHours год.</p>
-            <p><strong>Категорія:</strong> @Model.Category?.Name</p>
-
-            <p>
-                <strong>Ціна:</strong>
-                @if (Model.IsFree)
-                {
-                    <span class="badge bg-success">Безкоштовно</span>
-                }
-                else
-                {
-                    <span>@Model.Price.ToString() @Model.PriceCurrency</span>
-                }
-            </p>
-
-            <p class="mt-3 text-muted">@Model.Description</p>
-
-            <h4>Записати користувача на курс</h4>
-            @if (TempData["Message"] != null)
-            {
-                <div class="alert alert-info alert-dismissible fade show mt-3" role="alert">
-                    @TempData["Message"]
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            }
-            <form asp-action="EnrollUser" method="post">
-                <input type="hidden" name="courseId" value="@Model.Id" />
-                <select name="userId" class="form-select">
-                    @foreach (var user in ViewBag.Users as List<ApplicationUser>)
+    <div class="cyber-card mb-5">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="course-image-wrapper">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
                     {
-                        <option value="@user.Id">@user.UserName (@user.Email)</option>
+                        <img src="@Model.ImageUrl" alt="@Model.Title" class="cyber-img" />
+                        <div class="scan-line"></div>
                     }
-                </select>
-                <button type="submit" class="btn btn-success mt-2">✅ Записати</button>
-            </form>
+                    else
+                    {
+                        <div class="no-image-placeholder">
+                            <span class="blink">NO_IMAGE_DATA</span>
+                        </div>
+                    }
+                </div>
+            </div>
 
-            <div class="mt-4">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏ Редагувати</a>
-                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Видалити</a>
-                <a asp-action="Index" class="btn btn-secondary">↩️ Назад</a>
+            <div class="col-md-8">
+                <h2 class="card-header-pixel text-neon">@Model.Title</h2>
+                @if (!string.IsNullOrEmpty(Model.Subtitle))
+                {
+                    <p class="pixel-text text-muted">> @Model.Subtitle</p>
+                }
+
+                <div class="row mt-4 cyber-stats">
+                    <div class="col-md-6 mb-3">
+                        <span class="pixel-label">МОВА:</span>
+                        <span class="cyber-value">@Model.Language</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="pixel-label">ТРИВАЛІСТЬ:</span>
+                        <span class="cyber-value">@Model.DurationHours ГОД.</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="pixel-label">КАТЕГОРІЯ:</span>
+                        <span class="cyber-value">@(Model.Category?.Name ?? "N/A")</span>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <span class="pixel-label">ДОСТУП:</span>
+                        @if (Model.IsFree)
+                        {
+                            <span class="cyber-badge free">БЕЗКОШТОВНО</span>
+                        }
+                        else
+                        {
+                            <span class="cyber-badge paid">@Model.Price.ToString() @Model.PriceCurrency</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <span class="pixel-label">ОПИС ПРОГРАМИ:</span>
+                    <div class="cyber-description">
+                        @Model.Description
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 flex-wrap">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-cyber w-auto px-3 warning-glow">
+                        [ РЕДАГУВАТИ ]
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-cyber w-auto px-3 danger-glow">
+                        [ ВИДАЛИТИ ]
+                    </a>
+                    <a asp-action="Index" class="btn-cyber w-auto px-3">
+                        < НАЗАД
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- -------------------- МОДУЛІ КУРСУ -------------------- -->
-<h4 class="mt-4 d-flex justify-content-between align-items-center">
-    📚 Модулі курсу
-    <a asp-action="Create" asp-controller="AdminModules" asp-route-courseId="@Model.Id" class="btn btn-success btn-sm">➕ Додати модуль</a>
-</h4>
+    <div class="cyber-card danger-border mb-5">
+        <h3 class="card-header-pixel text-danger">> ПРИЗНАЧЕННЯ АГЕНТА НА КУРС [АДМІН]</h3>
 
-@if (Model.Modules != null && Model.Modules.Any())
-{
-    <ul class="list-group mt-3">
-        @foreach (var module in Model.Modules)
+        @if (TempData["Message"] != null)
         {
-            <li class="list-group-item">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <strong>@module.Title</strong>
-                        <div class="text-muted">@module.Description</div>
-                    </div>
-                    <div>
-                        <a asp-action="Details" asp-controller="AdminModules" asp-route-id="@module.Id" class="btn btn-primary btn-sm">Переглянути</a>
-                        <a asp-action="Edit" asp-controller="AdminModules" asp-route-id="@module.Id" class="btn btn-warning btn-sm">✏ Редагувати</a>
-                        <a asp-action="Delete" asp-controller="AdminModules" asp-route-id="@module.Id" class="btn btn-danger btn-sm">🗑 Видалити</a>
-                    </div>
-                </div>
-
-                @if (module.Lectures != null && module.Lectures.Any())
-                {
-                    <ul class="mt-2">
-                        @foreach (var lecture in module.Lectures)
-                        {
-                            <li>
-                                🎓 <strong>@lecture.Title</strong>
-                                @if (!string.IsNullOrEmpty(lecture.VideoUrl))
-                                {
-                                    <a asp-action="Details" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="ms-2">▶️ Відео/Контент</a>
-                                }
-                            </li>
-                        }
-                    </ul>
-                }
-            </li>
+            <div class="terminal-alert mb-3">
+                > @TempData["Message"]
+            </div>
         }
-    </ul>
-}
-else
-{
-    <div class="alert alert-info mt-3">
-        Цей курс ще не містить жодного модуля або лекції.
+
+        <form asp-action="EnrollUser" method="post" class="row align-items-end">
+            <input type="hidden" name="courseId" value="@Model.Id" />
+            <div class="col-md-8">
+                <label class="pixel-label text-danger">ОБЕРІТЬ КОРИСТУВАЧА:</label>
+                <div class="input-wrapper">
+                    <select name="userId" class="cyber-input">
+                        @foreach (var user in ViewBag.Users as List<ApplicationUser>)
+                        {
+                            <option value="@user.Id">@user.UserName (@user.Email)</option>
+                        }
+                    </select>
+                    <span class="input-border"></span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn-cyber btn-danger-glow">
+                    [ НАДАТИ ДОСТУП ]
+                </button>
+            </div>
+        </form>
     </div>
-}
+
+    <div class="modules-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="pixel-title">> СТРУКТУРА ДАНИХ (МОДУЛІ)</h3>
+            <a asp-action="Create" asp-controller="AdminModules" asp-route-courseId="@Model.Id" class="btn-cyber w-auto">
+                + НОВИЙ МОДУЛЬ
+            </a>
+        </div>
+
+        @if (Model.Modules != null && Model.Modules.Any())
+        {
+            <div class="cyber-tree">
+                @foreach (var module in Model.Modules)
+                {
+                    <div class="cyber-module-item">
+                        <div class="module-header d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="folder-icon">📂</span>
+                                <strong class="text-neon">@module.Title</strong>
+                                <p class="text-muted small mb-0 ms-4">@module.Description</p>
+                            </div>
+                            <div class="module-actions">
+                                <a asp-action="Details" asp-controller="AdminModules" asp-route-id="@module.Id" class="action-link info">[INFO]</a>
+                                <a asp-action="Edit" asp-controller="AdminModules" asp-route-id="@module.Id" class="action-link warning">[EDIT]</a>
+                                <a asp-action="Delete" asp-controller="AdminModules" asp-route-id="@module.Id" class="action-link danger">[DEL]</a>
+                            </div>
+                        </div>
+
+                        <div class="lectures-list">
+                            @if (module.Lectures != null && module.Lectures.Any())
+                            {
+                                @foreach (var lecture in module.Lectures)
+                                {
+                                    <div class="lecture-item">
+                                        <span class="file-icon">📄</span> @lecture.Title
+                                        @if (!string.IsNullOrEmpty(lecture.VideoUrl))
+                                        {
+                                            <a asp-action="Details" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="ms-3 video-link">
+                                                [ >_ ВІДКРИТИ КОНТЕНТ ]
+                                            </a>
+                                        }
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="lecture-item text-muted">
+                                    <span class="file-icon">Empty</span> > Папка пуста...
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="terminal-alert">
+                > СТРУКТУРА ПОРОЖНЯ. ІНІЦІЮЙТЕ СТВОРЕННЯ МОДУЛІВ.
+            </div>
+        }
+    </div>
+</div>
