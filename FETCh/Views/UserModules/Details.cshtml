@@ -1,8 +1,10 @@
 ﻿@model FETChModels.Models.Module
 
 @{
-    ViewData["Title"] = "Модуль: " + Model.Title;
+    ViewData["Title"] = "ВМІСТ_МОДУЛЯ";
     var userId = ViewBag.UserId as string;
+
+    // Логіка підрахунку прогресу
     int totalLectures = Model.Lectures.Count();
     int watchedLectures = Model.Lectures.Count(l =>
         l.UserLectureProgresses != null &&
@@ -12,67 +14,129 @@
     double progressPercent = totalLectures > 0
         ? Math.Round((double)watchedLectures / totalLectures * 100, 1)
         : 0;
+
+    // Колір прогресу: червоний (мало), жовтий (середньо), зелений (багато)
+    string progressColorClass = progressPercent < 30 ? "bg-danger" : (progressPercent < 99 ? "bg-warning" : "bg-success");
 }
 
-<h2 class="mt-3">Модуль: @Model.Title</h2>
-<p>@Model.Description</p>
-
-@if (totalLectures > 0)
-{
-    <div class="progress my-3" style="height: 25px;">
-        <div class="progress-bar bg-success"
-             role="progressbar"
-             style="width: @progressPercent%;"
-             aria-valuenow="@progressPercent"
-             aria-valuemin="0"
-             aria-valuemax="100">
-            @progressPercent%
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="СЕКТОР ДАНИХ">СЕКТОР ДАНИХ</h1>
+            <p class="pixel-text text-muted">> ВМІСТ БЛОКУ: @Model.Title.ToUpper()</p>
         </div>
     </div>
 
-    <h4 class="mt-4">Лекції:</h4>
-    <ul class="list-group">
-        @foreach (var lecture in Model.Lectures)
-        {
-            var progress = lecture.UserLectureProgresses?
-            .FirstOrDefault(p => p.UserId == userId);
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
 
-            bool watched = progress?.Watched ?? false;
+            <div class="cyber-card mb-5">
+                <h3 class="card-header-pixel">> СТАТУС СИНХРОНІЗАЦІЇ</h3>
 
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>@lecture.Title</strong>
-                    <br />
-                    <small class="text-muted">
-                        @if (lecture.Duration != null)
-                        {
-                            <text>Тривалість: @lecture.Duration.Value.ToString(@"hh\:mm\:ss")</text>
-                        }
-                    </small>
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <div class="d-flex justify-content-between pixel-text mb-2">
+                            <span>ЗАВАНТАЖЕНО ФАЙЛІВ:</span>
+                            <span class="text-neon">@watchedLectures / @totalLectures</span>
+                        </div>
+
+                        <div class="progress-bar-pixel" style="height: 20px;">
+                            <div style="width: @progressPercent%;"></div>
+                        </div>
+
+                        <div class="mt-2 text-end">
+                            <span class="pixel-text small text-muted">@progressPercent% COMPLETE</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 text-center border-start border-secondary">
+                        <div class="cyber-description border-0 p-0">
+                            @Model.Description
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <div>
-                    @if (watched)
-                    {
-                        <span class="badge bg-success me-2">✅ Переглянуто</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-secondary me-2">⏳ Не переглянуто</span>
-                    }
-
-                    <a class="btn btn-outline-primary btn-sm"
-                       asp-controller="UserLectures"
-                       asp-action="Details"
-                       asp-route-id="@lecture.Id">
-                        Переглянути
+            <div class="lectures-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="pixel-title">> ФАЙЛОВА СИСТЕМА (ЛЕКЦІЇ)</h3>
+                    <a asp-action="Details" asp-controller="UserCourses" asp-route-id="@Model.CourseId" class="btn-cyber w-auto px-3">
+                        < НАЗАД ДО КУРСУ
                     </a>
                 </div>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Лекції відсутні.</p>
-}
+
+                @if (totalLectures > 0)
+                {
+                    <div class="cyber-tree">
+                        @foreach (var lecture in Model.Lectures)
+                        {
+                            var progress = lecture.UserLectureProgresses?.FirstOrDefault(p => p.UserId == userId);
+                            bool watched = progress?.Watched ?? false;
+
+                            // Стилі для статусу
+                            string statusClass = watched ? "success-border" : "";
+                            string icon = watched ? "✅" : "📄";
+                            string statusText = watched ? "[ ЗАВАНТАЖЕНО ]" : "[ ОЧІКУВАННЯ ]";
+                            string titleColor = watched ? "text-neon" : "text-white";
+
+                            <div class="cyber-module-item mb-3">
+                                <div class="cyber-card p-3 @statusClass" style="min-height: auto;">
+                                    <div class="row align-items-center">
+
+                                        <div class="col-md-7">
+                                            <div class="d-flex align-items-center">
+                                                <span class="fs-4 me-3">@icon</span>
+                                                <div>
+                                                    <h5 class="mb-1 @titleColor" style="font-family: 'Courier New', monospace; font-weight: bold;">
+                                                        @lecture.Title
+                                                    </h5>
+                                                    <small class="text-muted pixel-text" style="font-size: 9px;">
+                                                        @if (lecture.Duration != null)
+                                                        {
+                                                            <span>SIZE: @lecture.Duration.Value.ToString(@"hh\:mm\:ss")</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>SIZE: UNKNOWN</span>
+                                                        }
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-5 text-end">
+                                            <div class="d-flex justify-content-end align-items-center gap-3">
+                                                <span class="pixel-text small @(watched ? "text-success" : "text-muted")">
+                                                    @statusText
+                                                </span>
+
+                                                <a asp-controller="UserLectures" asp-action="Details" asp-route-id="@lecture.Id"
+                                                   class="btn-cyber w-auto px-3 @(watched ? "" : "warning-glow")">
+                                                    @if (watched)
+                                                    {
+                                                        <span>[ >_ ПЕРЕГЛЯНУТИ ]</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>[ >_ ЗАПУСТИТИ ]</span>
+                                                    }
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="terminal-alert">
+                        > ДАНІ ВІДСУТНІ. ПАПКА ПОРОЖНЯ.
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

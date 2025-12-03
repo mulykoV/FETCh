@@ -12,7 +12,7 @@ namespace FETCh.Controllers
     {
         private readonly IFETChRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
-        private const int PAGE_SIZE = 1;
+        private const int PAGE_SIZE = 5;
         public UserCoursesController(IFETChRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;

@@ -1833,3 +1833,222 @@ select.cyber-input {
     border-color: #ff3333;
     color: #ff3333;
 }
+
+/* === DELETE PAGE STYLES === */
+
+/* Спеціальний алерт для небезпеки */
+.danger-alert {
+    background: rgba(255, 0, 0, 0.1);
+    border: 1px dashed #ff3333;
+    color: #ff3333;
+    font-weight: bold;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 5px #ff3333;
+}
+
+/* Перезапис кольору глітчу на червоний для заголовка */
+.text-danger.glitch-text {
+    color: #ff3333 !important;
+    text-shadow: 2px 2px 0px #550000;
+}
+
+    .text-danger.glitch-text::before,
+    .text-danger.glitch-text::after {
+        text-shadow: -1px 0 #fff; /* Білий шум */
+    }
+
+/* Кнопка видалення (посилений ефект) */
+.btn-danger-glow {
+    border-color: #ff3333;
+    color: #ff3333;
+}
+
+    .btn-danger-glow:hover {
+        background: #ff3333;
+        color: #000;
+        box-shadow: 0 0 25px #ff3333; /* Сильніше світіння */
+    }
+
+/* === LECTURE DETAILS STYLES === */
+
+/* Відео Термінал */
+.video-terminal {
+    border: 2px solid #333;
+    background: #000;
+}
+
+.terminal-header {
+    background: #111;
+    border-bottom: 1px solid #333;
+    font-family: 'Courier New', monospace;
+    font-size: 0.8rem;
+}
+
+.video-wrapper {
+    position: relative;
+    min-height: 200px;
+    background: #050505;
+}
+
+.cyber-video {
+    display: block;
+    /* Фільтр додає трохи контрасту, щоб виглядало кінематографічно */
+    filter: contrast(1.1) saturate(1.1);
+}
+
+/* Ефект сітки поверх відео (для атмосфери) */
+.video-overlay-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none; /* Щоб можна було клікати на відео */
+    z-index: 2;
+}
+
+/* No Signal Box */
+.no-signal-box {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #111;
+    /* Ефект шуму */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+}
+
+/* Контент лекції (HTML) */
+.cyber-content-log {
+    font-family: 'Courier New', monospace; /* Моноширинний шрифт для тексту лекції */
+    color: #ccc;
+    line-height: 1.6;
+    padding: 10px;
+    background: #050505;
+    border-left: 2px solid #333;
+}
+
+    /* Стилізація стандартних тегів всередині контенту, щоб вони не ламали дизайн */
+    .cyber-content-log h1, .cyber-content-log h2, .cyber-content-log h3 {
+        color: #0f0;
+        font-family: 'Press Start 2P', cursive;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .cyber-content-log ul, .cyber-content-log ol {
+        margin-left: 20px;
+        color: #bbb;
+    }
+
+    .cyber-content-log a {
+        color: #0dcaf0;
+        text-decoration: underline;
+    }
+
+    .cyber-content-log blockquote {
+        border-left: 3px solid #0f0;
+        padding-left: 15px;
+        color: #fff;
+        font-style: italic;
+        background: rgba(0, 255, 0, 0.05);
+        padding: 10px;
+    }
+
+/* === MY COURSES STYLES === */
+
+/* Бейдж статусу поверх картинки */
+.status-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 2px 8px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 8px;
+    border: 1px solid #000;
+    z-index: 2;
+}
+
+/* Консольний список модулів */
+.cyber-console-log {
+    background: #080808;
+    border: 1px solid #222;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    max-height: 150px;
+    overflow-y: auto;
+    /* Стилізація скролу */
+    scrollbar-width: thin;
+    scrollbar-color: #333 #000;
+}
+
+    .cyber-console-log::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .cyber-console-log::-webkit-scrollbar-thumb {
+        background: #333;
+    }
+
+/* Посилання на модуль */
+.module-link {
+    color: #ccc;
+    text-decoration: none;
+    transition: 0.2s;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+    .module-link:hover {
+        color: #0f0;
+        padding-left: 5px; /* Зсув при наведенні */
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+
+.success-border {
+    border-color: #0f0 !important; /* Зелена рамка для завершених */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+}
+
+/* === LECTURE VIEW STYLES === */
+
+/* Стилізація Iframe (YouTube/Vimeo) */
+.cyber-iframe-wrapper iframe {
+    border: none;
+    /* Легкий фільтр для ефекту екрану */
+    filter: contrast(1.1) saturate(1.1) brightness(0.95);
+}
+
+.pointer-events-none {
+    pointer-events: none;
+}
+
+/* Успішне повідомлення */
+.success-alert {
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px dashed #0f0;
+    color: #0f0;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 5px #0f0;
+    text-transform: uppercase;
+}
+
+/* Кнопка успіху (зелене світіння) */
+.success-glow {
+    border-color: #0f0;
+    color: #0f0;
+}
+
+    .success-glow:hover {
+        background: #0f0;
+        color: #000;
+        box-shadow: 0 0 20px #0f0;
+    }

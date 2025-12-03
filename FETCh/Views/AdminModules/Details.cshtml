@@ -1,46 +1,102 @@
 ﻿@model FETChModels.Models.Module
 
-<h2>📚 Модуль: @Model.Title</h2>
-
-<p><strong>Курс:</strong> @Model.Course.Title</p>
-<p class="mt-3">@Model.Description</p>
-
-<div class="mt-4 mb-3">
-    <a asp-action="Edit" class="btn btn-warning">✏️ Редагувати модуль</a>
-    <a asp-action="Delete" class="btn btn-danger">🗑 Видалити модуль</a>
-    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn btn-secondary">↩️ Назад до курсу</a>
-</div>
-
-<!-- Лекції модуля -->
-<h4 class="mt-4 d-flex justify-content-between align-items-center">
-    🎓 Лекції модуля
-    <a asp-action="Create" asp-controller="AdminLectures" asp-route-moduleId="@Model.Id" class="btn btn-success btn-sm">➕ Додати лекцію</a>
-</h4>
-
-@if (Model.Lectures != null && Model.Lectures.Any())
-{
-    <ul class="list-group mt-3">
-        @foreach (var lecture in Model.Lectures)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>@lecture.Title</strong>
-                    @if (!string.IsNullOrEmpty(lecture.VideoUrl))
-                    {
-                        <a asp-action="Details" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="ms-2">▶️ Відео/Контент</a>
-                    }
-                </div>
-                <div>
-                    <a asp-action="Edit" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="btn btn-warning btn-sm">✏️ Редагувати</a>
-                    <a asp-action="Delete" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="btn btn-danger btn-sm">🗑 Видалити</a>
-                </div>
-            </li>
-        }
-    </ul>
+@{
+    ViewData["Title"] = "ДЕТАЛІ_МОДУЛЯ";
 }
-else
-{
-    <div class="alert alert-info mt-3">
-        Цей модуль ще не містить жодної лекції.
+
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="ДЕТАЛІ СЕКТОРУ">ДЕТАЛІ СЕКТОРУ</h1>
+            <p class="pixel-text text-muted">> ID БЛОКУ: @Model.Id.ToString().ToUpper()</p>
+        </div>
     </div>
-}
+
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+
+            <div class="cyber-card mb-5">
+                <h3 class="card-header-pixel">> META_DATA (МОДУЛЬ)</h3>
+
+                <div class="row cyber-stats">
+                    <div class="col-md-12 mb-3">
+                        <span class="pixel-label">НАЗВА:</span>
+                        <h2 class="text-neon mt-1">@Model.Title</h2>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <span class="pixel-label">НАЛЕЖИТЬ ДО КУРСУ:</span>
+                        <span class="cyber-value">@Model.Course.Title</span>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <span class="pixel-label">ОПИС ВМІСТУ:</span>
+                        <div class="cyber-description">
+                            @Model.Description
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 d-flex gap-2 flex-wrap">
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-cyber w-auto px-3 warning-glow">
+                        [ РЕДАГУВАТИ МОДУЛЬ ]
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn-cyber w-auto px-3 danger-glow">
+                        [ ВИДАЛИТИ МОДУЛЬ ]
+                    </a>
+                    <a asp-action="Details" asp-controller="AdminCourses" asp-route-id="@Model.CourseId" class="btn-cyber w-auto px-3">
+                        < НАЗАД ДО КУРСУ
+                    </a>
+                </div>
+            </div>
+
+            <div class="modules-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="pixel-title">> ВМІСТ СЕКТОРУ (ЛЕКЦІЇ)</h3>
+                    <a asp-action="Create" asp-controller="AdminLectures" asp-route-moduleId="@Model.Id" class="btn-cyber w-auto">
+                        + НОВА ЛЕКЦІЯ
+                    </a>
+                </div>
+
+                @if (Model.Lectures != null && Model.Lectures.Any())
+                {
+                    <div class="cyber-tree">
+                        @foreach (var lecture in Model.Lectures)
+                        {
+                            <div class="cyber-module-item">
+                                <div class="module-header d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <span class="file-icon" style="font-size: 1.5rem;">📄</span>
+                                        <div class="ms-3">
+                                            <strong class="text-white d-block">@lecture.Title</strong>
+                                            @if (!string.IsNullOrEmpty(lecture.VideoUrl))
+                                            {
+                                                <span class="text-muted small" style="font-size: 10px;">[ ВІДЕОПОТІК ПІДКЛЮЧЕНО ]</span>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="module-actions">
+                                        @if (!string.IsNullOrEmpty(lecture.VideoUrl))
+                                        {
+                                            <a asp-action="Details" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="action-link info" title="Переглянути">[VIEW]</a>
+                                        }
+                                        <a asp-action="Edit" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="action-link warning" title="Редагувати">[EDIT]</a>
+                                        <a asp-action="Delete" asp-controller="AdminLectures" asp-route-id="@lecture.Id" class="action-link danger" title="Видалити">[DEL]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="terminal-alert">
+                        > СЕКТОР ПОРОЖНІЙ. ДАНІ ВІДСУТНІ. ІНІЦІЮЙТЕ ЗАВАНТАЖЕННЯ ЛЕКЦІЙ.
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

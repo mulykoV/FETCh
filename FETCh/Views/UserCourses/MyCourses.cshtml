@@ -1,57 +1,104 @@
 ﻿@model IEnumerable<FETChModels.Models.UserCourse>
 
 @{
-    ViewData["Title"] = "Мої курси";
+    ViewData["Title"] = "АКТИВНІ_МІСІЇ";
 }
 
-<h2 class="mt-3 pixel-title text-white">🎓 @ViewData["Title"]</h2>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="МОЇ КУРСИ">МОЇ КУРСИ</h1>
+            <p class="pixel-text text-muted">> СПИСОК АКТИВНИХ ТА ЗАВЕРШЕНИХ ПРОТОКОЛІВ</p>
+        </div>
+    </div>
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info mt-3">Ви ще не записані на жоден курс.</div>
-}
-else
-{
-    <div class="row mt-3">
-        @foreach (var enrollment in Model)
-        {
-            var course = enrollment.Course;
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100">
-                    @if (!string.IsNullOrEmpty(course.ImageUrl))
-                    {
-                        <img src="@course.ImageUrl" class="card-img-top" alt="@course.Title" />
-                    }
-                    <div class="card-body">
-                        <h5 class="card-title text-white">@course.Title</h5>
-                        <p class="text-muted">@course.Subtitle</p>
-                        <p>
-                            <strong>Прогрес:</strong>
-                            @(enrollment.IsCompleted ? "Завершено" : "У процесі")
+    @if (!Model.Any())
+    {
+        <div class="terminal-alert">
+            <span class="blink">></span> СПИСОК МІСІЙ ПОРОЖНІЙ. ЗАПИШІТЬСЯ НА КУРС ЧЕРЕЗ АРХІВ.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var enrollment in Model)
+            {
+                var course = enrollment.Course;
+                // Визначаємо статус для стилізації
+                var statusClass = enrollment.IsCompleted ? "success-border" : "";
+                var statusText = enrollment.IsCompleted ? "МІСІЯ ЗАВЕРШЕНА" : "В ПРОЦЕСІ";
+                var progressWidth = enrollment.IsCompleted ? "100%" : "45%"; // Емуляція прогресу, якщо немає точного поля
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="cyber-card h-100 d-flex flex-column @statusClass">
+
+                        <div class="course-image-wrapper mb-3" style="height: 180px;">
+                            @if (!string.IsNullOrEmpty(course.ImageUrl))
+                            {
+                                <img src="@course.ImageUrl" class="cyber-img" alt="@course.Title" />
+                            }
+                            else
+                            {
+                                <div class="no-image-placeholder">
+                                    <span class="text-muted small">[ NO_IMAGE ]</span>
+                                </div>
+                            }
+                            <div class="scan-line"></div>
+
+                            <div class="status-badge @(enrollment.IsCompleted ? "bg-success text-black" : "bg-warning text-black")">
+                                @statusText
+                            </div>
+                        </div>
+
+                        <h3 class="card-header-pixel text-neon text-truncate" title="@course.Title">
+                            @course.Title
+                        </h3>
+                        <p class="pixel-text text-muted small mb-3">
+                            > @course.Subtitle
                         </p>
 
-                        @* -------------------- Відображення модулів -------------------- *@
-                        @if (course.Modules != null && course.Modules.Any())
-                        {
-                            <h6 class="mt-2 text-white">Модулі:</h6>
-                            <ul class="list-group list-group-flush">
-                                @foreach (var module in course.Modules)
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between pixel-text mb-1" style="font-size: 10px;">
+                                <span>ПРОГРЕС:</span>
+                                <span>@(enrollment.IsCompleted ? "100%" : "ACTIVE")</span>
+                            </div>
+                            <div class="progress-bar-pixel">
+                                <div style="width: @progressWidth"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <div class="cyber-console-log p-2 mb-3">
+                                <span class="text-muted d-block mb-2 border-bottom border-secondary pb-1">> СПИСОК_МОДУЛІВ:</span>
+
+                                @if (course.Modules != null && course.Modules.Any())
                                 {
-                                    <li class="list-group-item p-1 bg-dark border-0">
-                                        <a asp-action="Details" asp-controller="UserModules" asp-route-id="@module.Id" class="text-decoration-none text-white">
-                                            📘 @module.Title
-                                        </a>
-                                    </li>
+                                    <ul class="list-unstyled mb-0">
+                                        @foreach (var module in course.Modules)
+                                        {
+                                            <li class="mb-2">
+                                                <a asp-action="Details" asp-controller="UserModules" asp-route-id="@module.Id" class="module-link">
+                                                    <span class="blink me-1">></span> @module.Title
+                                                </a>
+                                            </li>
+                                        }
+                                    </ul>
                                 }
-                            </ul>
-                        }
-                        else
-                        {
-                            <small class="text-muted">Модулів ще немає.</small>
-                        }
+                                else
+                                {
+                                    <span class="text-muted small">>> ДАНІ ВІДСУТНІ...</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mt-auto">
+                            <button class="btn-cyber w-100 disabled" style="opacity: 0.7; cursor: default;">
+                                [ СТАТУС: @statusText ]
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</div>

@@ -1,26 +1,72 @@
 ﻿@model IEnumerable<FETChModels.Models.Module>
 
 @{
-    ViewData["Title"] = "Модулі курсу: " + ViewBag.CourseTitle;
+    ViewData["Title"] = "МОДУЛІ_КУРСУ";
 }
 
-<h2 class="mt-3">Модулі курсу: @ViewBag.CourseTitle</h2>
+<div class="cyber-container fade-in">
+    <!-- Заголовок -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="АРХІТЕКТУРА ДАНИХ">АРХІТЕКТУРА ДАНИХ</h1>
+            <p class="pixel-text text-muted">> ЦІЛЬОВИЙ ПРОТОКОЛ: @ViewBag.CourseTitle</p>
+        </div>
+    </div>
 
-@if (!Model.Any())
-{
-    <p>Модулі відсутні.</p>
-}
-else
-{
-    <ul class="list-group mt-3">
-        @foreach (var module in Model)
-        {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                @module.Title
-                <a class="btn btn-outline-primary btn-sm" asp-action="Details" asp-route-id="@module.Id">
-                    Переглянути
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            <div class="cyber-card">
+                <h3 class="card-header-pixel">> ДОСТУПНІ СЕКТОРИ (МОДУЛІ)</h3>
+
+                @if (!Model.Any())
+                {
+                    <div class="terminal-alert mt-3">
+                        <span class="blink">></span> ПОМИЛКА: СЕКТОРИ НЕ ЗНАЙДЕНО. ДАНІ ВІДСУТНІ.
+                    </div>
+                }
+                else
+                {
+                    <div class="cyber-tree mt-4">
+                        @foreach (var module in Model)
+                        {
+                            <div class="cyber-module-item mb-3">
+                                <div class="cyber-card p-3 hover-effect border-secondary" style="min-height: auto;">
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <!-- Назва модуля -->
+                                        <div class="d-flex align-items-center">
+                                            <span class="folder-icon text-neon fs-4">📂</span>
+                                            <div class="ms-3">
+                                                <h5 class="text-white mb-0" style="font-family: 'Courier New', monospace; font-weight: bold;">
+                                                    @module.Title
+                                                </h5>
+                                                <!-- Якщо є опис, можна додати його сюди -->
+                                                @* <small class="text-muted">@module.Description</small> *@
+                                            </div>
+                                        </div>
+
+                                        <!-- Кнопка переходу -->
+                                        <div>
+                                            <a asp-action="Details" asp-route-id="@module.Id" class="btn-cyber w-auto px-3" style="font-size: 0.8rem;">
+                                                [ >_ ВІДКРИТИ ]
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Навігація -->
+            <div class="mt-4">
+                <a href="javascript:history.back()" class="btn-cyber w-auto px-4">
+                    < ПОВЕРНУТИСЯ НАЗАД
                 </a>
-            </li>
-        }
-    </ul>
-}
+            </div>
+
+        </div>
+    </div>
+</div>
