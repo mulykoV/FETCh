@@ -10,7 +10,7 @@ namespace FETCh.Models.ViewModels
 
         // 1. Remote Validation
         // ErrorMessage тут — це ключ ресурсу, якщо сервер впаде або поверне false
-        [Remote(action: "CheckTitle", controller: "AdminCourses", ErrorMessage = "TitleTaken")]
+        [Remote(action: "CheckTitle", controller: "AdminCourses", AdditionalFields = "Id", ErrorMessage = "TitleTaken")]
         [Required(ErrorMessage = "TitleRequired")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "TitleLengthError")]
         [Display(Name = "CourseTitle")] // Можна теж використовувати ключ, якщо налаштовано
