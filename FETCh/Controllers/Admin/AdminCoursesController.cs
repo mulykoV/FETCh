@@ -232,17 +232,19 @@ namespace FETCh.Controllers
 
         // AJAX VALIDATION
         [AcceptVerbs("GET", "POST")]
-        public async Task<IActionResult> CheckTitle(string title)
+        public async Task<IActionResult> CheckTitle(string title, int id)
         {
             var exists = (await _repository.GetAllCoursesAsync())
-                .Any(c => c.Title.ToLower() == title.ToLower());
+                .Any(c => c.Title.ToLower() == title.ToLower()
+                       && c.Id != id); 
 
             if (exists)
-                // ЗМІНЕНО: _localizer
                 return Json(_localizer["TitleTaken", title].Value);
 
             return Json(true);
         }
+
+
 
         [AcceptVerbs("GET", "POST")]
         public IActionResult CheckPriceLogic(decimal price, bool isFree)

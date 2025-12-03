@@ -18,6 +18,8 @@
         <div class="col-lg-10">
             <form asp-action="Edit" method="post" class="cyber-form">
                 <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ContactEmail" />
+                <input type="hidden" asp-for="ConfirmContactEmail" />
 
                 <div asp-validation-summary="ModelOnly" class="terminal-alert mb-4"></div>
 
