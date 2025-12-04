@@ -116,19 +116,39 @@
                 }
             </div>
 
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between align-items-center">
                 <a asp-action="Index" class="btn-cyber w-auto px-4">
                     < ПОВЕРНУТИСЯ ДО АРХІВУ
                 </a>
 
-                @* Тут можна розкоментувати форму запису, якщо вона знадобиться.
-                   Зараз вона виглядає як неактивна кнопка для демонстрації.
-                *@
-                <button class="btn-cyber w-auto px-4 disabled" style="opacity: 0.5; cursor: not-allowed;">
-                    [ СТАТУС: ЛИШЕ ПЕРЕГЛЯД ]
-                </button>
+                @if (ViewBag.IsCompleted == true)
+                {
+                    @* СТАН 1: Курс вже пройдено *@
+                    <button class="btn-cyber w-auto px-4 disabled" style="cursor: default; border-color: #00ff41; color: #00ff41;">
+                        [ ✓ СТАТУС: МІСІЯ ЗАВЕРШЕНА ]
+                    </button>
+                }
+                else if (ViewBag.IsEnrolled == true)
+                {
+                    @* СТАН 2: Записаний, але не пройшов -> Кнопка завершення *@
+                    <form asp-action="CompleteCourse" asp-controller="UserCourses" method="post">
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                        <button type="submit" class="btn-cyber w-auto px-4 text-warning" style="border-color: #ffc107;">
+                            [ >_ ПІДТВЕРДИТИ ЗАВЕРШЕННЯ ]
+                        </button>
+                    </form>
+                }
+                else
+                {
+                    @* СТАН 3: Не записаний -> Кнопка запису *@
+                    <form asp-action="Enroll" asp-controller="UserCourses" method="post">
+                        <input type="hidden" name="courseId" value="@Model.Id" />
+                        <button type="submit" class="btn-cyber w-auto px-4">
+                            [ + ЗАПИСАТИСЯ НА КУРС ]
+                        </button>
+                    </form>
+                }
             </div>
-
         </div>
     </div>
 </div>
