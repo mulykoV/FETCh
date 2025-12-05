@@ -1,23 +1,81 @@
 ﻿@model FETChModels.Models.CourseCategory
 
 @{
-    ViewData["Title"] = "Видалити категорію";
+    ViewData["Title"] = "ВИДАЛЕННЯ_КАТЕГОРІЇ";
+    bool hasCourses = Model.Courses != null && Model.Courses.Any();
 }
 
-<h2 class="mt-3 text-danger">🗑️ Видалити категорію</h2>
-
-<div class="alert alert-warning">
-    Ви впевнені, що хочете видалити категорію: <strong>@Model.Name</strong>?
-    @if (Model.Courses.Any())
-    {
-        <p class="text-danger">Увага: ця категорія містить курси і не може бути видалена!</p>
-    }
-</div>
-
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="d-flex gap-2 mt-3">
-        <button type="submit" class="btn btn-danger">🗑️ Видалити</button>
-        <a asp-action="Index" class="btn btn-secondary">↩️ Назад</a>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text text-danger" data-text="ФОРМАТУВАННЯ РОЗДІЛУ">ФОРМАТУВАННЯ РОЗДІЛУ</h1>
+            <div class="terminal-alert danger-alert mt-3">
+                <span class="blink">>>></span> УВАГА: СПРОБА ВИДАЛЕННЯ СИСТЕМНОЇ ДИРЕКТОРІЇ. <span class="blink"><<<</span>
+            </div>
+        </div>
     </div>
-</form>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+
+            <div class="cyber-card danger-border">
+                <h3 class="card-header-pixel text-danger">> ЦІЛЬОВА ДИРЕКТОРІЯ</h3>
+
+                <div class="p-3">
+                    <div class="mb-4 text-center">
+                        <span class="pixel-label text-danger">НАЗВА РОЗДІЛУ:</span>
+                        <h2 class="text-white mt-1 text-uppercase" style="font-family: 'Press Start 2P'; font-size: 1.5rem;">
+                            @Model.Name
+                        </h2>
+                    </div>
+
+                    @if (hasCourses)
+                    {
+                        <div class="cyber-console-log p-3 mb-3" style="border-color: #ff3333; background: rgba(255, 0, 0, 0.05);">
+                            <p class="text-danger mb-1 font-weight-bold">🚫 ПОМИЛКА ДОСТУПУ:</p>
+                            <p class="text-muted small mb-0">
+                                > ДИРЕКТОРІЯ НЕ Є ПОРОЖНЬОЮ.<br>
+                                > ВИЯВЛЕНО ПРИВ'ЯЗАНИХ ПРОТОКОЛІВ: <span class="text-white">@Model.Courses.Count</span><br>
+                                > СПОЧАТКУ ВИДАЛІТЬ АБО ПЕРЕМІСТІТЬ КУРСИ.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="cyber-console-log p-3 mb-3">
+                            <p class="text-success mb-1">> ПЕРЕВІРКА ЦІЛІСНОСТІ...</p>
+                            <p class="text-muted small mb-0">
+                                > ДИРЕКТОРІЯ ПОРОЖНЯ.<br>
+                                > ГОТОВНІСТЬ ДО ВИДАЛЕННЯ: 100%.
+                            </p>
+                        </div>
+                    }
+                </div>
+
+                <form asp-action="Delete" method="post" class="mt-4">
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Index" class="btn-cyber w-auto px-4">
+                            < ВІДМІНИТИ
+                        </a>
+
+                        @if (hasCourses)
+                        {
+                            <button type="button" class="btn-cyber w-auto px-4 disabled" style="border-color: #555; color: #555; cursor: not-allowed;">
+                                [ 🔒 ВИДАЛЕННЯ ЗАБОРОНЕНО ]
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="submit" class="btn-cyber btn-danger-glow w-auto px-4">
+                                [ 🗑️ СТЕРТИ РОЗДІЛ ]
+                            </button>
+                        }
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,31 +1,90 @@
 ﻿@model FETChModels.Models.CourseCategory
 
 @{
-    ViewData["Title"] = "Перегляд категорії";
+    ViewData["Title"] = "ДЕТАЛІ_КАТЕГОРІЇ";
 }
 
-<h2 class="mt-3">📄 Категорія: @Model.Name</h2>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="СИСТЕМНИЙ РОЗДІЛ">СИСТЕМНИЙ РОЗДІЛ</h1>
+            <p class="pixel-text text-muted">> ID ПАРТИТУРИ: @Model.Id</p>
+        </div>
+    </div>
 
-<h4 class="mt-4">Курси в цій категорії:</h4>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
 
-@if (Model.Courses.Any())
-{
-    <ul class="list-group">
-        @foreach (var course in Model.Courses)
-        {
-            <li class="list-group-item">
-                @course.Title
-                <a class="btn btn-link btn-sm" asp-controller="AdminCourses" asp-action="Details" asp-route-id="@course.Id">Переглянути</a>
-            </li>
-        }
-    </ul>
-}
-else
-{
-    <p>Курси відсутні.</p>
-}
+            <div class="cyber-card mb-5">
+                <h3 class="card-header-pixel">> ВЛАСТИВОСТІ РОЗДІЛУ</h3>
 
-<div class="mt-3">
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏️ Редагувати</a>
-    <a asp-action="Index" class="btn btn-secondary">↩️ Назад</a>
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <span class="pixel-label">НАЗВА (LABEL):</span>
+                        <h2 class="text-neon mt-1">@Model.Name</h2>
+                    </div>
+                    <div class="col-md-4 text-end">
+                        <span class="pixel-label">КІЛЬКІСТЬ ФАЙЛІВ:</span>
+                        <span class="cyber-value" style="font-size: 1.5rem;">@Model.Courses.Count</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="courses-section">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="pixel-title">> ВМІСТ ДИРЕКТОРІЇ (КУРСИ)</h3>
+                </div>
+
+                @if (Model.Courses.Any())
+                {
+                    <div class="cyber-tree">
+                        @foreach (var course in Model.Courses)
+                        {
+                            <div class="cyber-module-item mb-2">
+                                <div class="cyber-card p-3 border-secondary" style="min-height: auto;">
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <div class="d-flex align-items-center">
+                                            <span class="file-icon text-muted fs-5">📀</span>
+                                            <div class="ms-3">
+                                                <strong class="text-white" style="font-family: 'Courier New', monospace;">
+                                                    @course.Title
+                                                </strong>
+                                                <span class="ms-2 small pixel-text text-muted">
+                                                    [@(course.IsFree ? "FREE" : "PAID")]
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <a asp-controller="AdminCourses" asp-action="Details" asp-route-id="@course.Id" class="action-link info" style="font-size: 0.8rem;">
+                                                [ >_ ВІДКРИТИ ]
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="terminal-alert">
+                        > ДИРЕКТОРІЯ ПОРОЖНЯ. ФАЙЛИ НЕ ЗНАЙДЕНО.
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-between mt-5">
+                <a asp-action="Index" class="btn-cyber w-auto px-4">
+                    < ПОВЕРНУТИСЯ ДО РЕЄСТРУ
+                </a>
+
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn-cyber warning-glow w-auto px-4">
+                    [ РЕДАГУВАТИ НАЗВУ ]
+                </a>
+            </div>
+
+        </div>
+    </div>
 </div>

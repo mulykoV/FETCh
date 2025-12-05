@@ -1,33 +1,66 @@
 ﻿@model IEnumerable<FETChModels.Models.CourseCategory>
 
 @{
-    ViewData["Title"] = "Категорії курсів";
+    ViewData["Title"] = "РЕЄСТР_КАТЕГОРІЙ";
 }
 
-<h2 class="mt-3">📂 Категорії курсів</h2>
+<div class="cyber-container fade-in">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1 class="glitch-text" data-text="СИСТЕМНІ РОЗДІЛИ">СИСТЕМНІ РОЗДІЛИ</h1>
+            <p class="pixel-text text-muted">> КАТАЛОГІЗАЦІЯ ДАНИХ (КАТЕГОРІЇ)</p>
+        </div>
+    </div>
 
-<a asp-action="Create" class="btn btn-success mb-3">➕ Додати категорію</a>
+    <div class="mb-4 text-end">
+        <a asp-action="Create" class="btn-cyber d-inline-block w-auto">
+            [ + СТВОРИТИ НОВИЙ РОЗДІЛ ]
+        </a>
+    </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Назва</th>
-            <th>Кількість курсів</th>
-            <th>Дії</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var category in Model)
-        {
-            <tr>
-                <td>@category.Name</td>
-                <td>@category.Courses.Count</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@category.Id">Перегляд</a>
-                    <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@category.Id">Редагувати</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@category.Id">Видалити</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    @if (!Model.Any())
+    {
+        <div class="terminal-alert">
+            <span class="blink">></span> РОЗДІЛИ ВІДСУТНІ. СТРУКТУРА ДАНИХ НЕ СФОРМОВАНА.
+        </div>
+    }
+    else
+    {
+        <div class="cyber-table-wrapper">
+            <table class="cyber-table">
+                <thead>
+                    <tr>
+                        <th>ІДЕНТИФІКАТОР (НАЗВА)</th>
+                        <th>ОБ'ЄМ ДАНИХ (КУРСИ)</th>
+                        <th class="text-end">ОПЕРАЦІЇ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var category in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong class="text-white">@category.Name</strong>
+                            </td>
+                            <td>
+                                <span class="text-neon" style="font-family: 'Courier New', monospace; font-weight: bold;">
+                                    @category.Courses.Count
+                                </span>
+                                <span class="text-muted small"> PROTOCOLS</span>
+                            </td>
+                            <td class="text-end action-cell">
+                                <a asp-action="Details" asp-route-id="@category.Id" class="action-link info" title="Перегляд">[VIEW]</a>
+                                <a asp-action="Edit" asp-route-id="@category.Id" class="action-link warning" title="Редагувати">[EDIT]</a>
+                                <a asp-action="Delete" asp-route-id="@category.Id" class="action-link danger" title="Видалити">[DEL]</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="console-line mt-3">
+            <span class="text-muted">system partition status: stable.</span><span class="cursor">_</span>
+        </div>
+    }
+</div>
