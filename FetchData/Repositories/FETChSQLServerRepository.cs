@@ -185,6 +185,21 @@ namespace FetchData.Repositories
                     .ThenInclude(c => c.Modules)
                 .ToListAsync();
         }
+        public async Task MarkCourseAsCompletedAsync(string userId, int courseId)
+        {
+            // Шукаємо запис про запис користувача на курс
+            var userCourse = await ReadAll<UserCourse>()
+                .FirstOrDefaultAsync(uc => uc.UserId == userId && uc.CourseId == courseId);
+
+            // Якщо запис знайдено, оновлюємо статус
+            if (userCourse != null)
+            {
+                userCourse.IsCompleted = true;
+                userCourse.CompletedDate = DateTime.UtcNow; // Використовуємо UtcNow, як і в методі EnrollUserAsync
+
+                await UpdateAsync(userCourse);
+            }
+        }
 
         // --- ПРОГРЕС ЛЕКЦІЙ ---
         public async Task<UserLectureProgress?> GetUserLectureProgressAsync(string userId, int lectureId)

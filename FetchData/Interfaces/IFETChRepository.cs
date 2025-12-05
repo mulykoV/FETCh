@@ -40,5 +40,6 @@ namespace FetchData.Interfaces
         Task UpdateUserLectureProgressAsync(UserLectureProgress progress);
         Task<IEnumerable<Module>> GetModulesByCourseIdAsync(int courseId);
         Task<IEnumerable<UserLectureProgress>> GetLectureProgressForUserAsync(int lectureId, string userId);
+        Task MarkCourseAsCompletedAsync(string userId, int courseId);
     }
 }
