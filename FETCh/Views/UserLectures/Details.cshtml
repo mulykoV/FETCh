@@ -1,5 +1,25 @@
 ﻿@model FETChModels.Models.Lecture
+@functions {
+    public string GetEmbedUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url)) return "";
+        if (url.Contains("/embed/")) return url;
 
+        if (url.Contains("youtube.com/watch?v="))
+        {
+            var videoId = url.Split("v=")[1].Split("&")[0]; 
+            return $"https://www.youtube.com/embed/{videoId}";
+        }
+
+        if (url.Contains("youtu.be/"))
+        {
+            var videoId = url.Split("youtu.be/")[1];
+            return $"https://www.youtube.com/embed/{videoId}";
+        }
+
+        return url;
+    }
+}
 @{
     ViewData["Title"] = "НАВЧАЛЬНИЙ_ПОТІК";
 }
@@ -25,17 +45,14 @@
                     @if (!string.IsNullOrEmpty(Model.VideoUrl))
                     {
                         <div class="ratio ratio-16x9 cyber-iframe-wrapper">
-                            <iframe src="@Model.VideoUrl" allowfullscreen title="@Model.Title"></iframe>
+                            <iframe src="@GetEmbedUrl(Model.VideoUrl)"
+                                    allowfullscreen
+                                    title="@Model.Title">
+                            </iframe>
                             <div class="video-overlay-grid pointer-events-none"></div>
                         </div>
                     }
-                    else
-                    {
-                        <div class="no-signal-box">
-                            <h2 class="glitch-text" data-text="NO SIGNAL">NO SIGNAL</h2>
-                            <p class="pixel-text mt-2">> ВІДЕОМАТЕРІАЛИ ВІДСУТНІ</p>
-                        </div>
-                    }
+                    // ... else block ...
                 </div>
             </div>
 

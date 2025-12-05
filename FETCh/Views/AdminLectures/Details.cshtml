@@ -1,5 +1,26 @@
 ﻿@model FETChModels.Models.Lecture
+@functions {
+    public string GetEmbedUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url)) return "";
 
+        if (url.Contains("/embed/")) return url;
+
+        if (url.Contains("youtube.com/watch?v="))
+        {
+            var videoId = url.Split("v=")[1].Split("&")[0];
+            return $"https://www.youtube.com/embed/{videoId}";
+        }
+
+        if (url.Contains("youtu.be/"))
+        {
+            var videoId = url.Split("youtu.be/")[1];
+            return $"https://www.youtube.com/embed/{videoId}";
+        }
+
+        return url;
+    }
+}
 @{
     ViewData["Title"] = "ПЕРЕГЛЯД_ЛЕКЦІЇ";
 }
@@ -24,11 +45,14 @@
                 <div class="video-wrapper">
                     @if (!string.IsNullOrEmpty(Model.VideoUrl))
                     {
-                        <video controls class="w-100 cyber-video">
-                            <source src="@Model.VideoUrl" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                        <div class="video-overlay-grid"></div>
+                        <div class="ratio ratio-16x9 cyber-iframe-wrapper">
+                            <iframe src="@GetEmbedUrl(Model.VideoUrl)"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    class="w-100 h-100 cyber-iframe">
+                            </iframe>
+                            <div class="video-overlay-grid" style="pointer-events: none;"></div>
+                        </div>
                     }
                     else
                     {
